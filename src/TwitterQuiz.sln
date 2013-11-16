@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitterQuiz", "TwitterQuiz\TwitterQuiz.csproj", "{39C9EE5A-405D-4BCA-A62F-1384F334345F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitterQuiz.Test", "..\TwitterQuiz.Test\TwitterQuiz.Test.csproj", "{9D360814-EC91-42D7-9708-D9DB092E19DB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitterQuiz.Test", "TwitterQuiz.Test\TwitterQuiz.Test.csproj", "{9D360814-EC91-42D7-9708-D9DB092E19DB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{743F2F54-8A0B-408C-9522-A70BCE99EB32}"
 	ProjectSection(SolutionItems) = preProject
