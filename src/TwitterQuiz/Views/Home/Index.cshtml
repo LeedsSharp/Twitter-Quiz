@@ -1,0 +1,8 @@
+﻿@using SimpleAuthentication.Mvc
+@model dynamic
+
+@{
+    ViewBag.Title = "Twitter Quiz";
+    Layout = "../Shared/_MasterLayout.cshtml";
+}
+<a href="@Url.RedirectToProvider("twitter")">Log in with Twitter</a>
