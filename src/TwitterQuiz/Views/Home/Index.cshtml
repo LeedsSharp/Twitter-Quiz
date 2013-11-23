@@ -5,4 +5,12 @@
     ViewBag.Title = "Twitter Quiz";
     Layout = "../Shared/_MasterLayout.cshtml";
 }
-<a href="@Url.RedirectToProvider("twitter")">Log in with Twitter</a>
+
+@if (!Request.IsAuthenticated)
+{
+    <a href="@Url.RedirectToProvider("twitter")">Log in with Twitter</a>
+}
+else
+{
+    <h2>Logged in as @ViewBag.Username</h2>
+}

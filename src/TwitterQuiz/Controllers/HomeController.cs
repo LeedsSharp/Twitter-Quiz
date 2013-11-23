@@ -6,10 +6,9 @@ namespace TwitterQuiz.Controllers
     {
         //
         // GET: /Home/
-
         public ActionResult Index()
         {
-
+            ViewBag.Username = User.Identity.Name;
             return View();
         }
 
