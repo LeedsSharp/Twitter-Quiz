@@ -8,12 +8,27 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="~/Content/bootstrap.min.css"/>
+    <link rel="stylesheet" href="~/Content/font-awesome.min.css"/>
+    <link rel="stylesheet" href="~/Content/screen.css" media="screen"/>
     @RenderSection("Styles", false)
 </head>
-<body>
-    <div>
-        @RenderBody()
-    </div>
-    @RenderSection("Scripts", false)
-</body>
+    <body>
+        <header>
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                    <h1>
+                        Funky Quiz Name
+                        <span>Pub quiz run over twitter</span>
+                    </h1>
+                </div>
+            </div>
+        </header>
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                @RenderBody()
+            </div>
+        </div>
+        @RenderSection("Scripts", false)
+    </body>
 </html>

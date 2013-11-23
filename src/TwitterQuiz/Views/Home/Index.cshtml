@@ -1,4 +1,5 @@
-﻿@using SimpleAuthentication.Mvc
+﻿
+
 @model dynamic
 
 @{
@@ -8,7 +9,7 @@
 
 @if (!Request.IsAuthenticated)
 {
-    <a href="@Url.RedirectToProvider("twitter")">Log in with Twitter</a>
+    @Html.Partial("_LogOn")
 }
 else
 {
