@@ -1,3 +1,10 @@
+using Ninject;
+using Ninject.Web.Common;
+using SimpleAuthentication.Core;
+using SimpleAuthentication.Mvc;
+using SimpleAuthentication.Mvc.Caching;
+using TwitterQuiz.Controllers;
+
 [assembly: WebActivator.PreApplicationStartMethod(typeof(TwitterQuiz.App_Start.NinjectWebCommon), "Start")]
 [assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(TwitterQuiz.App_Start.NinjectWebCommon), "Stop")]
 
@@ -9,7 +16,6 @@ namespace TwitterQuiz.App_Start
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 
     using Ninject;
-    using Ninject.Web.Common;
 
     public static class NinjectWebCommon 
     {
@@ -40,9 +46,13 @@ namespace TwitterQuiz.App_Start
         private static IKernel CreateKernel()
         {
             var kernel = new StandardKernel();
+            
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
-            
+            kernel.Bind<IAuthenticationCallbackProvider>().To<AuthenticationCallbackProvider>();
+            kernel.Load(typeof(SimpleAuthenticationController).Assembly);
+            kernel.Bind<ICache>().To<CookieCache>();
+
             RegisterServices(kernel);
             return kernel;
         }
@@ -53,7 +63,7 @@ namespace TwitterQuiz.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
-
-        }        
+            kernel.Load(new EventStoreNinjectModule());
+        }       
     }
 }
