@@ -147,7 +147,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Authentication\" />
     <Folder Include="Content\" />
   </ItemGroup>
   <ItemGroup>
@@ -158,9 +157,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\_MasterLayout.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\SimpleAuthentication\AuthenticateCallback.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TwitterQuiz.Domain\TwitterQuiz.Domain.csproj">
