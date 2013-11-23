@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{743F2F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitterQuiz.Domain", "TwitterQuiz.Domain\TwitterQuiz.Domain.csproj", "{83EFF6B3-F4EA-4E1D-8320-6FF84CC3509F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitterQuiz.EventStore", "TwitterQuiz.EventStore\TwitterQuiz.EventStore.csproj", "{99090409-30AC-4F45-A02E-96A945260F89}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,10 @@ Global
 		{83EFF6B3-F4EA-4E1D-8320-6FF84CC3509F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83EFF6B3-F4EA-4E1D-8320-6FF84CC3509F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83EFF6B3-F4EA-4E1D-8320-6FF84CC3509F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99090409-30AC-4F45-A02E-96A945260F89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99090409-30AC-4F45-A02E-96A945260F89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99090409-30AC-4F45-A02E-96A945260F89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99090409-30AC-4F45-A02E-96A945260F89}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

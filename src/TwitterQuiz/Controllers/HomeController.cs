@@ -1,5 +1,4 @@
 ﻿using System.Web.Mvc;
-using SimpleAuthentication.Mvc;
 
 namespace TwitterQuiz.Controllers
 {

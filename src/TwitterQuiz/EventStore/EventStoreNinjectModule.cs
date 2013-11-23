@@ -8,7 +8,12 @@ namespace TwitterQuiz.EventStore
         public override void Load()
         {
             Bind<IEventStoreConnection>()
-                .ToMethod(x => EventStoreConnectionProvider.EventStore)
+                .ToMethod(x =>
+                    {
+                        var connection = EventStoreConnectionProvider.EventStore;
+                        connection.Connect();
+                        return connection;
+                    })
                 .InSingletonScope();
         }
     }

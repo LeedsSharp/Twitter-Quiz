@@ -163,6 +163,16 @@
   <ItemGroup>
     <Content Include="Views\SimpleAuthentication\AuthenticateCallback.cshtml" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TwitterQuiz.Domain\TwitterQuiz.Domain.csproj">
+      <Project>{83EFF6B3-F4EA-4E1D-8320-6FF84CC3509F}</Project>
+      <Name>TwitterQuiz.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TwitterQuiz.EventStore\TwitterQuiz.EventStore.csproj">
+      <Project>{99090409-30ac-4f45-a02e-96a945260f89}</Project>
+      <Name>TwitterQuiz.EventStore</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
