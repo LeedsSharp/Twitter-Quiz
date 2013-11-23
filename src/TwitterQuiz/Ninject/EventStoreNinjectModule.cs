@@ -1,7 +1,8 @@
 ﻿using EventStore.ClientAPI;
 using Ninject.Modules;
+using TwitterQuiz.EventStore;
 
-namespace TwitterQuiz.EventStore
+namespace TwitterQuiz.Ninject
 {
     public class EventStoreNinjectModule : NinjectModule
     {

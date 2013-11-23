@@ -124,8 +124,7 @@
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="Controllers\AuthenticationCallbackProvider.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="EventStore\EventStoreConnectionProvider.cs" />
-    <Compile Include="EventStore\EventStoreNinjectModule.cs" />
+    <Compile Include="Ninject\EventStoreNinjectModule.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

@@ -1,8 +1,9 @@
+using Ninject;
+using Ninject.Web.Common;
 using SimpleAuthentication.Core;
 using SimpleAuthentication.Mvc;
 using SimpleAuthentication.Mvc.Caching;
 using TwitterQuiz.Controllers;
-using TwitterQuiz.EventStore;
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(TwitterQuiz.App_Start.NinjectWebCommon), "Start")]
 [assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(TwitterQuiz.App_Start.NinjectWebCommon), "Stop")]
@@ -15,7 +16,6 @@ namespace TwitterQuiz.App_Start
     using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 
     using Ninject;
-    using Ninject.Web.Common;
 
     public static class NinjectWebCommon 
     {
