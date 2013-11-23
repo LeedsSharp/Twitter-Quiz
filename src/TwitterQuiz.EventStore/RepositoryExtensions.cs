@@ -10,7 +10,7 @@ namespace TwitterQuiz.EventStore
     {
         public static IEnumerable<T> GetEventStream<T>(this IEventStoreConnection eventStoreConnection)
         {
-            var stream = eventStoreConnection.ReadStreamEventsForward(typeof(T).Name.Pluralize(), 0, int.MaxValue, true);
+            var stream = eventStoreConnection.ReadStreamEventsBackward(typeof(T).Name.Pluralize(), 0, int.MaxValue, true);
             return stream.Events.Select(x => x.Event.Data.ParseJson<T>());
         }
 
