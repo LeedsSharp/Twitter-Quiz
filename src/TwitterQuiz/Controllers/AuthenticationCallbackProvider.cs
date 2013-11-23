@@ -33,20 +33,14 @@ namespace TwitterQuiz.Controllers
                 _eventStoreConnection.AppendToStream(user, new { Created = DateTime.Now });
             }
 
-            // TODO: Create auth token
-            var ticket = new FormsAuthenticationTicket(1, // version 
-                                                       user.Username, // user name
-                                                       DateTime.Now, // create time
-                                                       DateTime.Now.AddSeconds(30), // expire time
-                                                       false, // persistent
-                                                       ""); // user data, such as roles
+            // Create auth token
+            var ticket = new FormsAuthenticationTicket(1, user.Username, DateTime.Now, DateTime.Now.AddMinutes(30), false, ""); 
 
             var strEncryptedTicket = FormsAuthentication.Encrypt(ticket);
             var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, strEncryptedTicket);
             context.Response.Cookies.Add(cookie);
 
-            context.Response.Redirect(model.ReturnUrl);
-            return null;
+            return new RedirectResult(model.ReturnUrl);
         }
 
         public ActionResult OnRedirectToAuthenticationProviderError(HttpContextBase context, string errorMessage)
