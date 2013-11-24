@@ -13,6 +13,9 @@ namespace TwitterQuiz.ViewModels.Quiz
         [DisplayName("Description")]
         [Required]
         public string Description { get; set; }
+        [DisplayName("Quiz Host")]
+        [Required]
+        public string Host { get; set; }
         [DisplayName("Start")]
         [Required]
         public DateTime StartDate { get; set; }
@@ -29,6 +32,7 @@ namespace TwitterQuiz.ViewModels.Quiz
         {
             return new Domain.Quiz
                 {
+                    Id = Guid.NewGuid(),
                     Name = Name,
                     Description = Description,
                     StartDate = StartDate,

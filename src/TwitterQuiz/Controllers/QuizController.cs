@@ -6,6 +6,7 @@ using TwitterQuiz.ViewModels.Quiz;
 
 namespace TwitterQuiz.Controllers
 {
+    [Authorize]
     public class QuizController : Controller
     {
         private readonly IEventStoreConnection _eventStoreConnection;
@@ -26,7 +27,8 @@ namespace TwitterQuiz.Controllers
         {
             var model = new NewQuizViewModel
                 {
-                    StartDate = DateTime.Now.AddHours(1)
+                    StartDate = DateTime.Now.AddHours(1),
+                    Host = User.Identity.Name
                 };
             return View(model);
         }
