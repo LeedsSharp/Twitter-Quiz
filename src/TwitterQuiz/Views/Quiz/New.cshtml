@@ -1,0 +1,51 @@
+﻿@model TwitterQuiz.ViewModels.Quiz.NewQuizViewModel
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+<h2>Create a new Quiz</h2>
+@using(Html.BeginForm("New", "Quiz", FormMethod.Post, new { @class = "form-horizontal", id = "new-quiz"}))
+{
+    <div class="form-group">
+        @Html.LabelFor(x => x.Name, new { @class = "col-sm-2 control-label" })
+        <div class="col-sm-10">
+            @Html.TextBoxFor(x => x.Name, new { @class = "form-control", placeholder = "Name" })
+        </div>
+        @Html.ValidationMessageFor(x => x.Name)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(x => x.Description, new { @class = "col-sm-2 control-label" })
+        <div class="col-sm-10">
+            @Html.TextBoxFor(x => x.Description, new { @class = "form-control", placeholder = "Description" })
+        </div>
+        @Html.ValidationMessageFor(x => x.Description)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(x => x.StartDate, new { @class = "col-sm-2 control-label" })
+        <div class="col-sm-10">
+            @Html.EditorFor(x => x.StartDate, new { @class = "form-control", placeholder = "Time to start the quiz" })
+        </div>
+        @Html.ValidationMessageFor(x => x.StartDate)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(x => x.FrequencyOfQuestions, new { @class = "col-sm-2 control-label" })
+        <div class="col-sm-10">
+            @Html.TextBoxFor(x => x.FrequencyOfQuestions, new { @class = "form-control", placeholder = "Time between sending out questions in minutes" })
+        </div>
+        @Html.ValidationMessageFor(x => x.FrequencyOfQuestions)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(x => x.FrequencyOfAnswers, new { @class = "col-sm-2 control-label" })
+        <div class="col-sm-10">
+            @Html.TextBoxFor(x => x.FrequencyOfAnswers, new { @class = "form-control", placeholder = "Time between sending out answers in minutes" })
+        </div>
+        @Html.ValidationMessageFor(x => x.FrequencyOfAnswers)
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-default">Create</button>
+        </div>
+    </div>
+}

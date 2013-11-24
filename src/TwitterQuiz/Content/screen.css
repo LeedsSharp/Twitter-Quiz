@@ -1,6 +1,9 @@
 ﻿body {
     background: #DDD;
 }
+a { color: inherit; text-decoration: none; }
+a:hover { text-decoration: none; color: #68707b; }
+a[href^="tel:"] {color: inherit;text-decoration:none;}
 
 header {
     background: #E8710C;
@@ -45,4 +48,3 @@ header h1 span {
     text-align: center;
     padding: 10px 0;
 }
-.sign-in-buttons 

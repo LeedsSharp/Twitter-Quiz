@@ -1,6 +1,4 @@
-﻿
-
-@model dynamic
+﻿@model dynamic
 
 @{
     ViewBag.Title = "Twitter Quiz";
@@ -13,5 +11,14 @@
 }
 else
 {
-    <h2>Logged in as @ViewBag.Username</h2>
+    <div class="sign-in-buttons">
+        <a class="btn btn-lg btn-primary" href="@Url.Action("New", "Quiz")">
+            <i class="fa fa-clipboard fa-fw"></i> 
+            Create a Quiz
+        </a>
+    </div>
+    //@foreach (var quiz in Model.Quizzes)
+    //{
+    //   // List quizzes
+    //}
 }

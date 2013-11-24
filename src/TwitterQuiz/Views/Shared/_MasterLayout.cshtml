@@ -8,27 +8,35 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
-    <link rel="stylesheet" href="~/Content/bootstrap.min.css"/>
-    <link rel="stylesheet" href="~/Content/font-awesome.min.css"/>
+    <link rel="stylesheet" href="~/Content/bootstrap.css" media="screen"/>
+    <link rel="stylesheet" href="~/Content/font-awesome.css" media="screen" />
+    <link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.min.css" media="screen"/>
     <link rel="stylesheet" href="~/Content/screen.css" media="screen"/>
     @RenderSection("Styles", false)
 </head>
     <body>
         <header>
             <div class="row">
-                <div class="col-md-8 col-md-offset-2">
+                <div class="col-sm-8 col-sm-offset-2">
                     <h1>
-                        Funky Quiz Name
-                        <span>Pub quiz run over twitter</span>
+                        <a href="~/">Snazzy Name</a>
+                        <span>Something like "Sir Quizalot" or "Quizzimodo"</span>
                     </h1>
                 </div>
             </div>
         </header>
         <div class="row">
-            <div class="col-md-8 col-md-offset-2">
+            <div class="col-sm-8 col-sm-offset-2">
                 @RenderBody()
             </div>
         </div>
+        <script type="text/javascript" src="~/Scripts/jquery-1.9.1.min.js"></script>
+        <script type="text/javascript" src="~/Scripts/jquery.validate.min.js"></script>
+        <script type="text/javascript" src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+        <script type="text/javascript" src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+        <script type="text/javascript" src="~/Scripts/bootstrap.min.js"></script>
+        <script type="text/javascript" src="~/Scripts/bootstrap-datetimepicker.min.js"></script>
+        <script type="text/javascript" src="~/Scripts/global.js"></script>
         @RenderSection("Scripts", false)
     </body>
 </html>
