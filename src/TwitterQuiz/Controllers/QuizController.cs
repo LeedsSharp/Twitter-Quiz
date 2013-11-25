@@ -36,7 +36,7 @@ namespace TwitterQuiz.Controllers
         [HttpPost]
         public ActionResult New(NewQuizViewModel model)
         {
-            _quizLogic.AppendToStream(model.ToQuizModel());
+            _quizLogic.CreateNewQuiz(model.ToQuizModel(), User.Identity.Name);
             return View(model);
         }
     }

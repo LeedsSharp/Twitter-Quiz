@@ -12,9 +12,10 @@ namespace TwitterQuiz.EventStore.Logic
             _eventStoreConnection = eventStoreConnection;
         }
 
-        public Quiz AppendToStream(Quiz quiz)
+        public Quiz CreateNewQuiz(Quiz quiz, string username)
         {
-            _eventStoreConnection.AppendToStream(quiz);
+            var streamName = string.Format("{0}-Quizzes", username);
+            _eventStoreConnection.AppendToStream(quiz, streamName);
             return quiz;
         }
     }

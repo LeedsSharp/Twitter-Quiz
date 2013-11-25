@@ -26,7 +26,7 @@ namespace TwitterQuiz.EventStore
             return events.Any(filter);
         }
 
-        public static T AppendToStream<T>(this IEventStoreConnection eventStoreConnection, T newEvent, string stream = "", object metaData = null)
+        public static T AppendToStream<T>(this IEventStoreConnection eventStoreConnection, T newEvent, string stream, object metaData = null)
         {
             var eventType = typeof(T).Name;
             if (stream == String.Empty)
@@ -39,6 +39,14 @@ namespace TwitterQuiz.EventStore
             };
             eventStoreConnection.AppendToStream(stream, ExpectedVersion.Any, eventData);
             return newEvent;
+        }
+
+        public static T AppendToStream<T>(this IEventStoreConnection eventStoreConnection, T newEvent, object metaData = null)
+        {
+            var eventType = typeof(T).Name;
+            var stream = eventType.Pluralize();
+
+            return AppendToStream(eventStoreConnection, newEvent, stream, metaData);
         }
 
         public static string Pluralize(this string @this, int count = 0)
