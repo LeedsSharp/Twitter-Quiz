@@ -54,10 +54,20 @@ namespace TwitterQuiz.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [HttpGet]
         public ActionResult Edit(int id)
         {
-            var quiz = _quizLogic.GetQuiz(id, User.Identity.Name);
-            var model = new EditQuizViewModel(quiz);
+            var model = new EditQuizViewModel
+                {
+                    Id = id, StreamName = string.Format("{0}-Quizzes", 
+                    User.Identity.Name)
+                };
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Edit(EditQuizViewModel model)
+        {
             return View(model);
         }
     }

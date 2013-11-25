@@ -140,10 +140,12 @@
     <Compile Include="ViewModels\AuthenticateCallbackViewModel.cs" />
     <Compile Include="ViewModels\Home\HomeIndexViewModel.cs" />
     <Compile Include="ViewModels\Quiz\EditQuizViewModel.cs" />
+    <Compile Include="ViewModels\Quiz\QuestionViewModel.cs" />
     <Compile Include="ViewModels\Quiz\QuizDetailsViewModel.cs" />
     <Compile Include="ViewModels\Quiz\QuizIndexViewModel.cs" />
     <Compile Include="ViewModels\Quiz\NewQuizViewModel.cs" />
     <Compile Include="ViewModels\Quiz\QuizListViewModel.cs" />
+    <Compile Include="ViewModels\Quiz\RoundViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />

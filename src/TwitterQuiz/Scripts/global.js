@@ -1,4 +1,18 @@
-﻿$(function() {
+﻿App = Ember.Application.create();
+
+App.Router.map(function () {
+    // put your routes here
+});
+
+App.ApplicationRoute = Ember.Route.extend({
+    model: function () {
+        return Ember.$.getJSON('https://api.github.com/repos/emberjs/ember.js/pulls').then(function (data) {
+            return data.splice(0, 3);
+        });
+    }
+});
+
+$(function () {
     $('.datepicker').datetimepicker({
         language: 'en-GB',
         format: 'dd/MM/yyyy hh:mm:ss'

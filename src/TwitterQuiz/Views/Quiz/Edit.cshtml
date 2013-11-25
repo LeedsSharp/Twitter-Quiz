@@ -5,5 +5,51 @@
     Layout = "~/Views/Shared/_MasterLayout.cshtml";
 }
 
-<h2>Edit</h2>
-@Html.EditorFor(x => x.Details)
+<h2>Edit - </h2>
+@using (Html.BeginForm("Edit", "Quiz", FormMethod.Post, new { @class = "form", id = "new-quiz" }))
+{
+    @Html.HiddenFor(x => x.Id)
+    @Html.HiddenFor(x => x.StreamName)
+    <div class="row">
+        @* <div class="col-md-6">
+            @Html.EditorFor(x => x.Details)
+        </div>
+        <div class="col-md-6">
+            @foreach (var round in Model.Rounds.OrderBy(x => x.Sequence))
+            {
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        @Html.TextBoxFor(x => round.Name, new { @class = "form-control" })
+                    </div>
+                    <div class="panel-body">
+                        @foreach (var question in round.Questions)
+                        {
+                            <div class="row ">
+                                <div class="col-md-6">
+                                    @Html.TextBoxFor(x => question.Question, new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-6 form-stacked">
+                                    @foreach (var answer in question.PossibleAnswers)
+                                    {
+                                        @Html.TextBoxFor(x => answer, new { @class = "form-control" })
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>*@
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+}
+@section Scripts
+{
+    <script type="text/javascript">
+        $(function() {
+
+        });
+    </script>
+}
