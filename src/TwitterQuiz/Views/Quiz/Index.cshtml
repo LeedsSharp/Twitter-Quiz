@@ -1,6 +1,14 @@
-﻿@{
+﻿@model TwitterQuiz.ViewModels.Quiz.QuizIndexViewModel
+
+@{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_MasterLayout.cshtml";
 }
 
 <h2>Index</h2>
+@foreach (var quiz in Model.Quizzes)
+{
+  <h3>@quiz.Name
+    <span>@quiz.Description</span>
+  </h3>
+}

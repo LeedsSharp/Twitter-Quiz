@@ -17,7 +17,20 @@ namespace TwitterQuiz.Controllers
 
         public ActionResult Index()
         {
-            return View();
+            var quizzes = _quizLogic.GetQuizzes(User.Identity.Name);
+            var model = new QuizIndexViewModel();
+            foreach (var quiz in quizzes)
+            {
+                var quizmodel = new QuizListViewModel
+                                {
+                                    Description = quiz.Description,
+                                    Name = quiz.Name,
+                                    Id = quiz.Id,
+                                    Start = quiz.StartDate
+                                };
+                model.Quizzes.Add(quizmodel);
+            }
+            return View(model);
         }
 
         [HttpGet]

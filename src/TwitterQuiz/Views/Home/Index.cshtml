@@ -1,4 +1,4 @@
-﻿@model dynamic
+﻿@model TwitterQuiz.ViewModels.Home.HomeIndexViewModel
 
 @{
     ViewBag.Title = "Twitter Quiz";
@@ -13,12 +13,24 @@ else
 {
     <div class="sign-in-buttons">
         <a class="btn btn-lg btn-primary" href="@Url.Action("New", "Quiz")">
-            <i class="fa fa-clipboard fa-fw"></i> 
+            <i class="fa fa-clipboard fa-fw"></i>
             Create a Quiz
         </a>
     </div>
-    //@foreach (var quiz in Model.Quizzes)
-    //{
-    //   // List quizzes
-    //}
+    foreach (var quiz in Model.Quizzes)
+    {
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">@quiz.Name</h3>
+        </div>
+        <div class="panel-body">
+            <a class="btn btn-lg btn-primary pull-right" href="@Url.Action("Edit", "Quiz", new { id = quiz.Id })">
+                <i class="fa fa-edit fa-fw"></i>
+                Edit
+            </a>
+            <p>@quiz.Description</p>
+            <p>Start: @quiz.Start</p>
+        </div>
+    </div>
+    }
 }
