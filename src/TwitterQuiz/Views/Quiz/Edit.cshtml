@@ -1,0 +1,9 @@
+﻿@model TwitterQuiz.ViewModels.Quiz.EditQuizViewModel
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+<h2>Edit</h2>
+@Html.EditorFor(x => x.Details)

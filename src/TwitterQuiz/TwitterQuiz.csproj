@@ -139,6 +139,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\AuthenticateCallbackViewModel.cs" />
     <Compile Include="ViewModels\Home\HomeIndexViewModel.cs" />
+    <Compile Include="ViewModels\Quiz\EditQuizViewModel.cs" />
+    <Compile Include="ViewModels\Quiz\QuizDetailsViewModel.cs" />
     <Compile Include="ViewModels\Quiz\QuizIndexViewModel.cs" />
     <Compile Include="ViewModels\Quiz\NewQuizViewModel.cs" />
     <Compile Include="ViewModels\Quiz\QuizListViewModel.cs" />
@@ -191,6 +193,8 @@
     <Content Include="Views\Quiz\Index.cshtml" />
     <Content Include="Views\Quiz\New.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DateTime.cshtml" />
+    <Content Include="Views\Quiz\EditorTemplates\QuizDetailsViewModel.cshtml" />
+    <Content Include="Views\Quiz\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -41,5 +41,14 @@ namespace TwitterQuiz.EventStore.Logic
             quizzes.RemoveAll(x => !elements.Add(x.Id));
             return quizzes;
         }
+
+        public Quiz GetQuiz(int id, string username)
+        {
+            var streamName = string.Format("{0}-Quizzes", username);
+            var slice = _eventStoreConnection.ReadStreamEventsBackward(streamName, -1, int.MaxValue, true);
+
+            var quizzes = slice.Events.Select(x => x.Event.Data.ParseJson<Quiz>()).ToList();
+            return quizzes.First(x => x.Id == id);
+        }
     }
 }

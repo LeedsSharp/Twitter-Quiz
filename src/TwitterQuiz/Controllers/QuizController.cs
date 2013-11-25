@@ -38,8 +38,11 @@ namespace TwitterQuiz.Controllers
         {
             var model = new NewQuizViewModel
                 {
-                    StartDate = DateTime.Now.AddHours(1),
-                    Host = User.Identity.Name
+                    Details = new QuizDetailsViewModel
+                        {
+                            StartDate = DateTime.Now.AddHours(1),
+                            Host = User.Identity.Name
+                        }
                 };
             return View(model);
         }
@@ -49,6 +52,13 @@ namespace TwitterQuiz.Controllers
         {
             _quizLogic.CreateNewQuiz(model.ToQuizModel(), User.Identity.Name);
             return RedirectToAction("Index", "Home");
+        }
+
+        public ActionResult Edit(int id)
+        {
+            var quiz = _quizLogic.GetQuiz(id, User.Identity.Name);
+            var model = new EditQuizViewModel(quiz);
+            return View(model);
         }
     }
 }
