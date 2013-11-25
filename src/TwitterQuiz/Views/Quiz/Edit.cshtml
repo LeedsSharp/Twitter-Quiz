@@ -4,52 +4,84 @@
     ViewBag.Title = "Edit";
     Layout = "~/Views/Shared/_MasterLayout.cshtml";
 }
+@Html.HiddenFor(x => x.Id)
+@Html.HiddenFor(x => x.StreamName)
 
-<h2>Edit - </h2>
-@using (Html.BeginForm("Edit", "Quiz", FormMethod.Post, new { @class = "form", id = "new-quiz" }))
-{
-    @Html.HiddenFor(x => x.Id)
-    @Html.HiddenFor(x => x.StreamName)
-    <div class="row">
-        @* <div class="col-md-6">
-            @Html.EditorFor(x => x.Details)
-        </div>
-        <div class="col-md-6">
-            @foreach (var round in Model.Rounds.OrderBy(x => x.Sequence))
-            {
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        @Html.TextBoxFor(x => round.Name, new { @class = "form-control" })
-                    </div>
-                    <div class="panel-body">
-                        @foreach (var question in round.Questions)
-                        {
-                            <div class="row ">
-                                <div class="col-md-6">
-                                    @Html.TextBoxFor(x => question.Question, new { @class = "form-control" })
-                                </div>
-                                <div class="col-md-6 form-stacked">
-                                    @foreach (var answer in question.PossibleAnswers)
-                                    {
-                                        @Html.TextBoxFor(x => answer, new { @class = "form-control" })
-                                    }
-                                </div>
-                            </div>
-                        }
-                    </div>
+@*<div class="row">
+    <div class="col-md-6">
+        @Html.EditorFor(x => x.Details)
+    </div>
+    <div class="col-md-6">
+        @foreach (var round in Model.Rounds.OrderBy(x => x.Sequence))
+        {
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    @Html.TextBoxFor(x => round.Name, new { @class = "form-control" })
                 </div>
-            }
-        </div>*@
+                <div class="panel-body">
+                    @foreach (var question in round.Questions)
+                    {
+                        <div class="row ">
+                            <div class="col-md-6">
+                                @Html.TextBoxFor(x => question.Question, new { @class = "form-control" })
+                            </div>
+                            <div class="col-md-6 form-stacked">
+                                @foreach (var answer in question.PossibleAnswers)
+                                {
+                                    @Html.TextBoxFor(x => answer, new { @class = "form-control" })
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
     </div>
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary">Save</button>
-    </div>
-}
+</div>
+<div class="form-group">
+    <button type="submit" class="btn btn-primary">Save</button>
+</div>*@
+
+
 @section Scripts
 {
+    <script type="text/x-handlebars" id="application">
+		<div class="form-group">
+			<label class="control-label">Quiz Name</label>
+			{{input class="form-control" placeholder="Name" type="text" value=name}}
+		</div>
+		<div class="form-group">
+			<label class="control-label">Description</label>
+			{{input class="form-control" placeholder="Description" type="text" value=description }}
+		</div>
+		<div class="form-group">
+			<label class="control-label">Quiz Host</label>
+			<p>This is the twitter account that will tweet the questions</p>
+			<div class="input-group">
+				<span class="input-group-addon">&#64;</span>
+				{{input class="form-control" placeholder="This is the twitter account that will tweet the questions" type="text" value=host }}
+			</div>
+		</div>
+    </script>
     <script type="text/javascript">
         $(function() {
-
+            var App = Ember.Application.create({
+                LOG_TRANSITIONS: true,
+                LOG_BINDINGS: true,
+                LOG_VIEW_LOOKUPS: true,
+                LOG_STACKTRACE_ON_DEPRECATION: true,
+                LOG_VERSION: true,
+                debugMode: true
+            });
+            App.ApplicationRoute = Ember.Route.extend({
+                model: function() {
+                    var id = $('#Id').val();
+                    var stream = $('#StreamName').val();
+                    return Ember.$.getJSON('http://localhost:2113/streams/' + stream + '/' + id).then(function(data) {
+                        return data;
+                    });
+                }
+            });
         });
     </script>
 }
