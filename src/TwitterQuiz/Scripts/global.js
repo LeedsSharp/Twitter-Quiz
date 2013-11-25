@@ -29,12 +29,6 @@
                 previousSuccessMethod(error);
             }
         });
-        $.validator.methods.date = function (value, element) {
-            //This is not ideal but Chrome passes dates through in ISO1901 format regardless of locale 
-            //and despite displaying in the specified format.
-
-            return this.optional(element)
-                || Globalize.parseDate(value, "dd/mm/yyyy hh:mm:ss", "en-GB");
-        };
+        $.validator.methods["date"] = function (value, element) { return true; }
     }
 });
