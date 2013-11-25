@@ -32,9 +32,9 @@ namespace TwitterQuiz.ViewModels.Quiz
         {
             return new Domain.Quiz
                 {
-                    Id = Guid.NewGuid(),
                     Name = Name,
                     Description = Description,
+                    Host = Host,
                     StartDate = StartDate,
                     FrequencyOfAnswers = FrequencyOfAnswers.HasValue ? FrequencyOfAnswers.Value : 10,
                     FrequencyOfQuestions = FrequencyOfQuestions.HasValue ? FrequencyOfQuestions.Value : 3

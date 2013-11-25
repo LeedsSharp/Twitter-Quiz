@@ -9,12 +9,10 @@ namespace TwitterQuiz.Controllers
     [Authorize]
     public class QuizController : Controller
     {
-        private readonly IEventStoreConnection _eventStoreConnection;
         private readonly QuizLogic _quizLogic;
         public QuizController(IEventStoreConnection eventStoreConnection)
         {
-            _eventStoreConnection = eventStoreConnection;
-            _quizLogic = new QuizLogic(_eventStoreConnection);
+            _quizLogic = new QuizLogic(eventStoreConnection);
         }
 
         public ActionResult Index()
@@ -37,7 +35,7 @@ namespace TwitterQuiz.Controllers
         public ActionResult New(NewQuizViewModel model)
         {
             _quizLogic.CreateNewQuiz(model.ToQuizModel(), User.Identity.Name);
-            return View(model);
+            return RedirectToAction("Index", "Home");
         }
     }
 }
