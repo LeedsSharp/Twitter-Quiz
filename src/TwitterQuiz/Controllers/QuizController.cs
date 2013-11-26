@@ -67,5 +67,22 @@ namespace TwitterQuiz.Controllers
         {
             return View(model);
         }
+
+        [HttpPost]
+        public ActionResult AddRound(EditQuizViewModel model)
+        {
+            model.Rounds.Add(new RoundViewModel());
+            return PartialView("_EditQuiz", model);
+        }
+
+        [HttpGet]
+        public ActionResult AddSampleData()
+        {
+            var quiz = Domain.Quiz.SampleQuiz();
+
+            _quizLogic.CreateNewQuiz(quiz, User.Identity.Name);
+            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Home", "Index");
+        }
     }
 }

@@ -12,5 +12,34 @@ namespace TwitterQuiz.Domain
         {
             Questions = new List<Question>();
         }
+
+        internal static Round SampleRoundA()
+        {
+            return new Round
+            {
+                Name = "C# interview questions",
+                Sequence = 1,
+                Questions = new List<Question>
+                {
+                    new Question { Tweet = "What does immutable mean?" },
+                    new Question { Tweet = "How do you prevent a class from being inherited?" },
+                    new Question { Tweet = "What is the term used to describe converting a value type to a reference type?" }
+                }
+            };
+        }
+
+        internal static Round SampleRoundB()
+        {
+            return new Round
+            {
+                Name = "SQL server questions",
+                Sequence = 1,
+                Questions = new List<Question>
+                {
+                    new Question { Tweet = "What is a CTE?" },
+                    new Question { Tweet = "How do you declare a local temp table?" }
+                }
+            };
+        }
     }
 }

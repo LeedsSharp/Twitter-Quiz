@@ -14,11 +14,11 @@
                 <div class="panel-body">
                     @foreach (var question in round.Questions)
                     {
-                        <div class="row ">
-                            <div class="col-md-6">
-                                @Html.TextBoxFor(x => question.Question, new { @class = "form-control" })
+                        <div class="row form-stacked">
+                            <div class="col-md-12">
+                                @Html.TextAreaFor(x => question.Question, new { @class = "form-control" })
                             </div>
-                            <div class="col-md-6 form-stacked">
+                            <div class="col-md-8 col-offset-2">
                                 @foreach (var answer in question.PossibleAnswers)
                                 {
                                     @Html.TextBoxFor(x => answer, new { @class = "form-control" })
@@ -29,6 +29,9 @@
                 </div>
             </div>
         }
+        <div class="form-group">
+            @Html.ActionLink("Add Round", "AddRound", "Quiz", new { @class = "btn btn-primary" })
+        </div>
     </div>
 </div>
 <div class="form-group">

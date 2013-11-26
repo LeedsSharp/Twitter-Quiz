@@ -17,34 +17,11 @@ namespace TwitterQuiz.ViewModels.Quiz
         public EditQuizViewModel(Domain.Quiz quiz)
         {
             Details = new QuizDetailsViewModel(quiz);
-            var round = new RoundViewModel
-                {
-                    Name = "Round 1",
-                    Questions = new List<QuestionViewModel>
-                        {
-                            new QuestionViewModel
-                                {
-                                    Question = "Question 1",
-                                    PossibleAnswers = new List<string>
-                                        {
-                                            "",
-                                            "",
-                                            ""
-                                        }
-                                },
-                            new QuestionViewModel
-                                {
-                                    Question = "Question 1",
-                                    PossibleAnswers = new List<string>
-                                        {
-                                            "",
-                                            "",
-                                            ""
-                                        }
-                                }
-                        }
-                };
-            Rounds = new List<RoundViewModel> { round, round };
+            Rounds = new List<RoundViewModel>();
+            foreach (var round in quiz.Rounds)
+            {
+                Rounds.Add(new RoundViewModel(round));
+            }
         }
     }
 }

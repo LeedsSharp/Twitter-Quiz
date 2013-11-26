@@ -7,8 +7,10 @@
 @Html.HiddenFor(x => x.Id)
 @Html.HiddenFor(x => x.StreamName)
 
-@Html.Partial("_EditQuiz", @Model)
-
+@using (Html.BeginForm("Edit", "Quiz", FormMethod.Post, new {@class = "form", id = "edit-quiz"}))
+{
+    @Html.Partial("_EditQuiz", @Model)
+}
 @*@section Scripts
 {
     <script type="text/x-handlebars" id="application">

@@ -12,5 +12,16 @@ namespace TwitterQuiz.ViewModels.Quiz
         {
             PossibleAnswers = new List<string>();
         }
+
+        public QuestionViewModel(Domain.Question question)
+        {
+            Question = question.Tweet;
+            Sequence = question.Sequence;
+            PossibleAnswers = new List<string>();
+            foreach (var answer in question.PossibleAnswers)
+            {
+                PossibleAnswers.Add(answer);
+            }
+        }
     }
 }

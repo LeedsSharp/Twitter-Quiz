@@ -12,5 +12,16 @@ namespace TwitterQuiz.ViewModels.Quiz
         {
             Questions = new List<QuestionViewModel>();
         }
+
+        public RoundViewModel(Domain.Round round)
+        {
+            Name = round.Name;
+            Sequence = round.Sequence;
+            Questions = new List<QuestionViewModel>();
+            foreach (var question in round.Questions)
+            {
+                Questions.Add(new QuestionViewModel(question));
+            }
+        }
     }
 }
