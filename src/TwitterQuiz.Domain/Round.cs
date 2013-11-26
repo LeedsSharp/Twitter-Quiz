@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace TwitterQuiz.Domain
 {
@@ -13,33 +14,31 @@ namespace TwitterQuiz.Domain
             Questions = new List<Question>();
         }
 
-        internal static Round SampleRoundA()
+        internal static Round SampleRound(int roundNumber, Random r)
         {
-            return new Round
+            var round =  new Round
             {
-                Name = "C# interview questions",
-                Sequence = 1,
-                Questions = new List<Question>
-                {
-                    new Question { Tweet = "What does immutable mean?" },
-                    new Question { Tweet = "How do you prevent a class from being inherited?" },
-                    new Question { Tweet = "What is the term used to describe converting a value type to a reference type?" }
-                }
+                Name = string.Format("Round {0}", roundNumber),
+                Sequence = roundNumber,
+                Questions = new List<Question>()
             };
-        }
+            var num = r.Next(1, 10);
+            for (int i = 0; i < num; i++)
+            {
+                var question = new Question
+                    {
+                        Tweet = string.Format("Sample Question {0}", i),
+                        PossibleAnswers = new List<string>()
+                    };
+                var num2 = r.Next(1, 3);
+                for (int j = 0; j < num2; j++)
+                {
+                    question.PossibleAnswers.Add(string.Format("Possible Answer {0}", j));
+                }
 
-        internal static Round SampleRoundB()
-        {
-            return new Round
-            {
-                Name = "SQL server questions",
-                Sequence = 1,
-                Questions = new List<Question>
-                {
-                    new Question { Tweet = "What is a CTE?" },
-                    new Question { Tweet = "How do you declare a local temp table?" }
-                }
-            };
+                round.Questions.Add(question);
+            }
+            return round;
         }
     }
 }

@@ -16,21 +16,24 @@ namespace TwitterQuiz.Domain
         public IList<Round> Rounds { get; set; }
         public Player Winner { get; set; }
 
-        public static Quiz SampleQuiz()
+        public static Quiz SampleQuiz(int id, Random r)
         {
-            return new Quiz
+            var numOfRounds = r.Next(1, 5);
+            var quiz = new Quiz
             {
-                Name = "Leeds Sharp Pub Quiz",
-                Description = "A fun quiz to do down the pub at the December Leeds Sharp meetup.",
+                Name = string.Format("Quiz {0}", id),
+                Description = string.Format("Sample quiz number {0}", id),
                 Host = "LeedsSharp",
                 StartDate = DateTime.Now.AddHours(1),
-                FrequencyOfQuestions = 3,
-                FrequencyOfAnswers = 1,
-                Rounds = new List<Round>{
-                    Round.SampleRoundA(),
-                    Round.SampleRoundB()
-                }
+                FrequencyOfQuestions = r.Next(1, 10),
+                FrequencyOfAnswers = r.Next(1, 10),
+                Rounds = new List<Round>(numOfRounds)
             };
+            for (int i = 0; i < numOfRounds; i++)
+            {
+                quiz.Rounds.Add(Round.SampleRound(i, r));
+            }
+            return quiz;
         }
     }
 }

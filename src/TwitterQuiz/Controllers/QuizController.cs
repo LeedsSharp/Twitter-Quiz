@@ -76,11 +76,16 @@ namespace TwitterQuiz.Controllers
         }
 
         [HttpGet]
-        public ActionResult AddSampleData()
+        public ActionResult SmokeAndMirrors()
         {
-            var quiz = Domain.Quiz.SampleQuiz();
-
-            _quizLogic.CreateNewQuiz(quiz, User.Identity.Name);
+            Random r = new Random();
+            var NumOfQuizzes = r.Next(1, 5);
+            for (int i = 0; i < NumOfQuizzes; i++)
+            {
+                var quiz = Domain.Quiz.SampleQuiz(i, r);
+                _quizLogic.CreateNewQuiz(quiz, User.Identity.Name);
+            }
+            
             return RedirectToAction("Index", "Home");
         }
     }
