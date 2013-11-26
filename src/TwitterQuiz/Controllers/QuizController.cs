@@ -82,7 +82,6 @@ namespace TwitterQuiz.Controllers
 
             _quizLogic.CreateNewQuiz(quiz, User.Identity.Name);
             return RedirectToAction("Index", "Home");
-            return RedirectToAction("Home", "Index");
         }
     }
 }

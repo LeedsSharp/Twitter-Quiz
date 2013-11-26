@@ -18,7 +18,7 @@
                             <div class="col-md-12">
                                 @Html.TextAreaFor(x => question.Question, new { @class = "form-control" })
                             </div>
-                            <div class="col-md-8 col-offset-2">
+                            <div class="col-md-8 col-md-offset-2">
                                 @foreach (var answer in question.PossibleAnswers)
                                 {
                                     @Html.TextBoxFor(x => answer, new { @class = "form-control" })
