@@ -7,7 +7,7 @@ using EventStore.ClientAPI;
 using SimpleAuthentication.Mvc;
 using TwitterQuiz.Domain.Account;
 using TwitterQuiz.EventStore;
-using TwitterQuiz.ViewModels;
+using TwitterQuiz.ViewModels.Home;
 
 namespace TwitterQuiz.Controllers
 {
@@ -47,8 +47,8 @@ namespace TwitterQuiz.Controllers
         {
             return new ViewResult
             {
-                ViewName = "AuthenticateCallback",
-                ViewData = new ViewDataDictionary(new IndexViewModel
+                ViewName = "Index",
+                ViewData = new ViewDataDictionary(new HomeIndexViewModel
                 {
                     ErrorMessage = errorMessage
                 })

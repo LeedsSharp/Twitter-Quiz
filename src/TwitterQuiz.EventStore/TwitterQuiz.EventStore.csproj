@@ -45,11 +45,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EventStoreConnectionProvider.cs" />
+    <Compile Include="Logic\QuizLogic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RepositoryExtensions.cs" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Logic\" />
+    <ProjectReference Include="..\TwitterQuiz.Domain\TwitterQuiz.Domain.csproj">
+      <Project>{83EFF6B3-F4EA-4E1D-8320-6FF84CC3509F}</Project>
+      <Name>TwitterQuiz.Domain</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,12 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace TwitterQuiz.Domain
 {
     public class Question
     {
-        public Guid Id { get; set; }
         public string Tweet { get; set; }
-        public IList<Answer> Answers { get; set; }
+        public int Sequence { get; set; }
+        public IList<string> PossibleAnswers { get; set; }
+
+        public Question()
+        {
+            PossibleAnswers = new List<string>();
+        }
     }
 }

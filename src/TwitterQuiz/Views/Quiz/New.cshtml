@@ -1,0 +1,19 @@
+﻿@model TwitterQuiz.ViewModels.Quiz.NewQuizViewModel
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-sm-10 col-sm-offset-1 col-md-6 col-md-offset-3">
+        <h2>Create a new Quiz</h2>
+        @using (Html.BeginForm("New", "Quiz", FormMethod.Post, new { @class = "form", id = "new-quiz" }))
+        {
+            @Html.EditorFor(x => x.Details)
+            <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Create</button>
+            </div>
+        }
+    </div>
+</div>

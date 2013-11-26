@@ -26,15 +26,27 @@ namespace TwitterQuiz.EventStore
             return events.Any(filter);
         }
 
-        public static T AppendToStream<T>(this IEventStoreConnection eventStoreConnection, T newEvent, object metaData = null)
+        public static T AppendToStream<T>(this IEventStoreConnection eventStoreConnection, T newEvent, string stream, object metaData = null)
         {
             var eventType = typeof(T).Name;
+            if (stream == String.Empty)
+            {
+                stream = eventType.Pluralize();
+            }
             var eventData = new List<EventData>
             {
                 new EventData(Guid.NewGuid(), eventType, true, newEvent.ToJsonBytes(), new { metaData }.ToJsonBytes())
             };
-            eventStoreConnection.AppendToStream(eventType.Pluralize(), ExpectedVersion.Any, eventData);
+            eventStoreConnection.AppendToStream(stream, ExpectedVersion.Any, eventData);
             return newEvent;
+        }
+
+        public static T AppendToStream<T>(this IEventStoreConnection eventStoreConnection, T newEvent, object metaData = null)
+        {
+            var eventType = typeof(T).Name;
+            var stream = eventType.Pluralize();
+
+            return AppendToStream(eventStoreConnection, newEvent, stream, metaData);
         }
 
         public static string Pluralize(this string @this, int count = 0)
