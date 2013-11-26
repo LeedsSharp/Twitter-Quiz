@@ -57,11 +57,8 @@ namespace TwitterQuiz.Controllers
         [HttpGet]
         public ActionResult Edit(int id)
         {
-            var model = new EditQuizViewModel
-                {
-                    Id = id, StreamName = string.Format("{0}-Quizzes", 
-                    User.Identity.Name)
-                };
+            var quiz = _quizLogic.GetQuiz(id, User.Identity.Name);
+            var model = new EditQuizViewModel(quiz);
             return View(model);
         }
 

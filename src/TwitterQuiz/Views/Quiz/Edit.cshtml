@@ -7,43 +7,9 @@
 @Html.HiddenFor(x => x.Id)
 @Html.HiddenFor(x => x.StreamName)
 
-@*<div class="row">
-    <div class="col-md-6">
-        @Html.EditorFor(x => x.Details)
-    </div>
-    <div class="col-md-6">
-        @foreach (var round in Model.Rounds.OrderBy(x => x.Sequence))
-        {
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    @Html.TextBoxFor(x => round.Name, new { @class = "form-control" })
-                </div>
-                <div class="panel-body">
-                    @foreach (var question in round.Questions)
-                    {
-                        <div class="row ">
-                            <div class="col-md-6">
-                                @Html.TextBoxFor(x => question.Question, new { @class = "form-control" })
-                            </div>
-                            <div class="col-md-6 form-stacked">
-                                @foreach (var answer in question.PossibleAnswers)
-                                {
-                                    @Html.TextBoxFor(x => answer, new { @class = "form-control" })
-                                }
-                            </div>
-                        </div>
-                    }
-                </div>
-            </div>
-        }
-    </div>
-</div>
-<div class="form-group">
-    <button type="submit" class="btn btn-primary">Save</button>
-</div>*@
+@Html.Partial("_EditQuiz", @Model)
 
-
-@section Scripts
+@*@section Scripts
 {
     <script type="text/x-handlebars" id="application">
 		<div class="form-group">
@@ -84,4 +50,4 @@
             });
         });
     </script>
-}
+}*@

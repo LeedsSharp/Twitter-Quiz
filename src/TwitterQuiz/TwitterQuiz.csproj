@@ -199,6 +199,7 @@
     <Content Include="Views\Shared\EditorTemplates\DateTime.cshtml" />
     <Content Include="Views\Quiz\EditorTemplates\QuizDetailsViewModel.cshtml" />
     <Content Include="Views\Quiz\Edit.cshtml" />
+    <Content Include="Views\Quiz\_EditQuiz.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
