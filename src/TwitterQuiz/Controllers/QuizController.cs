@@ -88,5 +88,12 @@ namespace TwitterQuiz.Controllers
             
             return RedirectToAction("Index", "Home");
         }
+
+        public ActionResult Play(int id)
+        {
+            var quiz = _quizLogic.GetQuiz(id, User.Identity.Name);
+            var model = new EditQuizViewModel(quiz);
+            return View(model);
+        }
     }
 }

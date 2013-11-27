@@ -1,0 +1,39 @@
+﻿@model TwitterQuiz.ViewModels.Quiz.EditQuizViewModel
+
+@{
+    ViewBag.Title = Model.Details.Name;
+    Layout = "../Shared/_MasterLayout.cshtml";
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group">
+            <h2>@Model.Details.Name</h2>
+        </div>
+        <div class="form-group">
+            <span>@Model.Details.Description</span>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">Host:</label>
+            <span>&#64;@Model.Details.Host</span>
+        </div>
+    </div>
+    @foreach (var round in Model.Rounds)
+    {
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">@round.Name</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-6">
+
+                    </div>
+                    <div class="col-md-6">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
