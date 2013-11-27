@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using EventStore.ClientAPI;
 using TwitterQuiz.Domain;
+using TwitterQuiz.Domain.QuizEvents;
 using TwitterQuiz.EventStore;
 using TwitterQuiz.EventStore.Logic;
 
@@ -17,6 +18,33 @@ namespace TwitterQuiz.Runner
             _connection = EventStoreConnectionProvider.EventStore;
             _connection.Connect();
             _quizLogic = new QuizLogic(_connection);
+
+            Console.ReadLine();
+            Console.WriteLine("");
+            Console.WriteLine(@"                     ___          ___                   ___     ");
+            Console.WriteLine(@"                    /\  \        /\__\        ___      /\  \    ");
+            Console.WriteLine(@"                   /::\  \      /:/  /       /\  \     \:\  \   ");
+            Console.WriteLine(@"                  /:/\:\  \    /:/  /        \:\  \     \:\  \  ");
+            Console.WriteLine(@"                  \:\~\:\  \  /:/  /  ___    /::\__\     \:\  \ ");
+            Console.WriteLine(@"                   \:\ \:\__\/:/__/  /\__\__/:/\/__/______\:\__\");
+            Console.WriteLine(@"                    \:\/:/  /\:\  \ /:/  /\/:/  /  \::::::::/__/");
+            Console.WriteLine(@"                     \::/  /  \:\  /:/  /\::/__/    \:\~~\~~    ");
+            Console.WriteLine(@"                     /:/  /    \:\/:/  /  \:\__\     \:\  \     ");
+            Console.WriteLine(@"                    /:/  /      \::/  /    \/__/      \:\__\    ");
+            Console.WriteLine(@"                    \/__/        \/__/                 \/__/                   ");
+            Console.WriteLine(@"      ___          ___          ___          ___          ___          ___     ");
+            Console.WriteLine(@"     /\  \        /\__\        /\__\        /\__\        /\  \        /\  \    ");
+            Console.WriteLine(@"    /::\  \      /:/  /       /::|  |      /::|  |      /::\  \      /::\  \   ");
+            Console.WriteLine(@"   /:/\:\  \    /:/  /       /:|:|  |     /:|:|  |     /:/\:\  \    /:/\:\  \  ");
+            Console.WriteLine(@"  /::\~\:\  \  /:/  /  ___  /:/|:|  |__  /:/|:|  |__  /::\~\:\  \  /::\~\:\  \ ");
+            Console.WriteLine(@" /:/\:\ \:\__\/:/__/  /\__\/:/ |:| /\__\/:/ |:| /\__\/:/\:\ \:\__\/:/\:\ \:\__\");
+            Console.WriteLine(@" \/_|::\/:/  /\:\  \ /:/  /\/__|:|/:/  /\/__|:|/:/  /\:\~\:\ \/__/\/_|::\/:/  /");
+            Console.WriteLine(@"    |:|::/  /  \:\  /:/  /     |:/:/  /     |:/:/  /  \:\ \:\__\     |:|::/  / ");
+            Console.WriteLine(@"    |:|\/__/    \:\/:/  /      |::/  /      |::/  /    \:\ \/__/     |:|\/__/  ");
+            Console.WriteLine(@"    |:|  |       \::/  /       /:/  /       /:/  /      \:\__\       |:|  |    ");
+            Console.WriteLine(@"     \|__|        \/__/        \/__/        \/__/        \/__/        \|__|    ");
+            Console.WriteLine("");
+            Console.WriteLine("");
 
             var username = SetUsername();
 
@@ -63,15 +91,38 @@ namespace TwitterQuiz.Runner
         {
             foreach (var round in quiz.Rounds.OrderBy(x => x.Sequence))
             {
+                var roundTweet = new RoundStarted
+                    {
+                        Host = quiz.Host,
+                        Round = round.Sequence,
+                        Tweet = string.Format("Round {0}: {1}", round.Sequence, round.Name)
+                    };
+                _connection.AppendToStream(roundTweet, quiz.InternalName);
+                // Send tweet
                 Console.WriteLine("Round {0} - {1}", round.Sequence, round.Name);
                 Console.WriteLine("");
                 foreach (var question in round.Questions.OrderBy(x => x.Sequence))
                 {
+                    var questionTweet = new QuestionSent
+                        {
+                            Host = quiz.Host,
+                            Question = question.Sequence,
+                            Round = round.Sequence,
+                            Tweet = question.Tweet
+                        };
+                    _connection.AppendToStream(questionTweet, quiz.InternalName);
+                    // Send tweet
                     Console.WriteLine("{0}. {1}", question.Sequence, question.Tweet);
-                    Thread.Sleep(quiz.FrequencyOfQuestions * 100);
+                    Thread.Sleep(quiz.FrequencyOfQuestions * 6000);
                 }
                 Console.WriteLine("");
             }
+            var quizEnded = new QuizEnded
+                {
+                    Host = quiz.Host,
+                    Tweet = "The quiz is now over"
+                };
+            _connection.AppendToStream(quizEnded, quiz.InternalName);
         }
 
         private static string SetUsername()
