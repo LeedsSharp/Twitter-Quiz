@@ -91,8 +91,8 @@ namespace TwitterQuiz.Controllers
 
         public ActionResult Play(int id)
         {
-            var quiz = _quizLogic.GetQuiz(id, User.Identity.Name);
-            var model = new EditQuizViewModel(quiz);
+            var quizInProgress = _quizLogic.GetStartedQuiz(id, User.Identity.Name);
+            var model = new PlayQuizViewModel(quizInProgress);
             return View(model);
         }
     }

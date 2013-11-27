@@ -1,38 +1,46 @@
-﻿@model TwitterQuiz.ViewModels.Quiz.EditQuizViewModel
+﻿@model TwitterQuiz.ViewModels.Quiz.PlayQuizViewModel
 
 @{
-    ViewBag.Title = Model.Details.Name;
+    ViewBag.Title = Model.Name;
     Layout = "../Shared/_MasterLayout.cshtml";
 }
 <div class="row">
     <div class="col-md-12">
         <div class="form-group">
-            <h2>@Model.Details.Name</h2>
+            <h2>@Model.Name</h2>
         </div>
         <div class="form-group">
-            <span>@Model.Details.Description</span>
+            <span>@Model.Description</span>
         </div>
 
         <div class="form-group">
             <label class="control-label">Host:</label>
-            <span>&#64;@Model.Details.Host</span>
+            <span>&#64;@Model.Host</span>
         </div>
     </div>
-    @foreach (var round in Model.Rounds)
+    @foreach (var round in Model.Rounds.OrderBy(x => x.Sequence))
     {
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">@round.Name</h3>
-            </div>
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-md-6">
-
-                    </div>
-                    <div class="col-md-6">
-
-                    </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel-body">
+                    <h3>@round.Name</h3>
                 </div>
+            </div>
+            <div class="col-md-6">
+                @foreach (var question in round.Questions.OrderBy(x => x.Sequence))
+                {
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <h3>@question.Question</h3>
+                        </div>
+                        <div class="panel-footer">
+                            @foreach (var reply in question.Replies)
+                            {
+                                <p>@reply</p>
+                            }
+                        </div>
+                    </div>
+                }
             </div>
         </div>
     }

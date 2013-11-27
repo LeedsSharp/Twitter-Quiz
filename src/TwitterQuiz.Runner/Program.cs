@@ -113,7 +113,7 @@ namespace TwitterQuiz.Runner
                     _connection.AppendToStream(questionTweet, quiz.InternalName);
                     // Send tweet
                     Console.WriteLine("{0}. {1}", question.Sequence, question.Tweet);
-                    Thread.Sleep(quiz.FrequencyOfQuestions * 6000);
+                    Thread.Sleep(quiz.FrequencyOfQuestions * 1000);
                 }
                 Console.WriteLine("");
             }
