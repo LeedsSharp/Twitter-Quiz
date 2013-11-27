@@ -1,39 +1,62 @@
 ﻿@model TwitterQuiz.ViewModels.Quiz.EditQuizViewModel
 
 <div class="row">
+    <div class="col-md-12">
+        <div class="form-group pull-right" style="margin-top: 10px;">
+            @Html.ActionLink("Save", "Save", "Quiz", new { @class = "btn btn-success" })
+        </div>
+    </div>
+</div>
+<div class="row">
     <div class="col-md-6">
-        @Html.EditorFor(x => x.Details)
+                @Html.EditorFor(x => x.Details)
+        <div class="form-group">
+            @Html.ActionLink("Start Now", "StartQuiz", "Quiz", new { id = Model.Id },  new { @class = "btn btn-lg btn-success" })
+        </div>
     </div>
     <div class="col-md-6">
         @foreach (var round in Model.Rounds.OrderBy(x => x.Sequence))
         {
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    @Html.TextBoxFor(x => round.Name, new { @class = "form-control" })
+                    <div class="row">
+                        <div class="col-md-10">
+                            @Html.TextBoxFor(x => round.Name, new { @class = "form-control" })
+                        </div>
+                        <div class="col-md-2">
+                            <a class="btn btn-danger" href="#">
+                                <i class="fa fa-trash-o"></i>
+                            </a>
+                        </div>
+                    </div>
                 </div>
                 <div class="panel-body">
                     @foreach (var question in round.Questions)
                     {
                         <div class="row form-stacked">
-                            <div class="col-md-12">
+                            <div class="col-md-10">
                                 @Html.TextAreaFor(x => question.Question, new { @class = "form-control" })
                             </div>
-                            <div class="col-md-8 col-md-offset-2">
-                                @foreach (var answer in question.PossibleAnswers)
-                                {
-                                    @Html.TextBoxFor(x => answer, new { @class = "form-control" })
-                                }
+                            <div class="col-md-2">
+                                <a class="btn btn-danger" href="#">
+                                    <i class="fa fa-trash-o"></i>
+                                </a>
                             </div>
+                            @foreach (var answer in question.PossibleAnswers)
+                            {
+                                <div class="col-md-8 col-md-offset-2">
+                                    @Html.TextBoxFor(x => answer, new { @class = "form-control" })
+                                </div>
+                                <div class="col-md-2">
+                                    <a class="btn btn-danger" href="#">
+                                        <i class="fa fa-trash-o"></i>
+                                    </a>
+                                </div>
+                            }
                         </div>
                     }
                 </div>
             </div>
         }
-        <div class="form-group">
-            @Html.ActionLink("Add Round", "AddRound", "Quiz", new { @class = "btn btn-primary" })
-        </div>
     </div>
-</div>
-<div class="form-group">
-    <button type="submit" class="btn btn-primary">Save</button>
 </div>
