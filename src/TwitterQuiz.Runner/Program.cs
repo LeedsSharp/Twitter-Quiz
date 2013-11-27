@@ -65,7 +65,7 @@ namespace TwitterQuiz.Runner
             {
                 Console.WriteLine("Round {0} - {1}", round.Sequence, round.Name);
                 Console.WriteLine("");
-                foreach (var question in round.Questions)
+                foreach (var question in round.Questions.OrderBy(x => x.Sequence))
                 {
                     Console.WriteLine("{0}. {1}", question.Sequence, question.Tweet);
                     Thread.Sleep(quiz.FrequencyOfQuestions * 100);
