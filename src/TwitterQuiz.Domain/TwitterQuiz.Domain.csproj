@@ -44,13 +44,16 @@
   <ItemGroup>
     <Compile Include="Account\AccessToken.cs" />
     <Compile Include="Account\Gender.cs" />
+    <Compile Include="Account\TweetedAnswer.cs" />
     <Compile Include="Account\User.cs" />
     <Compile Include="Answer.cs" />
+    <Compile Include="Host.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Question.cs" />
     <Compile Include="Quiz.cs" />
     <Compile Include="Round.cs" />
+    <Compile Include="TweetedQuestion.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
