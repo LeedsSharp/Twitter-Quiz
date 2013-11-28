@@ -27,6 +27,7 @@ namespace TwitterQuiz.Domain
             {
                 var question = new Question
                     {
+                        Sequence = i,
                         Tweet = string.Format("Sample Question {0}", i),
                         PossibleAnswers = new List<string>()
                     };

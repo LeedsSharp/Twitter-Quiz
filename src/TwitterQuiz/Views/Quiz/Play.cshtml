@@ -1,0 +1,200 @@
+﻿@model TwitterQuiz.ViewModels.Quiz.PlayQuizViewModel
+
+@{
+    ViewBag.Title = Model.Name;
+    Layout = "../Shared/_MasterLayout.cshtml";
+}
+@Html.HiddenFor(x => x.InternalName, new { id = "internalName" })
+@Html.HiddenFor(x => x.Id, new { id = "quizId" })
+<div class="row" id="quiz">
+    <div class="col-md-12">
+        <div class="form-group">
+            <h1>
+                @Model.Name
+            <span>@Model.Description</span>
+        </h1>
+    </div>
+    <div class="form-group">
+        <h2 class="control-label text-center">Host: &#64;@Model.Host</h2>
+    </div>
+</div>
+@foreach (var round in Model.Rounds.OrderBy(x => x.Sequence))
+{
+    <div class="row" id="round-@round.Sequence">
+        <div class="col-md-12">
+            <h1>@round.Name</h1>
+            @foreach (var question in round.Questions.OrderBy(x => x.Sequence))
+            {
+                <div class="panel panel-default" id="question-@round.Sequence-@question.Sequence">
+                    <div class="panel-body">
+                        <h3>@question.Question</h3>
+                    </div>
+                    <div class="panel-footer">
+                        @foreach (var reply in question.Replies)
+                        {
+                            <a href="@Url.Action("Player", "Quiz", new { id = Model.Id, player = reply.Username })">
+                                <img id="answer-@round.Sequence-@question.Sequence-@reply.Username" src="@reply.ImageUrl" alt="&#64;@reply.Username" title="&#64;@reply.Username" class="img-thumbnail" width="50" />
+                            </a>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+@if (Model.IsComplete)
+{
+    <div class="alert alert-warning text-center" id="quiz-over">
+        <h2>THIS QUIZ HAS ENDED</h2>
+    </div>
+}
+</div>
+
+<script id="round-template" type="text/x-handlebars-template">
+    <div class="row" id="round-{{round}}">
+        <div class="col-md-12">
+            <h1>{{tweet}}</h1>
+        </div>
+    </div>
+</script>
+<script id="question-template" type="text/x-handlebars-template">
+    <div class="panel panel-default" id="question-{{round}}-{{question}}">
+        <div class="panel-body">
+            <h3>{{tweet}}</h3>
+        </div>
+        <div class="panel-footer">
+        </div>
+    </div>
+</script>
+<script id="answer-template" type="text/x-handlebars-template">
+    <a href="/Quiz/Player/{{quizId}}?player={{username}}">
+        <img id="answer-{{round}}-{{question}}-{{username}}" src="{{imageUrl}}" alt="&#64;{{username}}" title="&#64;{{username}}" class="img-thumbnail" width="50" />
+    </a>
+</script>
+
+@section Scripts
+{
+    <script type="text/javascript">
+        var last;
+
+        $(function () {
+            var streamName = $('#internalName').val();
+            last = "http://127.0.0.1:2113/streams/" + streamName;
+            getLatest(last, handleAtomResponse);
+        });
+
+        var handleAtomResponse = function (data) {
+            data.entries.forEach(function (item) {
+                var itemUri = getNamedLink(item.links, "alternate");
+                var callbackFunction = function () {
+                };
+                if (item.summary === "RoundStarted") callbackFunction = addRound;
+                if (item.summary === "QuestionSent") callbackFunction = addQuestion;
+                if (item.summary === "AnswerReceived") callbackFunction = addAnswer;
+                if (item.summary === "QuizEnded") callbackFunction = endQuiz;
+                $.ajax({
+                    headers: {
+                        Accept: 'application/json',
+                    },
+                    url: itemUri,
+                    success: callbackFunction
+                });
+            });
+
+            var prev = getNamedLink(data.links, "previous");
+            if (!prev) {
+                prev = last;
+            }
+            if (prev != last) {
+                last = prev;
+            }
+        };
+
+        function addRound(round) {
+            if ($('#round-' + round.round).length === 0) {
+                var source = $("#round-template").html();
+                var template = Handlebars.compile(source);
+                var html = template(round);
+                $('#quiz').append(html);;
+                //$(window).scrollTop($('#round-' + round.round).position().top);
+            }
+        }
+        function addQuestion(question) {
+            if ($('#question-' + question.round + '-' + question.question).length === 0) {
+                var source = $("#question-template").html();
+                var template = Handlebars.compile(source);
+                var html = template(question);
+                $('#round-' + question.round).append(html);
+                //$(window).scrollTop($('#round-' + question.round).position().top);
+            }
+        }
+
+        function addAnswer(answer) {
+            if ($('#answer-' + answer.round + '-' + answer.question + '-' + answer.username).length === 0) {
+                if (answer.username) {
+                    var quizId = $('#quizId').val();
+                    answer.quizId = quizId;
+                    var source = $("#answer-template").html();
+                    var template = Handlebars.compile(source);
+                    var html = template(answer);
+                    $('#question-' + answer.round + '-' + answer.question + ' .panel-footer').append(html);
+                }
+                //$(window).scrollTop($('#question-' + answer.round + '-' + answer.question).position().top);
+            }
+        }
+
+        function endQuiz(data) {
+            if ($('#quiz-over').length === 0) {
+                $('#quiz').append('<div class="alert alert-warning text-center" id="quiz-over"><h2>THIS QUIZ HAS ENDED</h2></div>');
+                $(window).scrollTop($('#quiz-over').position().top);
+            }
+        }
+
+        function getLatest(uri) {
+            console.log(uri);
+            $.ajax({
+                headers: {
+                    Accept: 'application/json',
+                },
+                url: uri,
+                success: function (data) {
+                    last = getNamedLink(data.links, "last");
+                    if (!last) {
+                        last = getNamedLink(data.links, "self");
+                    }
+                    if (!last) {
+                        last = uri;
+                    }
+                    setInterval(function () {
+                        readPrevious(last);
+                    }, 1000);
+                },
+                error: function () {
+                    setTimeout(function () {
+                        getLatest(last);
+                    }, 1000);
+                }
+            });
+        }
+        function readPrevious(uri) {
+            console.log(uri);
+            $.ajax({
+                headers: {
+                    Accept: 'application/json',
+                },
+                url: uri,
+                success: function (data) {
+                    handleAtomResponse(data);
+                }
+            });
+        }
+
+        function getNamedLink(links, name) {
+            for (var i = 0; i < links.length; i++) {
+                if (links[i].relation == name) {
+                    return links[i].uri;
+                }
+            }
+        }
+    </script>
+}

@@ -16,6 +16,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitterQuiz.Domain", "Twitt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitterQuiz.EventStore", "TwitterQuiz.EventStore\TwitterQuiz.EventStore.csproj", "{99090409-30AC-4F45-A02E-96A945260F89}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitterQuiz.Runner", "TwitterQuiz.Runner\TwitterQuiz.Runner.csproj", "{60655527-F216-48D7-9213-80467092DB57}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitterQuiz.FakeAnswerer", "TwitterQuiz.FakeAnswerer\TwitterQuiz.FakeAnswerer.csproj", "{2506EDF2-070F-4248-A530-FD3AD8A2B83D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitterQuiz.AtomPoller", "TwittQuiz.AtomPoller\TwitterQuiz.AtomPoller.csproj", "{3E57913F-E0C1-4534-AF75-6356E4E933B7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,6 +44,18 @@ Global
 		{99090409-30AC-4F45-A02E-96A945260F89}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{99090409-30AC-4F45-A02E-96A945260F89}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{99090409-30AC-4F45-A02E-96A945260F89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60655527-F216-48D7-9213-80467092DB57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60655527-F216-48D7-9213-80467092DB57}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60655527-F216-48D7-9213-80467092DB57}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60655527-F216-48D7-9213-80467092DB57}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2506EDF2-070F-4248-A530-FD3AD8A2B83D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2506EDF2-070F-4248-A530-FD3AD8A2B83D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2506EDF2-070F-4248-A530-FD3AD8A2B83D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2506EDF2-070F-4248-A530-FD3AD8A2B83D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E57913F-E0C1-4534-AF75-6356E4E933B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E57913F-E0C1-4534-AF75-6356E4E933B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E57913F-E0C1-4534-AF75-6356E4E933B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E57913F-E0C1-4534-AF75-6356E4E933B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

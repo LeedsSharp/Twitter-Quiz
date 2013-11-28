@@ -16,6 +16,7 @@ namespace TwitterQuiz.ViewModels.Quiz
 
         public EditQuizViewModel(Domain.Quiz quiz)
         {
+            Id = quiz.Id;
             Details = new QuizDetailsViewModel(quiz);
             Rounds = new List<RoundViewModel>();
             foreach (var round in quiz.Rounds)
