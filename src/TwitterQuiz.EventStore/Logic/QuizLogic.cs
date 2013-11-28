@@ -19,9 +19,9 @@ namespace TwitterQuiz.EventStore.Logic
 
         public Quiz CreateNewQuiz(Quiz quiz, string username)
         {
-            var streamName = string.Format("{0}-Quizzes", username);
+            var streamName = string.Format("User-{0}-Quizzes", username);
             var id = GetNumberOfQuizzes(username);
-            quiz.InternalName = string.Format("{0}-Quiz-{1}", username, id);
+            quiz.InternalName = string.Format("Quiz-{0}{1}", username, id);
             quiz.Id = id;
             _eventStoreConnection.AppendToStream(quiz, streamName);
             return quiz;
@@ -34,7 +34,7 @@ namespace TwitterQuiz.EventStore.Logic
 
         public IEnumerable<Quiz> GetQuizzes(string username)
         {
-            var streamName = string.Format("{0}-Quizzes", username);
+            var streamName = string.Format("User-{0}-Quizzes", username);
             var slice = _eventStoreConnection.ReadStreamEventsBackward(streamName, -1, int.MaxValue, true);
 
             var quizzes = slice.Events.Select(x => x.Event.Data.ParseJson<Quiz>()).ToList();
@@ -46,7 +46,7 @@ namespace TwitterQuiz.EventStore.Logic
 
         public Quiz GetQuiz(int id, string username)
         {
-            var streamName = string.Format("{0}-Quizzes", username);
+            var streamName = string.Format("User-{0}-Quizzes", username);
             var slice = _eventStoreConnection.ReadStreamEventsBackward(streamName, -1, int.MaxValue, true);
 
             var quizzes = slice.Events.Select(x => x.Event.Data.ParseJson<Quiz>()).ToList();

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Threading;
 using EventStore.ClientAPI;
 using TwitterQuiz.Domain.QuizEvents;
 using TwitterQuiz.EventStore;
@@ -53,8 +54,9 @@ namespace TwitterQuiz.FakeAnswerer
                     Console.WriteLine("");
                     Console.WriteLine("1. Connect to quiz");
                     Console.WriteLine("2. Submit fake answer");
-                    Console.WriteLine("3. Change username");
-                    Console.WriteLine("4. Exit"); 
+                    Console.WriteLine("3. Auto-run");
+                    Console.WriteLine("4. Change username");
+                    Console.WriteLine("5. Exit"); 
                 }
                 
 
@@ -78,10 +80,22 @@ namespace TwitterQuiz.FakeAnswerer
                             showMenu = false;
                             break;
                         case "3":
-                            username = SetUsername();
+                            while (true)
+                            {
+                                counter = CreateFakeAnswer(selectedQuiz, counter);
+                                Thread.Sleep(1000);
+                                if (Console.KeyAvailable)
+                                {
+                                    break;
+                                }
+                            }
                             showMenu = true;
                             break;
                         case "4":
+                            username = SetUsername();
+                            showMenu = true;
+                            break;
+                        case "5":
                             exit = true;
                             break;
                         default:

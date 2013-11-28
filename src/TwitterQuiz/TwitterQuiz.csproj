@@ -149,6 +149,7 @@
     <Compile Include="ViewModels\Quiz\QuizIndexViewModel.cs" />
     <Compile Include="ViewModels\Quiz\NewQuizViewModel.cs" />
     <Compile Include="ViewModels\Quiz\QuizListViewModel.cs" />
+    <Compile Include="ViewModels\Quiz\QuizPlayerViewModel.cs" />
     <Compile Include="ViewModels\Quiz\RoundViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -182,6 +183,7 @@
     <Content Include="Scripts\jquery-1.9.1.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.leanModal.min.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
@@ -205,6 +207,7 @@
     <Content Include="Views\Quiz\Edit.cshtml" />
     <Content Include="Views\Quiz\_EditQuiz.cshtml" />
     <Content Include="Views\Quiz\Play.cshtml" />
+    <Content Include="Views\Quiz\Player.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
