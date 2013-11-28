@@ -10,6 +10,7 @@ namespace TwitterQuiz.ViewModels.Quiz
         public string Name { get; set; }
         public string Description { get; set; }
         public string Host { get; set; }
+        public bool IsComplete { get; set; }
         public List<PlayRoundViewModel> Rounds { get; set; }
 
         public PlayQuizViewModel()
@@ -24,6 +25,7 @@ namespace TwitterQuiz.ViewModels.Quiz
             Name = quiz.Name;
             Description = quiz.Description;
             Host = quiz.Host;
+            IsComplete = quiz.Complete;
             Rounds = new List<PlayRoundViewModel>();
             foreach (var round in quiz.Rounds)
             {

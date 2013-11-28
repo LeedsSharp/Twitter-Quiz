@@ -4,7 +4,7 @@
     ViewBag.Title = Model.Name;
     Layout = "../Shared/_MasterLayout.cshtml";
 }
-@Html.HiddenFor(x => x.InternalName, new { id = "internalName"})
+@Html.HiddenFor(x => x.InternalName, new { id = "internalName" })
 <div class="row" id="quiz">
     <div class="col-md-12">
         <div class="form-group">
@@ -39,6 +39,12 @@
             </div>
         </div>
     }
+    @if (Model.IsComplete)
+    {
+        <div class="alert alert-warning text-center" id="quiz-over">
+            <h2>THIS QUIZ HAS ENDED</h2>
+        </div>
+    }
 </div>
 
 <script id="round-template" type="text/x-handlebars-template">
@@ -66,22 +72,22 @@
     <script type="text/javascript">
 
         var last;
-        
-        $(function() {
+
+        $(function () {
             var streamName = $('#internalName').val();
             last = "http://127.0.0.1:2113/streams/" + streamName;
             getLatest(last);
         });
 
 
-        var getLatest = function(uri) {
+        var getLatest = function (uri) {
             console.log(uri);
             $.ajax({
                 headers: {
                     Accept: 'application/json',
                 },
                 url: uri,
-                success: function(data) {
+                success: function (data) {
                     last = getNamedLink(data.links, "last");
                     if (!last) {
                         last = getNamedLink(data.links, "self");
@@ -90,28 +96,28 @@
                         last = uri;
                     }
 
-                    setInterval(function() {
+                    setInterval(function () {
                         readPrevious(last);
                     }, 1000);
                 },
                 error: function () {
-                    setTimeout(function() {
+                    setTimeout(function () {
                         getLatest(last);
                     }, 1000);
                 }
             });
         };
-        var readPrevious = function(uri) {
+        var readPrevious = function (uri) {
             console.log(uri);
             $.ajax({
                 headers: {
                     Accept: 'application/json',
                 },
                 url: uri,
-                success: function(data) {
-                    data.entries.forEach(function(item) {
+                success: function (data) {
+                    data.entries.forEach(function (item) {
                         var itemUri = getNamedLink(item.links, "alternate");
-                        var callback = function() {
+                        var callback = function () {
                         };
                         if (item.summary === "RoundStarted") callback = addRound;
                         if (item.summary === "QuestionSent") callback = addQuestion;
@@ -167,10 +173,13 @@
         }
 
         function endQuiz(data) {
-            console.log('Quiz Over');
+            if ($('#quiz-over').length === 0) {
+                $('#quiz').append('<div class="alert alert-warning text-center" id="quiz-over"><h2>THIS QUIZ HAS ENDED</h2></div>');
+                $(window).scrollTop($('#quiz-over').position().top);
+            }
         }
-        
-        var getNamedLink = function(links, name) {
+
+        var getNamedLink = function (links, name) {
             for (var i = 0; i < links.length; i++) {
                 if (links[i].relation == name) {
                     return links[i].uri;

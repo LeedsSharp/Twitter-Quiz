@@ -19,7 +19,6 @@ namespace TwitterQuiz.Runner
             _connection.Connect();
             _quizLogic = new QuizLogic(_connection);
 
-            Console.ReadLine();
             Console.WriteLine("");
             Console.WriteLine(@"                     ___          ___                   ___     ");
             Console.WriteLine(@"                    /\  \        /\__\        ___      /\  \    ");
@@ -47,13 +46,14 @@ namespace TwitterQuiz.Runner
             Console.WriteLine("");
 
             var username = SetUsername();
+            var quiz = SelectQuiz(username);
 
             var exit = false;
             while (!exit)
             {
-                Console.WriteLine("Please select from one of the following options:");
+                Console.WriteLine("> Please select from one of the following options:");
                 Console.WriteLine("");
-                Console.WriteLine("1. List Quizzes");
+                Console.WriteLine("1. Change Quiz");
                 Console.WriteLine("2. Run Quiz");
                 Console.WriteLine("3. Change username");
                 Console.WriteLine("4. Exit");
@@ -63,15 +63,20 @@ namespace TwitterQuiz.Runner
                 switch (input)
                 {
                     case "1":
-                        ListQuizzes(username);
+                        quiz = SelectQuiz(username);
                         // List Quizzes
                         break;
                     case "2":
-                        var quiz = GetQuiz(username);
-                        Console.WriteLine("Starting quiz {0}...", quiz.Name);
-                        Console.WriteLine("");
-                        PlayQuiz(quiz);
-                        // Start Quiz
+                        if (quiz != new Quiz())
+                        {
+                            Console.WriteLine("> Starting quiz {0}...", quiz.Name);
+                            Console.WriteLine("");
+                            PlayQuiz(quiz);
+                        }
+                        else
+                        {
+                            Console.WriteLine("> Please first select a quiz");
+                        }
                         break;
                     case "3":
                         username = SetUsername();
@@ -80,7 +85,7 @@ namespace TwitterQuiz.Runner
                         exit = true;
                         break;
                     default:
-                        Console.WriteLine("Unrecognised input...");
+                        Console.WriteLine("> Unrecognised input...");
                         Console.WriteLine("");
                         break;
                 }
@@ -99,9 +104,8 @@ namespace TwitterQuiz.Runner
                     };
                 _connection.AppendToStream(roundTweet, quiz.InternalName);
                 // Send tweet
-                Console.WriteLine("Round {0} - {1}", round.Sequence, round.Name);
-                Console.WriteLine("");
-                Thread.Sleep(1000);
+                Console.WriteLine("> Round {0}: {1}", round.Sequence, round.Name);
+                Thread.Sleep(quiz.FrequencyOfQuestions * 500);
                 foreach (var question in round.Questions.OrderBy(x => x.Sequence))
                 {
                     var questionTweet = new QuestionSent
@@ -113,7 +117,7 @@ namespace TwitterQuiz.Runner
                         };
                     _connection.AppendToStream(questionTweet, quiz.InternalName);
                     // Send tweet
-                    Console.WriteLine("{0}. {1}", question.Sequence, question.Tweet);
+                    Console.WriteLine("> {0}. {1}", question.Sequence, question.Tweet);
                     Thread.Sleep(quiz.FrequencyOfQuestions * 1000);
                 }
                 Console.WriteLine("");
@@ -121,82 +125,50 @@ namespace TwitterQuiz.Runner
             var quizEnded = new QuizEnded
                 {
                     Host = quiz.Host,
-                    Tweet = "The quiz is now over"
+                    Tweet = "> The quiz is now over"
                 };
             _connection.AppendToStream(quizEnded, quiz.InternalName);
         }
 
         private static string SetUsername()
         {
-            Console.WriteLine("What is your username?");
-            Console.WriteLine("");
+            Console.WriteLine("> What is your username?");
             var username = Console.ReadLine().Trim();
-            Console.WriteLine("Hello {0}", username);
+            Console.WriteLine("> Hello {0}", username);
             Console.WriteLine("");
             return username;
         }
 
-        private static Quiz GetQuiz(string username)
+        private static Quiz SelectQuiz(string username)
         {
-            var quiz = new Quiz();
-            var quizFound = false;
-            while (!quizFound)
-            {
-                Console.WriteLine("");
-                Console.WriteLine("Enter Quiz Id:");
-
-                var input = Console.ReadLine();
-
-                if (input == "cancel")
-                {
-                    break;
-                }
-                var quizId = 0;
-                if (!int.TryParse(input, out quizId))
-                {
-                    Console.WriteLine("No quiz found with Id of {0} - type cancel to go back to the menu", input);
-                }
-                else
-                {
-                    int id = quizId;
-                    var quizzes = _quizLogic.GetQuizzes(username);
-                    if (quizzes.Any(x => x.Id == id))
-                    {
-                        quiz = quizzes.First(x => x.Id == id);
-                        quizFound = true;
-                    }
-                    else
-                    {
-                        Console.WriteLine("No quiz found with Id of {0} - type cancel to go back to the menu", input);
-                    }
-                }
-            }
-            return quiz;
-        }
-
-        private static void ListQuizzes(string username)
-        {
-            Console.WriteLine("");
-            Console.WriteLine("Listing Quizzes...");
+            Console.WriteLine("> Select which quiz you want to connect to by entering the id");
             Console.WriteLine("");
             Console.WriteLine("Id\t\tName");
             try
             {
-                var quizzes = _quizLogic.GetQuizzes(username);
+                var quizzes = _quizLogic.GetQuizzes(username).ToList();
 
                 foreach (var quiz in quizzes)
                 {
                     Console.WriteLine("{0}\t\t{1}", quiz.Id, quiz.Name);
                 }
+
+                var input = Console.ReadLine();
+                Console.WriteLine("");
+                if (quizzes.Any(x => x.Id.ToString() == input))
+                {
+                    var quiz = quizzes.First(x => x.Id.ToString() == input);
+                    Console.WriteLine("> Connected to {0}", quiz.Name);
+                    return quiz;
+                }
+                Console.WriteLine("> Selection not recognised");
             }
             catch (Exception)
             {
-                Console.WriteLine("This user does not have any quizzes :(");
+                Console.WriteLine("> This user does not have any quizzes :(");
             }
-            finally
-            {
-                Console.WriteLine("");
-            }
+            Console.WriteLine("");
+            return new Quiz();
         }
     }
 }

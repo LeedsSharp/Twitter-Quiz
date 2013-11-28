@@ -60,46 +60,46 @@ namespace TwitterQuiz.EventStore.Logic
             var quizSoFar = new QuizInProgress();
             quizSoFar.Initialize(quiz);
 
-
             var slice = _eventStoreConnection.ReadStreamEventsForward(quiz.InternalName, StreamPosition.Start, int.MaxValue, true);
 
-            foreach (var @event in slice.Events)
+            foreach (var roundStartedEvent in slice.Events.Where(x => x.Event.EventType == "RoundStarted").Select(@event => @event.Event.Data.ParseJson<RoundStarted>()))
             {
-                switch (@event.Event.EventType)
-                {
-                    case "RoundStarted":
-                        var roundStartedEvent = @event.Event.Data.ParseJson<RoundStarted>();
-                        quizSoFar.Rounds.Add(new RoundInProgress(quiz.Rounds.First(x => x.Sequence == roundStartedEvent.Round)));
-                        break;
-                    case "QuestionSent":
-                        var questionSentEvent = @event.Event.Data.ParseJson<QuestionSent>();
-                        var question = quiz.Rounds.First(x => x.Sequence == questionSentEvent.Round)
+                quizSoFar.Rounds.Add(new RoundInProgress(quiz.Rounds.First(x => x.Sequence == roundStartedEvent.Round)));
+            }
+
+            foreach (var questionSentEvent in slice.Events.Where(x => x.Event.EventType == "QuestionSent").Select(@event => @event.Event.Data.ParseJson<QuestionSent>()))
+            {
+                var question = quiz.Rounds.First(x => x.Sequence == questionSentEvent.Round)
                                            .Questions.First(x => x.Sequence == questionSentEvent.Question);
                         quizSoFar.Rounds.First(x => x.Sequence == questionSentEvent.Round)
                                         .Questions.Add(new QuestionInProgress(question));
-                        break;
-                    case "AnswerReceived":
-                        var answerReceivedEvent = @event.Event.Data.ParseJson<AnswerReceived>();
-                        var answer = new Answer
-                            {
-                                Player = new Player
-                                    {
-                                        Username = answerReceivedEvent.Username,
-                                        ImageUrl = answerReceivedEvent.ImageUrl
-                                    },
-                                AnswerConent = answerReceivedEvent.Answer
-                            };
-                            var round = quizSoFar.Rounds.First(x => x.Sequence == answerReceivedEvent.Round);
-                            var qtion = round.Questions.First(x => x.Sequence == answerReceivedEvent.Question);
-                            qtion.Replies.Add(answer);
-                            var elements = new HashSet<string>();
-                            qtion.Replies.RemoveAll(x => !elements.Add(x.Player.Username));
-                        break;
-                    case "QuizEnded":
-                        quizSoFar.Complete = true;
-                        break;
+            }
+
+            foreach (var answerReceivedEvent in slice.Events.Where(x => x.Event.EventType == "AnswerReceived").Select(@event => @event.Event.Data.ParseJson<AnswerReceived>()))
+            {
+                var answer = new Answer
+                {
+                    Player = new Player
+                    {
+                        Username = answerReceivedEvent.Username,
+                        ImageUrl = answerReceivedEvent.ImageUrl
+                    },
+                    AnswerConent = answerReceivedEvent.Answer
+                };
+                var round = quizSoFar.Rounds.FirstOrDefault(x => x.Sequence == answerReceivedEvent.Round);
+                if (round != null)
+                {
+                    var qtion = round.Questions.FirstOrDefault(x => x.Sequence == answerReceivedEvent.Question);
+                    if (qtion != null)
+                    {
+                        qtion.Replies.Add(answer);
+                        var elements = new HashSet<string>();
+                        qtion.Replies.RemoveAll(x => !elements.Add(x.Player.Username));
+                    }
                 }
             }
+
+            quizSoFar.Complete = slice.Events.Any(x => x.Event.EventType == "QuizEnded");
 
             return quizSoFar;
         }
