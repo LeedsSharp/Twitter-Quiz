@@ -68,7 +68,7 @@ namespace TwitterQuiz.Runner
                         break;
                     case "2":
                         var quiz = GetQuiz(username);
-                        Console.WriteLine("Startin quiz {0}...", quiz.Name);
+                        Console.WriteLine("Starting quiz {0}...", quiz.Name);
                         Console.WriteLine("");
                         PlayQuiz(quiz);
                         // Start Quiz
@@ -101,6 +101,7 @@ namespace TwitterQuiz.Runner
                 // Send tweet
                 Console.WriteLine("Round {0} - {1}", round.Sequence, round.Name);
                 Console.WriteLine("");
+                Thread.Sleep(1000);
                 foreach (var question in round.Questions.OrderBy(x => x.Sequence))
                 {
                     var questionTweet = new QuestionSent

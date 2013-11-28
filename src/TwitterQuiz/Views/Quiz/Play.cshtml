@@ -4,7 +4,8 @@
     ViewBag.Title = Model.Name;
     Layout = "../Shared/_MasterLayout.cshtml";
 }
-<div class="row">
+@Html.HiddenFor(x => x.InternalName, new { id = "internalName"})
+<div class="row" id="quiz">
     <div class="col-md-12">
         <div class="form-group">
             <h1>@Model.Name
@@ -18,19 +19,19 @@
     </div>
     @foreach (var round in Model.Rounds.OrderBy(x => x.Sequence))
     {
-        <div class="row">
+        <div class="row" id="round-@round.Sequence">
             <div class="col-md-12">
                 <h1>@round.Name</h1>
                 @foreach (var question in round.Questions.OrderBy(x => x.Sequence))
                 {
-                    <div class="panel panel-default">
+                    <div class="panel panel-default" id="question-@round.Sequence-@question.Sequence">
                         <div class="panel-body">
                             <h3>@question.Question</h3>
                         </div>
                         <div class="panel-footer">
                             @foreach (var reply in question.Replies)
                             {
-                                <img src="@reply.ImageUrl" alt="&#64;@reply.Username" title="&#64;@reply.Username" class="img-thumbnail" width="50" />
+                                <img id="answer-@round.Sequence-@question.Sequence-@reply.Username" src="@reply.ImageUrl" alt="&#64;@reply.Username" title="&#64;@reply.Username" class="img-thumbnail" width="50" />
                             }
                         </div>
                     </div>
@@ -39,3 +40,142 @@
         </div>
     }
 </div>
+
+<script id="round-template" type="text/x-handlebars-template">
+  <div class="row" id="round-{{round}}">
+            <div class="col-md-12">
+                <h1>{{tweet}}</h1>
+            </div>
+        </div>
+</script>
+<script id="question-template" type="text/x-handlebars-template">
+  <div class="panel panel-default" id="question-{{round}}-{{question}}">
+        <div class="panel-body">
+            <h3>{{tweet}}</h3>
+        </div>
+        <div class="panel-footer">
+        </div>
+    </div>
+</script>
+<script id="answer-template" type="text/x-handlebars-template">
+    <img id="answer-{{round}}-{{question}}-{{username}}" src="{{imageUrl}}" alt="&#64;{{username}}" title="&#64;{{username}}" class="img-thumbnail" width="50" />
+</script>
+
+@section Scripts
+{
+    <script type="text/javascript">
+
+        var last;
+        
+        $(function() {
+            var streamName = $('#internalName').val();
+            last = "http://127.0.0.1:2113/streams/" + streamName;
+            getLatest(last);
+        });
+
+
+        var getLatest = function(uri) {
+            console.log(uri);
+            $.ajax({
+                headers: {
+                    Accept: 'application/json',
+                },
+                url: uri,
+                success: function(data) {
+                    last = getNamedLink(data.links, "last");
+                    if (!last) {
+                        last = getNamedLink(data.links, "self");
+                    }
+                    if (!last) {
+                        last = uri;
+                    }
+
+                    setInterval(function() {
+                        readPrevious(last);
+                    }, 1000);
+                },
+                error: function () {
+                    setTimeout(function() {
+                        getLatest(last);
+                    }, 1000);
+                }
+            });
+        };
+        var readPrevious = function(uri) {
+            console.log(uri);
+            $.ajax({
+                headers: {
+                    Accept: 'application/json',
+                },
+                url: uri,
+                success: function(data) {
+                    data.entries.forEach(function(item) {
+                        var itemUri = getNamedLink(item.links, "alternate");
+                        var callback = function() {
+                        };
+                        if (item.summary === "RoundStarted") callback = addRound;
+                        if (item.summary === "QuestionSent") callback = addQuestion;
+                        if (item.summary === "AnswerReceived") callback = addAnswer;
+                        if (item.summary === "QuizEnded") callback = endQuiz;
+                        $.ajax({
+                            headers: {
+                                Accept: 'application/json',
+                            },
+                            url: itemUri,
+                            success: callback
+                        });
+                    });
+
+                    var prev = getNamedLink(data.links, "previous");
+                    if (!prev) {
+                        prev = uri;
+                    }
+                    if (prev != last) {
+                        last = prev;
+                    }
+                }
+            });
+        };
+
+        function addRound(round) {
+            if ($('#round-' + round.round).length === 0) {
+                var source = $("#round-template").html();
+                var template = Handlebars.compile(source);
+                var html = template(round);
+                $('#quiz').append(html);;
+                $(window).scrollTop($('#round-' + round.round).position().top);
+            }
+        }
+        function addQuestion(question) {
+            if ($('#question-' + question.round + '-' + question.question).length === 0) {
+                var source = $("#question-template").html();
+                var template = Handlebars.compile(source);
+                var html = template(question);
+                $('#round-' + question.round).append(html);
+                $(window).scrollTop($('#round-' + question.round).position().top);
+            }
+        }
+
+        function addAnswer(answer) {
+            if ($('#answer-' + answer.round + '-' + answer.question + '-' + answer.username).length === 0) {
+                var source = $("#answer-template").html();
+                var template = Handlebars.compile(source);
+                var html = template(answer);
+                $('#question-' + answer.round + '-' + answer.question + ' .panel-footer').append(html);
+                $(window).scrollTop($('#question-' + answer.round + '-' + answer.question).position().top);
+            }
+        }
+
+        function endQuiz(data) {
+            console.log('Quiz Over');
+        }
+        
+        var getNamedLink = function(links, name) {
+            for (var i = 0; i < links.length; i++) {
+                if (links[i].relation == name) {
+                    return links[i].uri;
+                }
+            }
+        };
+    </script>
+}

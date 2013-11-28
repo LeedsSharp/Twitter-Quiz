@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitterQuiz.Runner", "Twitt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitterQuiz.FakeAnswerer", "TwitterQuiz.FakeAnswerer\TwitterQuiz.FakeAnswerer.csproj", "{2506EDF2-070F-4248-A530-FD3AD8A2B83D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwittQuiz.AtomPoller", "TwittQuiz.AtomPoller\TwittQuiz.AtomPoller.csproj", "{3E57913F-E0C1-4534-AF75-6356E4E933B7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +52,10 @@ Global
 		{2506EDF2-070F-4248-A530-FD3AD8A2B83D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2506EDF2-070F-4248-A530-FD3AD8A2B83D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2506EDF2-070F-4248-A530-FD3AD8A2B83D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E57913F-E0C1-4534-AF75-6356E4E933B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E57913F-E0C1-4534-AF75-6356E4E933B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E57913F-E0C1-4534-AF75-6356E4E933B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E57913F-E0C1-4534-AF75-6356E4E933B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
