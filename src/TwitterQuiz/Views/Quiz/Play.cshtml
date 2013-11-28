@@ -30,7 +30,7 @@
                         <div class="panel-footer">
                             @foreach (var reply in question.Replies)
                             {
-                                <p>@reply</p>
+                                <img src="@reply.ImageUrl" alt="&#64;@reply.Username" title="&#64;@reply.Username" class="img-thumbnail" width="50" />
                             }
                         </div>
                     </div>

@@ -7,13 +7,17 @@ namespace TwitterQuiz.ViewModels.Quiz
     {
         public string Question { get; set; }
         public int Sequence { get; set; }
-        public IList<string> Replies { get; set; }
+        public IList<PlayAnswerViewModel> Replies { get; set; }
 
         public PlayQuestionViewModel(QuestionInProgress question)
         {
             Question = question.Question;
             Sequence = question.Sequence;
-            Replies = question.Replies;
+            Replies = new List<PlayAnswerViewModel>();
+            foreach (var reply in question.Replies)
+            {
+                Replies.Add(new PlayAnswerViewModel(reply));
+            }
         }
     }
 }

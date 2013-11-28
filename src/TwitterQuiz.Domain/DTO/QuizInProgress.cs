@@ -50,13 +50,13 @@ namespace TwitterQuiz.Domain.DTO
     {
         public string Question { get; set; }
         public int Sequence { get; set; }
-        public IList<string> Replies { get; set; }
+        public List<Answer> Replies { get; set; }
 
         public QuestionInProgress(Question question)
         {
             Question = question.Tweet;
             Sequence = question.Sequence;
-            Replies = new List<string>();
+            Replies = new List<Answer>();
         }
     }
 }

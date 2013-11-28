@@ -140,6 +140,7 @@
     <Compile Include="ViewModels\AuthenticateCallbackViewModel.cs" />
     <Compile Include="ViewModels\Home\HomeIndexViewModel.cs" />
     <Compile Include="ViewModels\Quiz\EditQuizViewModel.cs" />
+    <Compile Include="ViewModels\Quiz\PlayAnswerViewModel.cs" />
     <Compile Include="ViewModels\Quiz\PlayQuestionViewModel.cs" />
     <Compile Include="ViewModels\Quiz\PlayQuizViewModel.cs" />
     <Compile Include="ViewModels\Quiz\PlayRoundViewModel.cs" />

@@ -78,6 +78,23 @@ namespace TwitterQuiz.EventStore.Logic
                         quizSoFar.Rounds.First(x => x.Sequence == questionSentEvent.Round)
                                         .Questions.Add(new QuestionInProgress(question));
                         break;
+                    case "AnswerReceived":
+                        var answerReceivedEvent = @event.Event.Data.ParseJson<AnswerReceived>();
+                        var answer = new Answer
+                            {
+                                Player = new Player
+                                    {
+                                        Username = answerReceivedEvent.Username,
+                                        ImageUrl = answerReceivedEvent.ImageUrl
+                                    },
+                                AnswerConent = answerReceivedEvent.Answer
+                            };
+                            var round = quizSoFar.Rounds.First(x => x.Sequence == answerReceivedEvent.Round);
+                            var qtion = round.Questions.First(x => x.Sequence == answerReceivedEvent.Question);
+                            qtion.Replies.Add(answer);
+                            var elements = new HashSet<string>();
+                            qtion.Replies.RemoveAll(x => !elements.Add(x.Player.Username));
+                        break;
                     case "QuizEnded":
                         quizSoFar.Complete = true;
                         break;
@@ -85,6 +102,22 @@ namespace TwitterQuiz.EventStore.Logic
             }
 
             return quizSoFar;
+        }
+
+        public void CreateFakeAnswer(AnswerReceived answer, string selectedQuiz)
+        {
+            var slice = _eventStoreConnection.ReadStreamEventsBackward(selectedQuiz, StreamPosition.End, int.MaxValue, true);
+
+            if (!slice.Events.Any() || slice.Events.Any(x => x.Event.EventType == "QuizEnded")) return;
+
+            answer.Round = slice.Events.First(x => x.Event.EventType == "RoundStarted")
+                                .Event.Data.ParseJson<RoundStarted>()
+                                .Round;
+            answer.Question = slice.Events.First(x => x.Event.EventType == "QuestionSent")
+                                .Event.Data.ParseJson<QuestionSent>()
+                                .Question;
+
+            _eventStoreConnection.AppendToStream(answer, selectedQuiz);
         }
     }
 }
