@@ -1,4 +1,6 @@
-﻿using Ninject.Modules;
+﻿using Ninject;
+using Ninject.Modules;
+using Ninject.Web.Common;
 using Raven.Client;
 
 namespace TwitterQuiz.Ninject
@@ -7,13 +9,11 @@ namespace TwitterQuiz.Ninject
     {
         public override void Load()
         {
-            Bind<IDocumentSession>()
-                .ToMethod(x =>
-                {
-                    var store = RavenSessionProvider.DocumentStore;
-                    return store.OpenSession();
-                })
-                .InSingletonScope();
+            Bind<IDocumentStore>()
+           .ToMethod(context => RavenSessionProvider.EmbeddableDocumentStore)
+           .InSingletonScope();
+
+            Bind<IDocumentSession>().ToMethod(context => context.Kernel.Get<IDocumentStore>().OpenSession()).InRequestScope();
         }
     }
 }

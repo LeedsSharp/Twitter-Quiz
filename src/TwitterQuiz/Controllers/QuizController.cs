@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Web.Mvc;
 using EventStore.ClientAPI;
+using Raven.Client.Linq;
 using TwitterQuiz.EventStore.Logic;
 using TwitterQuiz.ViewModels.Quiz;
+using Raven.Client;
+using TwitterQuiz.Domain;
 
 namespace TwitterQuiz.Controllers
 {
@@ -10,14 +13,17 @@ namespace TwitterQuiz.Controllers
     public class QuizController : Controller
     {
         private readonly QuizLogic _quizLogic;
-        public QuizController(IEventStoreConnection eventStoreConnection)
+        private readonly IDocumentSession _documentSession;
+        public QuizController(IEventStoreConnection eventStoreConnection, IDocumentSession documentSession)
         {
             _quizLogic = new QuizLogic(eventStoreConnection);
+            _documentSession = documentSession;
         }
 
         public ActionResult Index()
         {
-            var quizzes = _quizLogic.GetQuizzes(User.Identity.Name);
+            var quizzes = _documentSession.Query<Quiz>().Where(x => x.Owner == User.Identity.Name);
+            //var quizzes = _quizLogic.GetQuizzes(User.Identity.Name);
             var model = new QuizIndexViewModel();
             foreach (var quiz in quizzes)
             {
@@ -41,7 +47,8 @@ namespace TwitterQuiz.Controllers
                     Details = new QuizDetailsViewModel
                         {
                             StartDate = DateTime.Now.AddHours(1),
-                            Host = User.Identity.Name
+                            Host = User.Identity.Name,
+                            Owner = User.Identity.Name
                         }
                 };
             return View(model);
@@ -50,14 +57,19 @@ namespace TwitterQuiz.Controllers
         [HttpPost]
         public ActionResult New(NewQuizViewModel model)
         {
-            _quizLogic.CreateNewQuiz(model.ToQuizModel(), User.Identity.Name);
+            _documentSession.Store(model.ToQuizModel());
+            _documentSession.SaveChanges();
+            // Temp raven cop out to get the front end working whilst I figure out CQRS...
+            //_quizLogic.CreateNewQuiz(model.ToQuizModel(), User.Identity.Name);
             return RedirectToAction("Index", "Home");
         }
 
         [HttpGet]
         public ActionResult Edit(int id)
         {
-            var quiz = _quizLogic.GetQuiz(id, User.Identity.Name);
+            var quiz = _documentSession.Load<Quiz>(id);
+            // Temp raven cop out to get the front end working whilst I figure out CQRS...
+            //var quiz = _quizLogic.GetQuiz(id, User.Identity.Name);
             var model = new EditQuizViewModel(quiz);
             return View(model);
         }
@@ -82,8 +94,8 @@ namespace TwitterQuiz.Controllers
             var NumOfQuizzes = r.Next(1, 5);
             for (int i = 0; i < NumOfQuizzes; i++)
             {
-                var quiz = Domain.Quiz.SampleQuiz(i, r);
-                _quizLogic.CreateNewQuiz(quiz, User.Identity.Name);
+                var quiz = Quiz.SampleQuiz(i, r, User.Identity.Name);
+                _documentSession.Store(quiz);
             }
             
             return RedirectToAction("Index", "Home");

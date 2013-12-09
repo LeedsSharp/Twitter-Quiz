@@ -1,5 +1,7 @@
 ﻿using System.Configuration;
 using Raven.Client.Document;
+using Raven.Client.Embedded;
+using Raven.Database.Server;
 
 namespace TwitterQuiz
 {
@@ -7,6 +9,7 @@ namespace TwitterQuiz
     {
         private static DocumentStore _documentStore;
 
+        public bool Embeddable { get; set; }
         public bool SessionInitialized { get; set; }
 
         public static DocumentStore DocumentStore
@@ -24,6 +27,24 @@ namespace TwitterQuiz
             };
             store.Initialize();
 
+            return store;
+        }
+
+        public static DocumentStore EmbeddableDocumentStore
+        {
+            get { return (_documentStore ?? (_documentStore = CreateEmbeddableDocumentStore())); }
+        }
+
+        private static DocumentStore CreateEmbeddableDocumentStore()
+        {
+            NonAdminHttp.EnsureCanListenToWhenInNonAdminContext(8081);
+            var store = new EmbeddableDocumentStore
+            {
+                DataDirectory = "App_Data",
+                UseEmbeddedHttpServer = true,
+                Configuration = { Port = 8081 }
+            };
+            store.Initialize();
             return store;
         }
     }
