@@ -3,7 +3,14 @@
 <div class="row">
     <div class="col-md-12">
         <div class="form-group pull-right" style="margin-top: 10px;">
-            @Html.ActionLink("Save", "Save", "Quiz", new { @class = "btn btn-success" })
+            @if (Model.IsNew)
+            {
+                <button type="submit" class="btn btn-success">Create</button>
+            }
+            else
+            {
+                <button type="submit" class="btn btn-success">Save</button>
+            }
             <a class="btn btn-success add-round">
                 <i class="fa fa-plus"> Add Round</i>
             </a>
@@ -13,9 +20,9 @@
 <div class="row">
     <div class="col-md-6">
         @Html.EditorFor(x => x.Details)
-        <div class="form-group">
+        @*<div class="form-group">
             @Html.ActionLink("Start Now", "Play", "Quiz", new { id = Model.Id }, new { @class = "btn btn-lg btn-success" })
-        </div>
+        </div>*@
     </div>
     <div class="col-md-6" id="round-container">
         @foreach (var round in Model.Rounds.OrderBy(x => x.Sequence))

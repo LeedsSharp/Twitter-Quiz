@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using TwitterQuiz.Domain;
 
 namespace TwitterQuiz.ViewModels.Quiz
 {
@@ -28,6 +29,21 @@ namespace TwitterQuiz.ViewModels.Quiz
         {
             var question = new QuestionViewModel();
             question.PossibleAnswers.Add(new AnswerViewModel());
+            return question;
+        }
+
+        public Question ToQuestionModel()
+        {
+            var question = new Question
+                           {
+                               Tweet = Question,
+                               Sequence = Sequence,
+                               PossibleAnswers = new List<PossibleAnswer>(PossibleAnswers.Count)
+                           };
+            foreach (var answer in PossibleAnswers)
+            {
+                question.PossibleAnswers.Add(new PossibleAnswer { Answer = answer.Answer, IsCorrect = answer.IsCorrect});
+            }
             return question;
         }
     }

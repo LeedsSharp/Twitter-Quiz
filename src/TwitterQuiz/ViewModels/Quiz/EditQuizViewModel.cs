@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using TwitterQuiz.Domain;
 
 namespace TwitterQuiz.ViewModels.Quiz
 {
@@ -8,6 +9,7 @@ namespace TwitterQuiz.ViewModels.Quiz
         public string StreamName { get; set; }
         public QuizDetailsViewModel Details { get; set; }
         public List<RoundViewModel> Rounds { get; set; }
+        public bool IsNew { get; set; }
 
         public EditQuizViewModel()
         {
@@ -27,7 +29,7 @@ namespace TwitterQuiz.ViewModels.Quiz
 
         public Domain.Quiz ToQuizModel()
         {
-            return new Domain.Quiz
+            var quiz = new Domain.Quiz
             {
                 Name = Details.Name,
                 Description = Details.Description,
@@ -37,6 +39,12 @@ namespace TwitterQuiz.ViewModels.Quiz
                 FrequencyOfAnswers = Details.FrequencyOfAnswers.HasValue ? Details.FrequencyOfAnswers.Value : 10,
                 FrequencyOfQuestions = Details.FrequencyOfQuestions.HasValue ? Details.FrequencyOfQuestions.Value : 3
             };
+            quiz.Rounds = new List<Round>(Rounds.Count);
+            foreach (var round in Rounds)
+            {
+                quiz.Rounds.Add(round.ToRoundModel());
+            }
+            return quiz;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using TwitterQuiz.Domain;
 
 namespace TwitterQuiz.ViewModels.Quiz
 {
@@ -13,7 +14,7 @@ namespace TwitterQuiz.ViewModels.Quiz
             Questions = new List<QuestionViewModel>();
         }
 
-        public RoundViewModel(Domain.Round round)
+        public RoundViewModel(Round round)
         {
             Name = round.Name;
             Sequence = round.Sequence;
@@ -28,6 +29,21 @@ namespace TwitterQuiz.ViewModels.Quiz
         {
             var round = new RoundViewModel();
             round.Questions.Add(QuestionViewModel.NewQuestion());
+            return round;
+        }
+
+        public Round ToRoundModel()
+        {
+            var round = new Round
+                        {
+                            Name = Name,
+                            Sequence = Sequence,
+                            Questions = new List<Question>(Questions.Count)
+                        };
+            foreach (var question in Questions)
+            {
+                round.Questions.Add(question.ToQuestionModel());
+            }
             return round;
         }
     }
