@@ -26,7 +26,7 @@ else
         <div class="panel-body">
             <p>@quiz.Description</p>
             <p>Start: @quiz.Start</p>
-            <a class="btn btn-lg btn-success" href="@Url.Action("Play", "Quiz", new { id = quiz.Id })">
+            <a class="btn btn-lg btn-success" href="@Url.Action("Start", "Quiz", new { id = quiz.Id })">
                 <i class="fa fa-play fa-fw"></i>
                 Play Now
             </a>
