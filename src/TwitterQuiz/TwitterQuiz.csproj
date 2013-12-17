@@ -246,6 +246,9 @@
     <Content Include="Views\Quiz\_EditQuiz.cshtml" />
     <Content Include="Views\Quiz\Play.cshtml" />
     <Content Include="Views\Quiz\Player.cshtml" />
+    <Content Include="Views\Quiz\EditorTemplates\AnswerViewModel.cshtml" />
+    <Content Include="Views\Quiz\EditorTemplates\QuestionViewModel.cshtml" />
+    <Content Include="Views\Quiz\EditorTemplates\RoundViewModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

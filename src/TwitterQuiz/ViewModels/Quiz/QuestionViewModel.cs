@@ -10,20 +10,24 @@ namespace TwitterQuiz.ViewModels.Quiz
         public string Question { get; set; }
         public int Sequence { get; set; }
         public List<AnswerViewModel> PossibleAnswers { get; set; }
+        public int Round { get; set; }
+        public int Index { get; set; }
 
         public QuestionViewModel()
         {
             PossibleAnswers = new List<AnswerViewModel>();
         }
 
-        public QuestionViewModel(Domain.Question question)
+        public QuestionViewModel(Question question, int roundIndex, int index)
         {
             Question = question.Tweet;
             Sequence = question.Sequence;
+            Round = roundIndex;
+            Index = index;
             PossibleAnswers = new List<AnswerViewModel>();
-            foreach (var answer in question.PossibleAnswers)
+            for (int i = 0; i < question.PossibleAnswers.Count; i++)
             {
-                PossibleAnswers.Add(new AnswerViewModel(answer));
+                PossibleAnswers.Add(new AnswerViewModel(question.PossibleAnswers[i], i));
             }
         }
 

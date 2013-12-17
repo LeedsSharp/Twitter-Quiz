@@ -10,15 +10,18 @@ namespace TwitterQuiz.ViewModels.Quiz
         [Required]
         public bool IsCorrect { get; set; }
 
+        public int Index { get; set; }
+
         public AnswerViewModel()
         {
 
         }
 
-        public AnswerViewModel(PossibleAnswer answer)
+        public AnswerViewModel(PossibleAnswer answer, int index)
         {
             Answer = answer.Answer;
             IsCorrect = answer.IsCorrect;
+            Index = index;
         }
     }
 }

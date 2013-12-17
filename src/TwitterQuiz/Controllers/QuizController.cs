@@ -67,13 +67,11 @@ namespace TwitterQuiz.Controllers
         {
             var quiz = model.ToQuizModel();
             _documentSession.Store(quiz);
-            //_documentSession.SaveChanges();
+            _documentSession.SaveChanges();
             // Temp raven cop out to get the front end working whilst I figure out CQRS...
             //_quizLogic.CreateNewQuiz(model.ToQuizModel(), User.Identity.Name);
 
-            var editModel = new EditQuizViewModel(quiz);
-
-            return RedirectToAction("Edit", "Quiz", editModel);
+            return RedirectToAction("Edit", "Quiz", new { id = quiz.Id });
         }
 
         [HttpGet]

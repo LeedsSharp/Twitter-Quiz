@@ -23,9 +23,9 @@ namespace TwitterQuiz.ViewModels.Quiz
             Rounds = new List<RoundViewModel>();
             if (quiz.Rounds != null)
             {
-                foreach (var round in quiz.Rounds)
+                for (int i = 0; i < quiz.Rounds.Count; i++)
                 {
-                    Rounds.Add(new RoundViewModel(round));
+                    Rounds.Add(new RoundViewModel(quiz.Rounds[i], i));
                 }
             }
         }
