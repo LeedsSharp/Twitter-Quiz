@@ -6,7 +6,7 @@ namespace TwitterQuiz.Domain
     public class Quiz
     {
         public int Id { get; set; }
-        public string InternalName { get; set; }
+        public string InternalName { get { return string.Format("{0}-Quiz-{1}", Owner.Replace(" ", ""), Id); }}
         public string Name { get; set; }
         public string Description { get; set; }
         public string Owner { get; set; }

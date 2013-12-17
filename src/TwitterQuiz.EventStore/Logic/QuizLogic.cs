@@ -17,16 +17,6 @@ namespace TwitterQuiz.EventStore.Logic
             _eventStoreConnection = eventStoreConnection;
         }
 
-        public Quiz CreateNewQuiz(Quiz quiz, string username)
-        {
-            var streamName = string.Format("User-{0}-Quizzes", username);
-            var id = GetNumberOfQuizzes(username);
-            quiz.InternalName = string.Format("Quiz-{0}{1}", username, id);
-            quiz.Id = id;
-            _eventStoreConnection.AppendToStream(quiz, streamName);
-            return quiz;
-        }
-
         public int GetNumberOfQuizzes(string username)
         {
             return GetQuizzes(username).Select(x => x.InternalName).Distinct().Count();
@@ -53,9 +43,9 @@ namespace TwitterQuiz.EventStore.Logic
             return quizzes.First(x => x.Id == id);
         }
 
-        public QuizInProgress GetStartedQuiz(int quizId, string username)
+        public QuizInProgress GetStartedQuiz(Quiz quiz, string username)
         {
-            var quiz = GetQuiz(quizId, username);
+            //var quiz = GetQuiz(quizId, username);
 
             var quizSoFar = new QuizInProgress();
             quizSoFar.Initialize(quiz);

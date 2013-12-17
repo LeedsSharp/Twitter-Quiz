@@ -106,14 +106,16 @@ namespace TwitterQuiz.Controllers
 
         public ActionResult Play(int id)
         {
-            var quizInProgress = _quizLogic.GetStartedQuiz(id, User.Identity.Name);
+            var quiz = _documentSession.Load<Quiz>(id);
+            var quizInProgress = _quizLogic.GetStartedQuiz(quiz, User.Identity.Name);
             var model = new PlayQuizViewModel(quizInProgress);
             return View(model);
         }
 
         public ActionResult Player(int id, string player)
         {
-            var quizInProgress = _quizLogic.GetStartedQuiz(id, User.Identity.Name);
+            var quiz = _documentSession.Load<Quiz>(id);
+            var quizInProgress = _quizLogic.GetStartedQuiz(quiz, User.Identity.Name);
             QuizPlayerViewModel model = new QuizPlayerViewModel(quizInProgress, player);
             return View(model);
         }
