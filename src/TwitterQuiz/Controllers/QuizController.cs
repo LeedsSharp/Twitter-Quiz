@@ -7,6 +7,12 @@ using TwitterQuiz.ViewModels.Quiz;
 using Raven.Client;
 using TwitterQuiz.Domain;
 
+/*
+ * For now I am dropping back to what I already know - Raven. 
+ * Once we've got the LS Christmas pub quiz done I will be 
+ * rewriting this as an excercise in using CQRS and Event Store
+ * *******/
+
 namespace TwitterQuiz.Controllers
 {
     [Authorize]
@@ -42,7 +48,7 @@ namespace TwitterQuiz.Controllers
         [HttpGet]
         public ActionResult New()
         {
-            var model = new NewQuizViewModel
+            var model = new EditQuizViewModel
                 {
                     Details = new QuizDetailsViewModel
                         {
@@ -51,17 +57,23 @@ namespace TwitterQuiz.Controllers
                             Owner = User.Identity.Name
                         }
                 };
-            return View(model);
+            model.Rounds.Add(RoundViewModel.NewRound());
+            model.Rounds.Add(RoundViewModel.NewRound());
+            return View("Edit", model);
         }
 
         [HttpPost]
-        public ActionResult New(NewQuizViewModel model)
+        public ActionResult New(EditQuizViewModel model)
         {
-            _documentSession.Store(model.ToQuizModel());
+            var quiz = model.ToQuizModel();
+            _documentSession.Store(quiz);
             _documentSession.SaveChanges();
             // Temp raven cop out to get the front end working whilst I figure out CQRS...
             //_quizLogic.CreateNewQuiz(model.ToQuizModel(), User.Identity.Name);
-            return RedirectToAction("Index", "Home");
+
+            var editModel = new EditQuizViewModel(quiz);
+
+            return RedirectToAction("Edit", "Quiz", editModel);
         }
 
         [HttpGet]

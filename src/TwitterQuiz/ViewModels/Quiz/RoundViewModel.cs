@@ -23,5 +23,12 @@ namespace TwitterQuiz.ViewModels.Quiz
                 Questions.Add(new QuestionViewModel(question));
             }
         }
+
+        public static RoundViewModel NewRound()
+        {
+            var round = new RoundViewModel();
+            round.Questions.Add(QuestionViewModel.NewQuestion());
+            return round;
+        }
     }
 }
