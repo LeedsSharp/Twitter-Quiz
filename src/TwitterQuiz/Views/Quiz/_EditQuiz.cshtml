@@ -1,30 +1,50 @@
 ﻿@model TwitterQuiz.ViewModels.Quiz.EditQuizViewModel
 
-<div class="row">
-    <div class="col-md-12">
-        <div class="form-group pull-right" style="margin-top: 10px;">
-            @if (Model.IsNew)
-            {
-                <button type="submit" class="btn btn-success">Create</button>
-            }
-            else
-            {
-                <button type="submit" class="btn btn-success">Save</button>
-            }
-            <a class="btn btn-success add-round">
-                <i class="fa fa-plus"> Add Round</i>
-            </a>
+@using (Html.BeginForm("Edit", "Quiz", new {}, FormMethod.Post, new { @class = "form", id = "new-quiz" }))
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group pull-right" style="margin-top: 10px;">
+                @if (Model.IsNew)
+                {
+                    <button type="submit" class="btn btn-success">Create</button>
+                }
+                else
+                {
+                    <button type="submit" class="btn btn-success">Save</button>
+                }
+                <a class="btn btn-success add-round">
+                    <i class="fa fa-plus">Add Round</i>
+                </a>
+            </div>
         </div>
     </div>
-</div>
-<div class="row">
-    <div class="col-md-6">
-        @Html.EditorFor(x => x.Details)
-        @*<div class="form-group">
+    <div class="row">
+        <div class="col-md-6">
+            @Html.EditorFor(x => x.Details)
+            @*<div class="form-group">
             @Html.ActionLink("Start Now", "Play", "Quiz", new { id = Model.Id }, new { @class = "btn btn-lg btn-success" })
         </div>*@
+        </div>
+        <div class="col-md-6" id="round-container">
+            @Html.EditorFor(x => x.Rounds)
+        </div>
     </div>
-    <div class="col-md-6" id="round-container">
-        @Html.EditorFor(x => x.Rounds)
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group pull-right" style="margin-top: 10px;">
+                @if (Model.IsNew)
+                {
+                    <button type="submit" class="btn btn-success">Create</button>
+                }
+                else
+                {
+                    <button type="submit" class="btn btn-success">Save</button>
+                }
+                <a class="btn btn-success add-round">
+                    <i class="fa fa-plus">Add Round</i>
+                </a>
+            </div>
+        </div>
     </div>
-</div>
+}

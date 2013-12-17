@@ -62,18 +62,6 @@ namespace TwitterQuiz.Controllers
             return View("Edit", model);
         }
 
-        [HttpPost]
-        public ActionResult New(EditQuizViewModel model)
-        {
-            var quiz = model.ToQuizModel();
-            _documentSession.Store(quiz);
-            _documentSession.SaveChanges();
-            // Temp raven cop out to get the front end working whilst I figure out CQRS...
-            //_quizLogic.CreateNewQuiz(model.ToQuizModel(), User.Identity.Name);
-
-            return RedirectToAction("Edit", "Quiz", new { id = quiz.Id });
-        }
-
         [HttpGet]
         public ActionResult Edit(int id)
         {
@@ -85,9 +73,13 @@ namespace TwitterQuiz.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(EditQuizViewModel model)
+        public ActionResult Edit(EditQuizViewModel model, int? id)
         {
-            return View(model);
+            var quiz = model.ToQuizModel();
+            _documentSession.Store(quiz);
+            _documentSession.SaveChanges();
+
+            return RedirectToAction("Edit", "Quiz", new { id = quiz.Id });
         }
 
         [HttpPost]

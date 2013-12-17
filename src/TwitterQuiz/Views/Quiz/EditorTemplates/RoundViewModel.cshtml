@@ -4,13 +4,13 @@
     @Html.HiddenFor(x => x.Sequence)
     <div class="panel-heading">
         <div class="row">
-            <div class="col-md-9">
+            <div class="col-xs-10">
                 <div class="form-group">
                     @Html.TextBoxFor(x => x.Name, new { @class = "form-control", placeholder = "Round Name" })
                     @Html.ValidationMessageFor(x => x.Name)
                 </div>
             </div>
-            <div class="col-md-3 pull-right">
+            <div class="col-xs-2 pull-right">
                 <a class="danger delete-round">
                     <i class="fa fa-trash-o fa-lg"></i>
                 </a>

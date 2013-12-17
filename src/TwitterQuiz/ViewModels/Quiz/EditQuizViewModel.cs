@@ -21,6 +21,7 @@ namespace TwitterQuiz.ViewModels.Quiz
             Id = quiz.Id;
             Details = new QuizDetailsViewModel(quiz);
             Rounds = new List<RoundViewModel>();
+            IsNew = false;
             if (quiz.Rounds != null)
             {
                 for (int i = 0; i < quiz.Rounds.Count; i++)
