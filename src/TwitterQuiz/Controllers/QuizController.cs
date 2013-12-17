@@ -117,5 +117,13 @@ namespace TwitterQuiz.Controllers
             QuizPlayerViewModel model = new QuizPlayerViewModel(quizInProgress, player);
             return View(model);
         }
+
+        public ActionResult Delete(int id)
+        {
+            var quiz = _documentSession.Load<Quiz>(id);
+            _documentSession.Delete(quiz);
+            _documentSession.SaveChanges();
+            return RedirectToAction("Index", "Home");
+        }
     }
 }
