@@ -137,5 +137,15 @@ namespace TwitterQuiz.Controllers
             _documentSession.SaveChanges();
             return RedirectToAction("Index", "Home");
         }
+
+        public ActionResult Stop(int id)
+        {
+            var quiz = _documentSession.Load<Quiz>(id);
+            quiz.StartDate = DateTime.Now.AddHours(1);
+            quiz.Status = QuizStatus.Ready;
+            _documentSession.Store(quiz);
+            _documentSession.SaveChanges();
+            return RedirectToAction("Index", "Home");
+        }
     }
 }

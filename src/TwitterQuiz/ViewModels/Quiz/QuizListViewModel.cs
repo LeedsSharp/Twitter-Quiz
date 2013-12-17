@@ -17,7 +17,7 @@ namespace TwitterQuiz.ViewModels.Quiz
                 switch (Status)
                 {
                     case QuizStatus.Draft:
-                        return "panel-info";
+                        return "panel-warning";
                     case QuizStatus.Ready:
                         return "panel-primary";
                     case QuizStatus.InProgress:
