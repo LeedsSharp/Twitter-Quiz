@@ -19,7 +19,7 @@ else
     </div>
     foreach (var quiz in Model.Quizzes)
     {
-    <div class="panel panel-primary">
+    <div class="panel @quiz.PanelClass">
         <div class="panel-heading">
             <h3 class="panel-title">@quiz.Name</h3>
         </div>

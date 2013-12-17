@@ -34,16 +34,18 @@ namespace TwitterQuiz.ViewModels.Quiz
         public Domain.Quiz ToQuizModel()
         {
             var quiz = new Domain.Quiz
-            {
-                Name = Details.Name,
-                Description = Details.Description,
-                Owner = Details.Owner,
-                Host = Details.Host,
-                StartDate = Details.StartDate,
-                FrequencyOfAnswers = Details.FrequencyOfAnswers.HasValue ? Details.FrequencyOfAnswers.Value : 10,
-                FrequencyOfQuestions = Details.FrequencyOfQuestions.HasValue ? Details.FrequencyOfQuestions.Value : 3
-            };
-            quiz.Rounds = new List<Round>(Rounds.Count);
+                {
+                    Name = Details.Name,
+                    Description = Details.Description,
+                    Owner = Details.Owner,
+                    Host = Details.Host,
+                    StartDate = Details.StartDate,
+                    FrequencyOfAnswers = Details.FrequencyOfAnswers.HasValue ? Details.FrequencyOfAnswers.Value : 10,
+                    FrequencyOfQuestions =
+                        Details.FrequencyOfQuestions.HasValue ? Details.FrequencyOfQuestions.Value : 3,
+                    Status = QuizStatus.Draft,
+                    Rounds = new List<Round>(Rounds.Count)
+                };
             foreach (var round in Rounds)
             {
                 quiz.Rounds.Add(round.ToRoundModel());

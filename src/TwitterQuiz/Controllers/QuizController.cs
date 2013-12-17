@@ -107,6 +107,9 @@ namespace TwitterQuiz.Controllers
         public ActionResult Play(int id)
         {
             var quiz = _documentSession.Load<Quiz>(id);
+            quiz.Status = QuizStatus.InProgress;
+            _documentSession.Store(quiz);
+            _documentSession.SaveChanges();
             var quizInProgress = _quizLogic.GetStartedQuiz(quiz, User.Identity.Name);
             var model = new PlayQuizViewModel(quizInProgress);
             return View(model);

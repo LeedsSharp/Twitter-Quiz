@@ -8,6 +8,6 @@ namespace TwitterQuiz.ViewModels.Quiz
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime Start { get; set; }
-
+        public string PanelClass { get; set; }
     }
 }

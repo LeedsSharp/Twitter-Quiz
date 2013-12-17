@@ -16,6 +16,7 @@ namespace TwitterQuiz.Domain
         public int FrequencyOfAnswers { get; set; } // The number of minutes the correct answers are tweeted at the end of the quiz
         public IList<Round> Rounds { get; set; }
         public Player Winner { get; set; }
+        public QuizStatus Status { get; set; }
 
         public Quiz()
         {

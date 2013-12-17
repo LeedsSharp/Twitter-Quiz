@@ -56,6 +56,7 @@
     <Compile Include="Quiz.cs" />
     <Compile Include="QuizEvents\AnswerReceived.cs" />
     <Compile Include="QuizEvents\QuizEnded.cs" />
+    <Compile Include="QuizStatus.cs" />
     <Compile Include="Round.cs" />
     <Compile Include="QuizEvents\QuestionSent.cs" />
     <Compile Include="QuizEvents\RoundStarted.cs" />
