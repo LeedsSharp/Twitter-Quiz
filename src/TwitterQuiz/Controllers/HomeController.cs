@@ -28,7 +28,7 @@ namespace TwitterQuiz.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 var quizzes = _documentSession.Query<Quiz>().Where(x => x.Owner == User.Identity.Name);
-                foreach (var quiz in quizzes)
+                foreach (var quiz in quizzes.OrderByDescending(x => x.StartDate))
                 {
                     var quizmodel = new QuizListViewModel
                     {

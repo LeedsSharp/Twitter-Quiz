@@ -17,6 +17,11 @@ namespace TwitterQuiz.Domain
         public IList<Round> Rounds { get; set; }
         public Player Winner { get; set; }
 
+        public Quiz()
+        {
+            Rounds = new List<Round>();
+        }
+
         public static Quiz SampleQuiz(int id, Random r, string username)
         {
             var numOfRounds = r.Next(1, 5);

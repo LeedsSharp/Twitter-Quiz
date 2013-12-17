@@ -3,75 +3,28 @@
 <div class="row">
     <div class="col-md-12">
         <div class="form-group pull-right" style="margin-top: 10px;">
-            @Html.ActionLink("Save", "Save", "Quiz", new { @class = "btn btn-success" })
+            @if (Model.IsNew)
+            {
+                <button type="submit" class="btn btn-success">Create</button>
+            }
+            else
+            {
+                <button type="submit" class="btn btn-success">Save</button>
+            }
+            <a class="btn btn-success add-round">
+                <i class="fa fa-plus"> Add Round</i>
+            </a>
         </div>
     </div>
 </div>
 <div class="row">
     <div class="col-md-6">
         @Html.EditorFor(x => x.Details)
-        <div class="form-group">
-            @Html.ActionLink("Start Now", "Play", "Quiz", new { id = Model.Id },  new { @class = "btn btn-lg btn-success" })
-        </div>
+        @*<div class="form-group">
+            @Html.ActionLink("Start Now", "Play", "Quiz", new { id = Model.Id }, new { @class = "btn btn-lg btn-success" })
+        </div>*@
     </div>
-    <div class="col-md-6">
-        @foreach (var round in Model.Rounds.OrderBy(x => x.Sequence))
-        {
-            <div class="panel panel-default round-template">
-                <div class="panel-heading">
-                    <div class="row">
-                        <div class="col-md-9">
-                            @Html.TextBoxFor(x => round.Name, new { @class = "form-control", placeholder = "Round Name" })
-                        </div>
-                        <div class="col-md-3 pull-right">
-                            <a class="btn btn-success" href="AddRound">
-                                <i class="fa fa-plus"></i>
-                            </a>
-                            <a class="btn btn-danger" href="DeleteRound">
-                                <i class="fa fa-trash-o"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="panel-body questions">
-                    @foreach (var question in round.Questions)
-                    {
-                        <div class="row form-stacked question-template">
-                            <div class="col-md-9">
-                                @Html.TextAreaFor(x => question.Question, new { @class = "form-control", placeholder = "Question" })
-                            </div>
-                            <div class="col-md-3 pull-right">
-                                <a class="btn btn-success add-answer">
-                                    <i class="fa fa-plus"></i>
-                                </a>
-                                <a class="btn btn-danger delete-question">
-                                    <i class="fa fa-trash-o"></i>
-                                </a>
-                            </div>
-                            <div class="answers">
-                                @foreach (var answer in question.PossibleAnswers)
-                                {
-                                    <div class="answer-template">
-                                        <div class="col-md-9">
-                                            @Html.TextBoxFor(x => answer, new { @class = "form-control", placeholder = "Possible answer" })
-                                        </div>
-                                        <div class="col-md-3 pull-right">
-                                            <a class="btn btn-danger delete-answer">
-                                                <i class="fa fa-trash-o"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                }
-                            </div>
-                        </div>
-                    }
-                </div>
-                <div class="panel-footer">
-                    <a class="btn btn-success add-question">
-                        <i class="fa fa-plus"> Add Question</i>
-                    </a>
-                </div>
-            </div>
-        }
+    <div class="col-md-6" id="round-container">
+        @Html.EditorFor(x => x.Rounds)
     </div>
 </div>

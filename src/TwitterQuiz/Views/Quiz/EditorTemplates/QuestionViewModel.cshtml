@@ -1,0 +1,22 @@
+﻿@model TwitterQuiz.ViewModels.Quiz.QuestionViewModel
+<div class="row form-stacked question-template">
+    <div class="col-md-9">
+        <div class="form-group">
+            @Html.TextAreaFor(x => x.Question, new { @class = "form-control", placeholder = "Question" })
+            @Html.ValidationMessageFor(x => x.Question)
+        </div>
+    </div>
+    <div class="col-md-3 pull-right">
+        <a class="success add-answer" data-round="@Model.Round" data-question="@Model.Index">
+            <i class="fa fa-plus fa-lg"></i>
+        </a>
+        <a class="danger delete-question">
+            <i class="fa fa-trash-o fa-lg"></i>
+        </a>
+    </div>
+    <div class="answers">
+        @Html.EditorFor(x => x.PossibleAnswers)
+    </div>
+</div>
+<hr />
+

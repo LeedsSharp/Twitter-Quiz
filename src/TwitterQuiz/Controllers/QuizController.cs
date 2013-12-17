@@ -49,15 +49,15 @@ namespace TwitterQuiz.Controllers
         public ActionResult New()
         {
             var model = new EditQuizViewModel
-                {
-                    Details = new QuizDetailsViewModel
                         {
-                            StartDate = DateTime.Now.AddHours(1),
-                            Host = User.Identity.Name,
-                            Owner = User.Identity.Name
-                        }
-                };
-            model.Rounds.Add(RoundViewModel.NewRound());
+                            Details = new QuizDetailsViewModel
+                                      {
+                                          StartDate = DateTime.Now.AddHours(1),
+                                          Host = User.Identity.Name,
+                                          Owner = User.Identity.Name
+                                      },
+                            IsNew = true
+                        };
             model.Rounds.Add(RoundViewModel.NewRound());
             return View("Edit", model);
         }
@@ -71,9 +71,7 @@ namespace TwitterQuiz.Controllers
             // Temp raven cop out to get the front end working whilst I figure out CQRS...
             //_quizLogic.CreateNewQuiz(model.ToQuizModel(), User.Identity.Name);
 
-            var editModel = new EditQuizViewModel(quiz);
-
-            return RedirectToAction("Edit", "Quiz", editModel);
+            return RedirectToAction("Edit", "Quiz", new { id = quiz.Id });
         }
 
         [HttpGet]

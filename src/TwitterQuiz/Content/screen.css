@@ -2,7 +2,7 @@
     background: #DDD;
 }
 a { color: inherit; text-decoration: none; }
-a:hover { text-decoration: none; color: #68707b; }
+a:hover { text-decoration: none; color: #68707b; cursor: pointer;}
 a[href^="tel:"] {color: inherit;text-decoration:none;}
 
 header {
@@ -57,7 +57,7 @@ header h1 span {
     padding: 10px 0;
 }
 
-.form-stacked input, .form-stacked textarea {
+.form-stacked input, .form-stacked textarea, .form-stacked .input-group {
     margin-bottom: 10px;
 }
 
@@ -70,4 +70,15 @@ header h1 span {
     width:100%;
     background: #000;
     display: none;
+}
+
+.no-margin-bottom {
+    margin-bottom: 0 !important;
+}
+
+a.success {
+    color: #5cb85c;
+}
+a.danger {
+    color: #d2322d;
 }

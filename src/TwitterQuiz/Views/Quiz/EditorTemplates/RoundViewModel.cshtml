@@ -1,0 +1,28 @@
+﻿@model TwitterQuiz.ViewModels.Quiz.RoundViewModel
+
+<div class="panel panel-default round-template">
+    @Html.HiddenFor(x => x.Sequence)
+    <div class="panel-heading">
+        <div class="row">
+            <div class="col-md-9">
+                <div class="form-group">
+                    @Html.TextBoxFor(x => x.Name, new { @class = "form-control", placeholder = "Round Name" })
+                    @Html.ValidationMessageFor(x => x.Name)
+                </div>
+            </div>
+            <div class="col-md-3 pull-right">
+                <a class="danger delete-round">
+                    <i class="fa fa-trash-o fa-lg"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="panel-body questions">
+        @Html.EditorFor(x => x.Questions)
+    </div>
+    <div class="panel-footer">
+        <a class="btn btn-success add-question" data-round="@Model.Index">
+            <i class="fa fa-plus"> Add Question</i>
+        </a>
+    </div>
+</div>

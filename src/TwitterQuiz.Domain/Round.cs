@@ -29,12 +29,12 @@ namespace TwitterQuiz.Domain
                     {
                         Sequence = i,
                         Tweet = string.Format("Sample Question {0}", i),
-                        PossibleAnswers = new List<string>()
+                        PossibleAnswers = new List<PossibleAnswer>()
                     };
                 var num2 = r.Next(1, 3);
                 for (int j = 0; j < num2; j++)
                 {
-                    question.PossibleAnswers.Add(string.Format("Possible Answer {0}", j));
+                    question.PossibleAnswers.Add(new PossibleAnswer { Answer = string.Format("Possible Answer {0}", j), IsCorrect = false });
                 }
 
                 round.Questions.Add(question);
