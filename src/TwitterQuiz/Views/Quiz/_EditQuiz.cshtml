@@ -31,7 +31,10 @@
                 <div class="panel-heading">
                     <div class="row">
                         <div class="col-md-9">
-                            @Html.TextBoxFor(x => round.Name, new { @class = "form-control", placeholder = "Round Name" })
+                            <div class="form-group">
+                                @Html.TextBoxFor(x => round.Name, new { @class = "form-control", placeholder = "Round Name" })
+                                @Html.ValidationMessageFor(x => round.Name)
+                            </div>
                         </div>
                         <div class="col-md-3 pull-right">
                             <a class="danger delete-round">
@@ -45,7 +48,10 @@
                     {
                         <div class="row form-stacked question-template">
                             <div class="col-md-9">
-                                @Html.TextAreaFor(x => question.Question, new { @class = "form-control", placeholder = "Question" })
+                                <div class="form-group">
+                                    @Html.TextAreaFor(x => question.Question, new { @class = "form-control", placeholder = "Question" })
+                                    @Html.ValidationMessageFor(x => question.Question)
+                                </div>
                             </div>
                             <div class="col-md-3 pull-right">
                                 <a class="success add-answer">
@@ -60,9 +66,12 @@
                                 {
                                     <div class="answer-template">
                                         <div class="col-md-9">
-                                            <div class="input-group">
-                                                <span class="input-group-addon">@Html.CheckBoxFor(x => answer.IsCorrect, new { @class="no-margin-bottom"})</span>
-                                                @Html.TextBoxFor(x => answer.Answer, new { @class = "form-control", placeholder = "Possible answer" })
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon">@Html.CheckBoxFor(x => answer.IsCorrect, new { @class = "no-margin-bottom" })</span>
+                                                    @Html.TextBoxFor(x => answer.Answer, new { @class = "form-control", placeholder = "Possible answer" })
+                                                </div>
+                                                @Html.ValidationMessageFor(x => answer.Answer)
                                             </div>
                                         </div>
                                         <div class="col-md-3 pull-right">

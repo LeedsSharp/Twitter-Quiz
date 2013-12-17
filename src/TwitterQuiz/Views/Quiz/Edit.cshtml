@@ -23,8 +23,10 @@
                 <div class="panel-heading">
                     <div class="row">
                         <div class="col-md-9">
-                            <input class="form-control" id="round_Name" name="round.Name" placeholder="Round Name" type="text" value="{{name}}">
-                            @*{{input class="form-control" name="namr" placeholder="Round Name" type="text" value=name}}*@
+                            <div class="form-group">
+                                <input class="form-control" data-val="true" data-val-required="The Name field is required." id="round_Name" name="round.Name" placeholder="Round Name" type="text" value="{{name}}">
+                                <span class="field-validation-valid help-block" data-valmsg-for="round.Name" data-valmsg-replace="true"></span>
+                            </div>
                         </div>
                         <div class="col-md-3 pull-right">
                             <a class="danger delete-round">
@@ -48,7 +50,10 @@
     <script type="text/x-handlebars" id="question-template">
         <div class="row form-stacked question-template">
             <div class="col-md-9">
-                <textarea class="form-control" cols="20" id="question_Question" name="question.Question" placeholder="Question" rows="2"></textarea>
+                <div class="form-group">
+                    <textarea class="form-control" cols="20" data-val="true" data-val-required="The Question field is required." id="question_Question" name="question.Question" placeholder="Question" rows="2"></textarea>
+                    <span class="field-validation-valid help-block" data-valmsg-for="question.Question" data-valmsg-replace="true"></span>
+                </div>
             </div>
             <div class="col-md-3 pull-right">
                 <a class="success add-answer">
@@ -69,12 +74,15 @@
     <script type="text/x-handlebars" id="answer-template">
         <div class="answer-template">
             <div class="col-md-9">
-                <div class="input-group">
-                    <span class="input-group-addon">
-                        <input class="no-margin-bottom" data-val="true" id="answer_IsCorrect" name="answer.IsCorrect" type="checkbox" value="{{isCorrect}}">
-                        <input name="answer.IsCorrect" type="hidden" value="false">
-                    </span>
-                    <input class="form-control" id="answer_Answer" name="answer.Answer" placeholder="Possible answer" type="text" value="{{answer}}">
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <input class="no-margin-bottom" data-val="true" data-val-required="The IsCorrect field is required." id="answer_IsCorrect" name="answer.IsCorrect" type="checkbox" value="true">
+                            <input name="answer.IsCorrect" type="hidden" value="false">
+                        </span>
+                        <input class="form-control" data-val="true" data-val-required="The Answer field is required." id="answer_Answer" name="answer.Answer" placeholder="Possible answer" type="text" value="{{answer}}">
+                    </div>
+                    <span class="field-validation-valid help-block" data-valmsg-for="answer.Answer" data-valmsg-replace="true"></span>
                 </div>
                 @*{{input class="form-control" name="answer" placeholder="Possible Answer" type="text" value=answer}}*@
             </div>

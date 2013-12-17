@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using TwitterQuiz.Domain;
 
 namespace TwitterQuiz.ViewModels.Quiz
 {
     public class RoundViewModel
     {
+        [Required]
         public string Name { get; set; }
         public int Sequence { get; set; }
         public List<QuestionViewModel> Questions { get; set; }
