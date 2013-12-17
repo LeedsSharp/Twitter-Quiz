@@ -21,9 +21,12 @@ namespace TwitterQuiz.ViewModels.Quiz
             Id = quiz.Id;
             Details = new QuizDetailsViewModel(quiz);
             Rounds = new List<RoundViewModel>();
-            foreach (var round in quiz.Rounds)
+            if (quiz.Rounds != null)
             {
-                Rounds.Add(new RoundViewModel(round));
+                foreach (var round in quiz.Rounds)
+                {
+                    Rounds.Add(new RoundViewModel(round));
+                }
             }
         }
 
