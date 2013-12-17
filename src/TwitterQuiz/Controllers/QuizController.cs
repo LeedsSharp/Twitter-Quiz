@@ -69,6 +69,7 @@ namespace TwitterQuiz.Controllers
             // Temp raven cop out to get the front end working whilst I figure out CQRS...
             //var quiz = _quizLogic.GetQuiz(id, User.Identity.Name);
             var model = new EditQuizViewModel(quiz);
+
             return View(model);
         }
 
