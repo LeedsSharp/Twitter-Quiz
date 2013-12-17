@@ -36,26 +36,13 @@ namespace TwitterQuiz.Controllers
                         Name = quiz.Name,
                         Id = quiz.Id,
                         Start = quiz.StartDate,
-                        PanelClass = GetQuizPanelClass(quiz.Status)
+                        Status = quiz.Status
                     };
                     model.Quizzes.Add(quizmodel);
                 }
             }
 
             return View(model);
-        }
-
-        private string GetQuizPanelClass(QuizStatus status)
-        {
-            switch (status)
-            {
-                case QuizStatus.Draft:
-                    return "panel-primary";
-                case QuizStatus.InProgress:
-                    return "panel-success";
-                default:
-                    return "panel-default";
-            }
         }
     }
 }

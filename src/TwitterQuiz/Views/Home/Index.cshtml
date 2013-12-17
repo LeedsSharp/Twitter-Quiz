@@ -1,4 +1,5 @@
-﻿@model TwitterQuiz.ViewModels.Home.HomeIndexViewModel
+﻿@using TwitterQuiz.Domain
+@model TwitterQuiz.ViewModels.Home.HomeIndexViewModel
 
 @{
     ViewBag.Title = "Twitter Quiz";
@@ -26,14 +27,34 @@ else
         <div class="panel-body">
             <p>@quiz.Description</p>
             <p>Start: @quiz.Start</p>
-            <a class="btn btn-lg btn-success" href="@Url.Action("Start", "Quiz", new { id = quiz.Id })">
-                <i class="fa fa-play fa-fw"></i>
-                Play Now
-            </a>
-            <a class="btn btn-lg btn-primary" href="@Url.Action("Edit", "Quiz", new { id = quiz.Id })">
-                <i class="fa fa-edit fa-fw"></i>
-                Edit
-            </a>
+            @if (quiz.Status == QuizStatus.Draft)
+            {
+                <a class="btn btn-lg btn-warning" href="@Url.Action("AuthorizeHost", "Quiz", new {id = quiz.Id})">
+                    <i class="fa fa-exclamation fa-fw"></i>
+                    Authorize Host
+                </a>
+            }
+            @if (quiz.Status == QuizStatus.Ready)
+            {
+                <a class="btn btn-lg btn-success" href="@Url.Action("Start", "Quiz", new {id = quiz.Id})">
+                    <i class="fa fa-play fa-fw"></i>
+                    Play Now
+                </a>
+            }
+            @if (quiz.Status == QuizStatus.InProgress)
+            {
+                <a class="btn btn-lg btn-danger" href="@Url.Action("Stop", "Quiz", new {id = quiz.Id})">
+                    <i class="fa fa-stop fa-fw"></i>
+                    Stop Quiz
+                </a>
+            }
+            @if (quiz.Status < QuizStatus.InProgress)
+            {
+                <a class="btn btn-lg btn-primary" href="@Url.Action("Edit", "Quiz", new {id = quiz.Id})">
+                    <i class="fa fa-edit fa-fw"></i>
+                    Edit
+                </a>
+            }
             <a class="btn btn-lg btn-danger" href="@Url.Action("Delete", "Quiz", new { id = quiz.Id })">
                 <i class="fa fa-trash-o fa-fw"></i>
             </a>
