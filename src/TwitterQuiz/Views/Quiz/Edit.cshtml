@@ -22,15 +22,41 @@
 @section Scripts
 {
     <script type="text/x-handlebars" id="round-template">
-        
+        <div class="panel panel-default round-template">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-md-9">
+                            <input class="form-control" id="round_Name" name="round.Name" placeholder="Round Name" type="text" value="{{name}}">
+                            @*{{input class="form-control" name="namr" placeholder="Round Name" type="text" value=name}}*@
+                        </div>
+                        <div class="col-md-3 pull-right">
+                            <a class="btn btn-danger delete-round">
+                                <i class="fa fa-trash-o"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body questions">
+                    {{#each questions}}
+                        {{> question}}
+                    {{/each}}
+                </div>
+                <div class="panel-footer">
+                    <a class="btn btn-success add-question">
+                        <i class="fa fa-plus"> Add Question</i>
+                    </a>
+                </div>
+            </div>
     </script>
     <script type="text/x-handlebars" id="question-template">
         <div class="row form-stacked question-template">
             <div class="col-md-9">
                 <textarea class="form-control" cols="20" id="question_Question" name="question.Question" placeholder="Question" rows="2"></textarea>
-                @*{{textarea class="form-control" cols="20" name="answer" placeholder="Possible Answer" type="text" value=question}}*@
             </div>
             <div class="col-md-3 pull-right">
+                <a class="btn btn-success add-answer">
+                    <i class="fa fa-plus"></i>
+                </a>
                 <a class="btn btn-danger delete-question">
                     <i class="fa fa-trash-o"></i>
                 </a>
@@ -41,11 +67,18 @@
                 {{/each}}
             </div>
         </div>
+        <hr />
     </script>
     <script type="text/x-handlebars" id="answer-template">
         <div class="answer-template">
             <div class="col-md-9">
-                <input class="form-control" name="answer" placeholder="Possible answer" type="text" value="">
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <input class="no-margin-bottom" data-val="true" id="answer_IsCorrect" name="answer.IsCorrect" type="checkbox" value="{{isCorrect}}">
+                        <input name="answer.IsCorrect" type="hidden" value="false">
+                    </span>
+                    <input class="form-control" id="answer_Answer" name="answer.Answer" placeholder="Possible answer" type="text" value="{{answer}}">
+                </div>
                 @*{{input class="form-control" name="answer" placeholder="Possible Answer" type="text" value=answer}}*@
             </div>
             <div class="col-md-3 pull-right">
@@ -56,8 +89,23 @@
         </div>
     </script>
     <script type="text/javascript">
-        $(function () {
-            $(document).on('click', '.add-question', function (e) {
+        $(function() {
+            $(document).on('click', '.add-round', function(e) {
+                e.preventDefault();
+                var source = $('#round-template').html();
+                var template = Handlebars.compile(source);
+                Handlebars.registerPartial("question", $("#question-template").html());
+                Handlebars.registerPartial("answer", $("#answer-template").html());
+                var roundNumber = Math.ceil($('.round-template').length) + 1;
+                var context = { name: 'Round ' + roundNumber, questions: { question: '' } };
+                var html = template(context);
+                $('#round-container').append(html);
+            });
+            $(document).on('click', '.delete-round', function(e) {
+                e.preventDefault();
+                $(this).closest('.round-template').remove();
+            });
+            $(document).on('click', '.add-question', function(e) {
                 e.preventDefault();
                 var source = $('#question-template').html();
                 var template = Handlebars.compile(source);
@@ -66,8 +114,9 @@
                 var html = template(context);
                 $(this).closest('.round-template').children('.questions').append(html);
             });
-            $(document).on('click', '.delete-question', function (e) {
+            $(document).on('click', '.delete-question', function(e) {
                 e.preventDefault();
+                $(this).closest('.question-template').next().remove();
                 $(this).closest('.question-template').remove();
             });
             $(document).on('click', '.add-answer', function(e) {

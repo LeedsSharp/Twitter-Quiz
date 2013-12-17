@@ -4,6 +4,9 @@
     <div class="col-md-12">
         <div class="form-group pull-right" style="margin-top: 10px;">
             @Html.ActionLink("Save", "Save", "Quiz", new { @class = "btn btn-success" })
+            <a class="btn btn-success add-round">
+                <i class="fa fa-plus"> Add Round</i>
+            </a>
         </div>
     </div>
 </div>
@@ -11,10 +14,10 @@
     <div class="col-md-6">
         @Html.EditorFor(x => x.Details)
         <div class="form-group">
-            @Html.ActionLink("Start Now", "Play", "Quiz", new { id = Model.Id },  new { @class = "btn btn-lg btn-success" })
+            @Html.ActionLink("Start Now", "Play", "Quiz", new { id = Model.Id }, new { @class = "btn btn-lg btn-success" })
         </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-6" id="round-container">
         @foreach (var round in Model.Rounds.OrderBy(x => x.Sequence))
         {
             <div class="panel panel-default round-template">
@@ -24,10 +27,7 @@
                             @Html.TextBoxFor(x => round.Name, new { @class = "form-control", placeholder = "Round Name" })
                         </div>
                         <div class="col-md-3 pull-right">
-                            <a class="btn btn-success" href="AddRound">
-                                <i class="fa fa-plus"></i>
-                            </a>
-                            <a class="btn btn-danger" href="DeleteRound">
+                            <a class="btn btn-danger delete-round">
                                 <i class="fa fa-trash-o"></i>
                             </a>
                         </div>
@@ -53,7 +53,10 @@
                                 {
                                     <div class="answer-template">
                                         <div class="col-md-9">
-                                            @Html.TextBoxFor(x => answer, new { @class = "form-control", placeholder = "Possible answer" })
+                                            <div class="input-group">
+                                                <span class="input-group-addon">@Html.CheckBoxFor(x => answer.IsCorrect, new { @class="no-margin-bottom"})</span>
+                                                @Html.TextBoxFor(x => answer.Answer, new { @class = "form-control", placeholder = "Possible answer" })
+                                            </div>
                                         </div>
                                         <div class="col-md-3 pull-right">
                                             <a class="btn btn-danger delete-answer">
@@ -64,6 +67,7 @@
                                 }
                             </div>
                         </div>
+                        <hr />
                     }
                 </div>
                 <div class="panel-footer">

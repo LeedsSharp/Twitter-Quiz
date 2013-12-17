@@ -6,11 +6,11 @@ namespace TwitterQuiz.Domain
     {
         public string Tweet { get; set; }
         public int Sequence { get; set; }
-        public IList<string> PossibleAnswers { get; set; }
+        public IList<PossibleAnswer> PossibleAnswers { get; set; }
 
         public Question()
         {
-            PossibleAnswers = new List<string>();
+            PossibleAnswers = new List<PossibleAnswer>();
         }
     }
 }

@@ -57,7 +57,7 @@ header h1 span {
     padding: 10px 0;
 }
 
-.form-stacked input, .form-stacked textarea {
+.form-stacked input, .form-stacked textarea, .form-stacked .input-group {
     margin-bottom: 10px;
 }
 
@@ -70,4 +70,8 @@ header h1 span {
     width:100%;
     background: #000;
     display: none;
+}
+
+.no-margin-bottom {
+    margin-bottom: 0 !important;
 }

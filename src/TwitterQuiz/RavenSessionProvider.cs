@@ -37,12 +37,12 @@ namespace TwitterQuiz
 
         private static DocumentStore CreateEmbeddableDocumentStore()
         {
-            NonAdminHttp.EnsureCanListenToWhenInNonAdminContext(8081);
+            NonAdminHttp.EnsureCanListenToWhenInNonAdminContext(8082);
             var store = new EmbeddableDocumentStore
             {
                 DataDirectory = "App_Data",
                 UseEmbeddedHttpServer = true,
-                Configuration = { Port = 8081 }
+                Configuration = { Port = 8082 }
             };
             store.Initialize();
             return store;

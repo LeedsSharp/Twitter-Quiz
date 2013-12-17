@@ -6,28 +6,28 @@ namespace TwitterQuiz.ViewModels.Quiz
     {
         public string Question { get; set; }
         public int Sequence { get; set; }
-        public List<string> PossibleAnswers { get; set; }
+        public List<AnswerViewModel> PossibleAnswers { get; set; }
 
         public QuestionViewModel()
         {
-            PossibleAnswers = new List<string>();
+            PossibleAnswers = new List<AnswerViewModel>();
         }
 
         public QuestionViewModel(Domain.Question question)
         {
             Question = question.Tweet;
             Sequence = question.Sequence;
-            PossibleAnswers = new List<string>();
+            PossibleAnswers = new List<AnswerViewModel>();
             foreach (var answer in question.PossibleAnswers)
             {
-                PossibleAnswers.Add(answer);
+                PossibleAnswers.Add(new AnswerViewModel(answer));
             }
         }
 
         public static QuestionViewModel NewQuestion()
         {
             var question = new QuestionViewModel();
-            question.PossibleAnswers.Add(string.Empty);
+            question.PossibleAnswers.Add(new AnswerViewModel());
             return question;
         }
     }
