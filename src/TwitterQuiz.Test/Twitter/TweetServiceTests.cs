@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Linq;
+using NUnit.Framework;
 using TwitterQuiz.AppServices;
 
 namespace TwitterQuiz.Test.Twitter
@@ -43,6 +44,22 @@ namespace TwitterQuiz.Test.Twitter
 
             // Assert
             Assert.IsTrue(true);
+        }
+
+        [Test]
+        public void Can_get_direct_messages()
+        {
+            // Arrange
+            var tweetService = new TweetService();
+
+            // Act
+            var dms = tweetService.GetDMs();
+
+            // Assert
+            Assert.IsNotNull(dms);
+            Assert.IsTrue(dms.Count() <= 20);
+            var latestDirectMessage = dms.FirstOrDefault();
+            tweetService.Tweet(latestDirectMessage.SenderScreenName + " said " + latestDirectMessage.Text);
         }
     }
 }

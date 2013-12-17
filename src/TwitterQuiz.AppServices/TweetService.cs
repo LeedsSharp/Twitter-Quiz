@@ -1,9 +1,17 @@
-﻿using TweetSharp;
+﻿using System;
+using System.Collections.Generic;
+using TweetSharp;
 
 namespace TwitterQuiz.AppServices
 {
     public class TweetService
     {
+        #region References
+
+        /* https://dev.twitter.com/apps/5533272/show to manage the PubQuiziminator app */
+
+        #endregion
+
         private readonly TwitterService twitterService;
         private const string ConsumerKey = "cCUfLlJdwNanXcdTFPaw";
         private const string ConsumerSecret = "LeLyBeYm655HdtdAJnBr74NDZ7DXWKgxmVQomhN1Y";
@@ -20,6 +28,21 @@ namespace TwitterQuiz.AppServices
         {
             twitterService.AuthenticateWith(AccessToken, AccessTokenSecret);
             twitterService.SendTweet(new SendTweetOptions { Status = message });
+        }
+
+        public IEnumerable<TwitterDirectMessage> GetDMs()
+        {
+            twitterService.AuthenticateWith(AccessToken, AccessTokenSecret);
+            var dms = twitterService.ListDirectMessagesReceived(new ListDirectMessagesReceivedOptions());
+            if (twitterService.Response == null)
+            {
+                throw new ApplicationException("Response was null");
+            }
+            if (twitterService.Response.Error != null)
+            {
+                throw new ApplicationException(twitterService.Response.Error.Message + "(" + twitterService.Response.Error.Code + ")");
+            }
+            return dms;
         }
     }
 }
