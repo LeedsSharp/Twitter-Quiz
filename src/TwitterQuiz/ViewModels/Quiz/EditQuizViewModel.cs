@@ -35,6 +35,7 @@ namespace TwitterQuiz.ViewModels.Quiz
         {
             var quiz = new Domain.Quiz
                 {
+                    Id = Id,
                     Name = Details.Name,
                     Description = Details.Description,
                     Owner = Details.Owner,

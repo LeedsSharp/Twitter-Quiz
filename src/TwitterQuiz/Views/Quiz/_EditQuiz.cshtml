@@ -2,6 +2,7 @@
 
 @using (Html.BeginForm("Edit", "Quiz", FormMethod.Post, new { @class = "form", id = "new-quiz" }))
 {
+    @Html.HiddenFor(x => x.Id)
     @Html.ValidationSummary()
     <div class="row">
         <div class="col-md-12">

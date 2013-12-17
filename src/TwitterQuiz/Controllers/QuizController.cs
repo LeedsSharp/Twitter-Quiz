@@ -74,7 +74,7 @@ namespace TwitterQuiz.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(EditQuizViewModel model, int? id)
+        public ActionResult Edit(EditQuizViewModel model)
         {
             var quiz = model.ToQuizModel();
             _documentSession.Store(quiz);
