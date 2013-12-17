@@ -27,6 +27,8 @@ namespace TwitterQuiz.ViewModels.Quiz
         [Required]
         [Digits]
         public int? FrequencyOfAnswers { get; set; }
+        [Required]
+        public string Owner { get; set; }
 
         public QuizDetailsViewModel()
         {

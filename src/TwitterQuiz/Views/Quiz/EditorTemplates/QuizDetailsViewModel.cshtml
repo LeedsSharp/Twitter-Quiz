@@ -1,5 +1,5 @@
 ﻿@model TwitterQuiz.ViewModels.Quiz.QuizDetailsViewModel
-
+@Html.HiddenFor(x => x.Owner)
 <div class="form-group">
     @Html.LabelFor(x => x.Name, new { @class = "control-label" })
     @Html.TextBoxFor(x => x.Name, new { @class = "form-control", placeholder = "Name" })

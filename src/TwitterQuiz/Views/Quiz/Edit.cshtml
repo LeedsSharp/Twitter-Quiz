@@ -7,49 +7,81 @@
 @Html.HiddenFor(x => x.Id)
 @Html.HiddenFor(x => x.StreamName)
 
-@using (Html.BeginForm("Edit", "Quiz", FormMethod.Post, new {@class = "form", id = "edit-quiz"}))
+<div class="row">
+    <div class="col-sm-10 col-sm-offset-1">
+        <h2>Create a new Quiz</h2>
+        @using (Html.BeginForm("Edit", "Quiz", FormMethod.Post, new { @class = "form", id = "new-quiz" }))
+        {
+            @Html.Partial("_EditQuiz", @Model)
+            <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Create</button>
+            </div>
+        }
+    </div>
+</div>
+@section Scripts
 {
-    @Html.Partial("_EditQuiz", @Model)
-}
-@*@section Scripts
-{
-    <script type="text/x-handlebars" id="application">
-		<div class="form-group">
-			<label class="control-label">Quiz Name</label>
-			{{input class="form-control" placeholder="Name" type="text" value=name}}
-		</div>
-		<div class="form-group">
-			<label class="control-label">Description</label>
-			{{input class="form-control" placeholder="Description" type="text" value=description }}
-		</div>
-		<div class="form-group">
-			<label class="control-label">Quiz Host</label>
-			<p>This is the twitter account that will tweet the questions</p>
-			<div class="input-group">
-				<span class="input-group-addon">&#64;</span>
-				{{input class="form-control" placeholder="This is the twitter account that will tweet the questions" type="text" value=host }}
-			</div>
-		</div>
+    <script type="text/x-handlebars" id="round-template">
+        
+    </script>
+    <script type="text/x-handlebars" id="question-template">
+        <div class="row form-stacked question-template">
+            <div class="col-md-9">
+                <textarea class="form-control" cols="20" id="question_Question" name="question.Question" placeholder="Question" rows="2"></textarea>
+                @*{{textarea class="form-control" cols="20" name="answer" placeholder="Possible Answer" type="text" value=question}}*@
+            </div>
+            <div class="col-md-3 pull-right">
+                <a class="btn btn-danger delete-question">
+                    <i class="fa fa-trash-o"></i>
+                </a>
+            </div>
+            <div class="answers">
+                {{#each answers}}
+                    {{> answer}}
+                {{/each}}
+            </div>
+        </div>
+    </script>
+    <script type="text/x-handlebars" id="answer-template">
+        <div class="answer-template">
+            <div class="col-md-9">
+                <input class="form-control" name="answer" placeholder="Possible answer" type="text" value="">
+                @*{{input class="form-control" name="answer" placeholder="Possible Answer" type="text" value=answer}}*@
+            </div>
+            <div class="col-md-3 pull-right">
+                <a class="btn btn-danger delete-answer">
+                    <i class="fa fa-trash-o"></i>
+                </a>
+            </div>
+        </div>
     </script>
     <script type="text/javascript">
-        $(function() {
-            var App = Ember.Application.create({
-                LOG_TRANSITIONS: true,
-                LOG_BINDINGS: true,
-                LOG_VIEW_LOOKUPS: true,
-                LOG_STACKTRACE_ON_DEPRECATION: true,
-                LOG_VERSION: true,
-                debugMode: true
+        $(function () {
+            $(document).on('click', '.add-question', function (e) {
+                e.preventDefault();
+                var source = $('#question-template').html();
+                var template = Handlebars.compile(source);
+                Handlebars.registerPartial("answer", $("#answer-template").html());
+                var context = { question: '', answers: { answer: '' } };
+                var html = template(context);
+                $(this).closest('.round-template').children('.questions').append(html);
             });
-            App.ApplicationRoute = Ember.Route.extend({
-                model: function() {
-                    var id = $('#Id').val();
-                    var stream = $('#StreamName').val();
-                    return Ember.$.getJSON('http://localhost:2113/streams/' + stream + '/' + id).then(function(data) {
-                        return data;
-                    });
-                }
+            $(document).on('click', '.delete-question', function (e) {
+                e.preventDefault();
+                $(this).closest('.question-template').remove();
             });
-        });
+            $(document).on('click', '.add-answer', function(e) {
+                e.preventDefault();
+                var source = $('#answer-template').html();
+                var template = Handlebars.compile(source);
+                var context = { answer: '' };
+                var html = template(context);
+                $(this).closest('.question-template').children('.answers').append(html);
+            });
+            $(document).on('click', '.delete-answer', function(e) {
+                e.preventDefault();
+                $(this).closest('.answer-template').remove();
+            });
+        })
     </script>
-}*@
+}

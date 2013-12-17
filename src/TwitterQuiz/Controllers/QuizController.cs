@@ -1,8 +1,17 @@
 ﻿using System;
 using System.Web.Mvc;
 using EventStore.ClientAPI;
+using Raven.Client.Linq;
 using TwitterQuiz.EventStore.Logic;
 using TwitterQuiz.ViewModels.Quiz;
+using Raven.Client;
+using TwitterQuiz.Domain;
+
+/*
+ * For now I am dropping back to what I already know - Raven. 
+ * Once we've got the LS Christmas pub quiz done I will be 
+ * rewriting this as an excercise in using CQRS and Event Store
+ * *******/
 
 namespace TwitterQuiz.Controllers
 {
@@ -10,14 +19,17 @@ namespace TwitterQuiz.Controllers
     public class QuizController : Controller
     {
         private readonly QuizLogic _quizLogic;
-        public QuizController(IEventStoreConnection eventStoreConnection)
+        private readonly IDocumentSession _documentSession;
+        public QuizController(IEventStoreConnection eventStoreConnection, IDocumentSession documentSession)
         {
             _quizLogic = new QuizLogic(eventStoreConnection);
+            _documentSession = documentSession;
         }
 
         public ActionResult Index()
         {
-            var quizzes = _quizLogic.GetQuizzes(User.Identity.Name);
+            var quizzes = _documentSession.Query<Quiz>().Where(x => x.Owner == User.Identity.Name);
+            //var quizzes = _quizLogic.GetQuizzes(User.Identity.Name);
             var model = new QuizIndexViewModel();
             foreach (var quiz in quizzes)
             {
@@ -36,28 +48,40 @@ namespace TwitterQuiz.Controllers
         [HttpGet]
         public ActionResult New()
         {
-            var model = new NewQuizViewModel
+            var model = new EditQuizViewModel
                 {
                     Details = new QuizDetailsViewModel
                         {
                             StartDate = DateTime.Now.AddHours(1),
-                            Host = User.Identity.Name
+                            Host = User.Identity.Name,
+                            Owner = User.Identity.Name
                         }
                 };
-            return View(model);
+            model.Rounds.Add(RoundViewModel.NewRound());
+            model.Rounds.Add(RoundViewModel.NewRound());
+            return View("Edit", model);
         }
 
         [HttpPost]
-        public ActionResult New(NewQuizViewModel model)
+        public ActionResult New(EditQuizViewModel model)
         {
-            _quizLogic.CreateNewQuiz(model.ToQuizModel(), User.Identity.Name);
-            return RedirectToAction("Index", "Home");
+            var quiz = model.ToQuizModel();
+            _documentSession.Store(quiz);
+            _documentSession.SaveChanges();
+            // Temp raven cop out to get the front end working whilst I figure out CQRS...
+            //_quizLogic.CreateNewQuiz(model.ToQuizModel(), User.Identity.Name);
+
+            var editModel = new EditQuizViewModel(quiz);
+
+            return RedirectToAction("Edit", "Quiz", editModel);
         }
 
         [HttpGet]
         public ActionResult Edit(int id)
         {
-            var quiz = _quizLogic.GetQuiz(id, User.Identity.Name);
+            var quiz = _documentSession.Load<Quiz>(id);
+            // Temp raven cop out to get the front end working whilst I figure out CQRS...
+            //var quiz = _quizLogic.GetQuiz(id, User.Identity.Name);
             var model = new EditQuizViewModel(quiz);
             return View(model);
         }
@@ -82,8 +106,8 @@ namespace TwitterQuiz.Controllers
             var NumOfQuizzes = r.Next(1, 5);
             for (int i = 0; i < NumOfQuizzes; i++)
             {
-                var quiz = Domain.Quiz.SampleQuiz(i, r);
-                _quizLogic.CreateNewQuiz(quiz, User.Identity.Name);
+                var quiz = Quiz.SampleQuiz(i, r, User.Identity.Name);
+                _documentSession.Store(quiz);
             }
             
             return RedirectToAction("Index", "Home");

@@ -64,6 +64,7 @@ namespace TwitterQuiz.App_Start
         private static void RegisterServices(IKernel kernel)
         {
             kernel.Load(new EventStoreNinjectModule());
-        }       
+            kernel.Load(new RavenDbNinjectModule());
+        }
     }
 }

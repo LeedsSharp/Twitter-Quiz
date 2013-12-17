@@ -24,5 +24,19 @@ namespace TwitterQuiz.ViewModels.Quiz
                 Rounds.Add(new RoundViewModel(round));
             }
         }
+
+        public Domain.Quiz ToQuizModel()
+        {
+            return new Domain.Quiz
+            {
+                Name = Details.Name,
+                Description = Details.Description,
+                Owner = Details.Owner,
+                Host = Details.Host,
+                StartDate = Details.StartDate,
+                FrequencyOfAnswers = Details.FrequencyOfAnswers.HasValue ? Details.FrequencyOfAnswers.Value : 10,
+                FrequencyOfQuestions = Details.FrequencyOfQuestions.HasValue ? Details.FrequencyOfQuestions.Value : 3
+            };
+        }
     }
 }

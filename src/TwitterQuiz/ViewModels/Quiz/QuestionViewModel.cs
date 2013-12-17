@@ -23,5 +23,12 @@ namespace TwitterQuiz.ViewModels.Quiz
                 PossibleAnswers.Add(answer);
             }
         }
+
+        public static QuestionViewModel NewQuestion()
+        {
+            var question = new QuestionViewModel();
+            question.PossibleAnswers.Add(string.Empty);
+            return question;
+        }
     }
 }

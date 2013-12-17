@@ -9,6 +9,7 @@ namespace TwitterQuiz.Domain
         public string InternalName { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public string Owner { get; set; }
         public string Host { get; set; }
         public DateTime StartDate { get; set; }
         public int FrequencyOfQuestions { get; set; } // The number of minutes the questions are tweeted
@@ -16,13 +17,14 @@ namespace TwitterQuiz.Domain
         public IList<Round> Rounds { get; set; }
         public Player Winner { get; set; }
 
-        public static Quiz SampleQuiz(int id, Random r)
+        public static Quiz SampleQuiz(int id, Random r, string username)
         {
             var numOfRounds = r.Next(1, 5);
             var quiz = new Quiz
             {
                 Name = string.Format("Quiz {0}", id),
                 Description = string.Format("Sample quiz number {0}", id),
+                Owner = username,
                 Host = "LeedsSharp",
                 StartDate = DateTime.Now.AddHours(1),
                 FrequencyOfQuestions = r.Next(1, 10),

@@ -10,6 +10,7 @@
                 {
                     Name = Details.Name,
                     Description = Details.Description,
+                    Owner = Details.Owner,
                     Host = Details.Host,
                     StartDate = Details.StartDate,
                     FrequencyOfAnswers = Details.FrequencyOfAnswers.HasValue ? Details.FrequencyOfAnswers.Value : 10,
