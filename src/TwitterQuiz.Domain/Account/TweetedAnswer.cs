@@ -2,7 +2,7 @@
 {
     public class TweetedAnswer
     {
-        public Host Host { get; set; }
+        public User Host { get; set; }
         public int Round { get; set; }
         public int Question { get; set; }
         public string QuizName { get; set; }

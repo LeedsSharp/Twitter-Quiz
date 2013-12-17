@@ -48,7 +48,6 @@
     <Compile Include="Account\User.cs" />
     <Compile Include="Answer.cs" />
     <Compile Include="DTO\QuizInProgress.cs" />
-    <Compile Include="Host.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="PossibleAnswer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -147,5 +147,13 @@ namespace TwitterQuiz.Controllers
             _documentSession.SaveChanges();
             return RedirectToAction("Index", "Home");
         }
+
+        public ActionResult AuthorizeHost(int id)
+        {
+            var quiz = _documentSession.Load<Quiz>(id);
+
+            var host = quiz.Host;
+            return RedirectToAction("Index", "Home");
+        }
     }
 }

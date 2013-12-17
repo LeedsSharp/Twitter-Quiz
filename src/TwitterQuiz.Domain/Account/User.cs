@@ -12,6 +12,7 @@ namespace TwitterQuiz.Domain.Account
         public string Locale { get; set; }
         public string Picture { get; set; }
         public IList<AccessToken> AccessTokens { get; set; }
+        public bool IsAuthenticated { get; set; }
 
         public User()
         {
