@@ -42,7 +42,8 @@ namespace TwitterQuiz
             {
                 DataDirectory = "App_Data",
                 UseEmbeddedHttpServer = true,
-                Configuration = { Port = 8082 }
+                Configuration = { Port = 8082 },
+                DefaultDatabase = "PubQuiziminator"
             };
             store.Initialize();
             return store;
