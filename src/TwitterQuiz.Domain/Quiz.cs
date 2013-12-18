@@ -12,7 +12,7 @@ namespace TwitterQuiz.Domain
         public string Description { get; set; }
         public string Owner { get; set; }
         public string Host { get; set; }
-        public string HostIsAuthenticated { get; set; }
+        public bool HostIsAuthenticated { get; set; }
         public User HostUser { get; set; }
         public DateTime StartDate { get; set; }
         public int FrequencyOfQuestions { get; set; } // The number of minutes the questions are tweeted

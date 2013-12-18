@@ -34,7 +34,8 @@ namespace TwitterQuiz.Controllers
                         Name = quiz.Name,
                         Id = quiz.Id,
                         Start = quiz.StartDate,
-                        Status = quiz.Status
+                        Status = quiz.Status,
+                        HostIsAuthenticated = quiz.HostIsAuthenticated
                     };
                     model.Quizzes.Add(quizmodel);
                 }
