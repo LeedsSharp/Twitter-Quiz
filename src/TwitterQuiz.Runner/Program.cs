@@ -98,7 +98,7 @@ namespace TwitterQuiz.Runner
             {
                 var roundTweet = new RoundStarted
                     {
-                        Host = quiz.Host,
+                        Host = quiz.HostUser.Username,
                         Round = round.Sequence,
                         Tweet = string.Format("Round {0}: {1}", round.Sequence, round.Name)
                     };
@@ -110,7 +110,7 @@ namespace TwitterQuiz.Runner
                 {
                     var questionTweet = new QuestionSent
                         {
-                            Host = quiz.Host,
+                            Host = quiz.HostUser.Username,
                             Question = question.Sequence,
                             Round = round.Sequence,
                             Tweet = question.Tweet
@@ -124,7 +124,7 @@ namespace TwitterQuiz.Runner
             }
             var quizEnded = new QuizEnded
                 {
-                    Host = quiz.Host,
+                    Host = quiz.HostUser.Username,
                     Tweet = "> The quiz is now over"
                 };
             _connection.AppendToStream(quizEnded, quiz.InternalName);

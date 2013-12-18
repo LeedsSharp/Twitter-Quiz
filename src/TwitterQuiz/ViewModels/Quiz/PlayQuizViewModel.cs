@@ -24,7 +24,7 @@ namespace TwitterQuiz.ViewModels.Quiz
             InternalName = quiz.InternalName; 
             Name = quiz.Name;
             Description = quiz.Description;
-            Host = quiz.Host;
+            Host = quiz.Host.Name;
             IsComplete = quiz.Complete;
             Rounds = new List<PlayRoundViewModel>();
             foreach (var round in quiz.Rounds)

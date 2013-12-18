@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using TwitterQuiz.Domain.Account;
 
 namespace TwitterQuiz.Domain.DTO
 {
@@ -8,7 +9,7 @@ namespace TwitterQuiz.Domain.DTO
         public string InternalName { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public string Host { get; set; }
+        public User Host { get; set; }
         public IList<RoundInProgress> Rounds { get; set; }
         public bool Complete { get; set; }
 
@@ -23,7 +24,7 @@ namespace TwitterQuiz.Domain.DTO
             InternalName = quiz.InternalName;
             Name = quiz.Name;
             Description = quiz.Description;
-            Host = quiz.Host;
+            Host = quiz.HostUser;
         }
     }
 

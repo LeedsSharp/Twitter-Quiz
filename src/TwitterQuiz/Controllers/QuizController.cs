@@ -152,7 +152,7 @@ namespace TwitterQuiz.Controllers
         {
             var quiz = _documentSession.Load<Quiz>(id);
 
-            var host = quiz.Host;
+            var host = quiz.HostUser;
             return RedirectToAction("Index", "Home");
         }
     }
