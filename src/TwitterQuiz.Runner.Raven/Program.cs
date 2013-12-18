@@ -68,61 +68,6 @@ namespace TwitterQuiz.Runner.Raven
             return new Sleep();
         }
 
-        private static void ActOnActiveQuiz(Quiz activeQuiz)
-        {
-            // if no rounds have been started then start the first
-            if (activeQuiz.ActiveRound == null)
-            {
-                StartRound(activeQuiz.NextRound);
-                return;
-            }
-            // If no questions have been sent yet for this round. Send the first one.
-            if (activeQuiz.ActiveRound.ActiveQuestion == null)
-            {
-                StartQuestion(activeQuiz.ActiveRound.NextQuestion);
-                return;
-            }
-            // Shouldn't happen but if there us an active question with no sent value then send it
-            if (!activeQuiz.ActiveRound.ActiveQuestion.DateSent.HasValue)
-            {
-                StartQuestion(activeQuiz.ActiveRound.ActiveQuestion);
-                return;
-            }
-            // If time has elapsed between questions then send the next question
-            if (activeQuiz.ActiveRound.ActiveQuestion.DateSent.Value.AddMinutes(activeQuiz.FrequencyOfQuestions) < DateTime.Now)
-            {
-                // If next question is null then start the next round
-                if (activeQuiz.ActiveRound.NextQuestion == null)
-                {
-                    // If the next round is null then the quiz is over
-                    if (activeQuiz.NextRound == null)
-                    {
-                        activeQuiz.Status = QuizStatus.Complete;
-                        return;
-                    }
-                    StartRound(activeQuiz.NextRound);
-                    return;
-                }
-                StartQuestion(activeQuiz.ActiveRound.NextQuestion);
-            }
-        }
-
-        private static void StartRound(Round round)
-        {
-            Console.WriteLine("Round {0}: {1}", round.Sequence, round.Name);
-            StartQuestion(round.NextQuestion);
-        }
-
-        private static void StartQuestion(Question question)
-        {
-            question.DateSent = DateTime.Now;
-            Console.WriteLine("Question {0}: {1}", question.Sequence, question.Tweet);
-            for (int i = 0; i < question.PossibleAnswers.Count; i++)
-            {
-                Console.WriteLine("{0}: {1}", _letters[i], question.PossibleAnswers[i].Answer);
-            }
-        }
-
         private static void StartDueQuizzes(IDocumentSession documentSession)
         {
             foreach (var dueQuiz in documentSession.Query<Quiz>().Where(x => x.Status == QuizStatus.Draft && x.HostIsAuthenticated && x.StartDate < DateTime.Now))
