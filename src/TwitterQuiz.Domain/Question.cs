@@ -7,6 +7,7 @@ namespace TwitterQuiz.Domain
         public string Tweet { get; set; }
         public int Sequence { get; set; }
         public IList<PossibleAnswer> PossibleAnswers { get; set; }
+        public bool Sent { get; set; }
 
         public Question()
         {

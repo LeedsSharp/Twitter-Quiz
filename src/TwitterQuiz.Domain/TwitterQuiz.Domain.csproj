@@ -60,6 +60,7 @@
     <Compile Include="Question.cs" />
     <Compile Include="Quiz.cs" />
     <Compile Include="QuizEvents\AnswerReceived.cs" />
+    <Compile Include="QuizEvents\iQuizEvent.cs" />
     <Compile Include="QuizEvents\QuizEnded.cs" />
     <Compile Include="QuizStatus.cs" />
     <Compile Include="Round.cs" />

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using TwitterQuiz.Domain.Account;
+using TwitterQuiz.Domain.QuizEvents;
 
 namespace TwitterQuiz.Domain
 {
@@ -18,12 +20,31 @@ namespace TwitterQuiz.Domain
         public int FrequencyOfQuestions { get; set; } // The number of minutes the questions are tweeted
         public int FrequencyOfAnswers { get; set; } // The number of minutes the correct answers are tweeted at the end of the quiz
         public IList<Round> Rounds { get; set; }
+
+        public Round NextRound
+        {
+            get
+            {
+                return Rounds.OrderBy(x => x.Sequence).FirstOrDefault(x => !x.RoundStarted);
+            }
+        }
+
+        public Round ActiveRound
+        {
+            get
+            {
+                return Rounds.OrderBy(x => x.Sequence).LastOrDefault(x => x.RoundStarted);
+            }
+        }
+
         public Player Winner { get; set; }
         public QuizStatus Status { get; set; }
+        public IList<QuizEvent> Events { get; set; }
 
         public Quiz()
         {
             Rounds = new List<Round>();
+            Events = new List<QuizEvent>();
         }
 
         public static Quiz SampleQuiz(int id, Random r, string username)
