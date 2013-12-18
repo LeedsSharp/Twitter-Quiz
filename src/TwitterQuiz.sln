@@ -24,6 +24,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitterQuiz.AtomPoller", "T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitterQuiz.AppServices", "TwitterQuiz.AppServices\TwitterQuiz.AppServices.csproj", "{6A1ECB19-73BA-4862-8FC9-169D147725C8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitterQuiz.Runner.Raven", "TwitterQuiz.Runner.Raven\TwitterQuiz.Runner.Raven.csproj", "{BF0EDC05-469C-4228-8E7B-CD1DE6F5118B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -62,6 +64,10 @@ Global
 		{6A1ECB19-73BA-4862-8FC9-169D147725C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A1ECB19-73BA-4862-8FC9-169D147725C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A1ECB19-73BA-4862-8FC9-169D147725C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF0EDC05-469C-4228-8E7B-CD1DE6F5118B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF0EDC05-469C-4228-8E7B-CD1DE6F5118B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF0EDC05-469C-4228-8E7B-CD1DE6F5118B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF0EDC05-469C-4228-8E7B-CD1DE6F5118B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

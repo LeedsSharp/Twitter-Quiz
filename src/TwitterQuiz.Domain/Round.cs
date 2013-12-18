@@ -14,7 +14,7 @@ namespace TwitterQuiz.Domain
         {
             get
             {
-                return Questions.OrderBy(x => x.Sequence).LastOrDefault(x => x.Sent);
+                return Questions.OrderBy(x => x.Sequence).LastOrDefault(x => x.DateSent.HasValue);
             }
         }
 
@@ -22,7 +22,7 @@ namespace TwitterQuiz.Domain
         {
             get
             {
-                return Questions.OrderBy(x => x.Sequence).FirstOrDefault(x => !x.Sent);
+                return Questions.OrderBy(x => x.Sequence).FirstOrDefault(x => !x.DateSent.HasValue);
             }
         }
 
@@ -30,7 +30,7 @@ namespace TwitterQuiz.Domain
         {
             get
             {
-                return Questions.Any(x => x.Sent);
+                return Questions.Any(x => x.DateSent.HasValue);
             }
         }
 

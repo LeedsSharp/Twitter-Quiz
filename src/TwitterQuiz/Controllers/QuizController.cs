@@ -4,7 +4,6 @@ using System.Web.Mvc;
 using EventStore.ClientAPI;
 using Raven.Client.Linq;
 using TwitterQuiz.Domain.Account;
-using TwitterQuiz.Domain.QuizEvents;
 using TwitterQuiz.EventStore.Logic;
 using TwitterQuiz.ViewModels.Quiz;
 using Raven.Client;

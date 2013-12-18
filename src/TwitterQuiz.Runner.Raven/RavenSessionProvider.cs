@@ -3,7 +3,7 @@ using Raven.Client.Document;
 using Raven.Client.Embedded;
 using Raven.Database.Server;
 
-namespace TwitterQuiz
+namespace TwitterQuiz.Runner.Raven
 {
     public class RavenSessionProvider
     {

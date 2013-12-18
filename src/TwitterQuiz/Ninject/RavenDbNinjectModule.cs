@@ -10,7 +10,7 @@ namespace TwitterQuiz.Ninject
         public override void Load()
         {
             Bind<IDocumentStore>()
-           .ToMethod(context => RavenSessionProvider.EmbeddableDocumentStore)
+           .ToMethod(context => RavenSessionProvider.DocumentStore)
            .InSingletonScope();
 
             Bind<IDocumentSession>().ToMethod(context => context.Kernel.Get<IDocumentStore>().OpenSession()).InRequestScope();
