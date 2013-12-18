@@ -13,14 +13,22 @@ namespace TwitterQuiz.AppServices
         #endregion
 
         private readonly TwitterService twitterService;
-        private const string ConsumerKey = "RMEjl9PUttoX3jl34Bb3iQ";
-        private const string ConsumerSecret = "vpIEH6sBorbEo39JRsUTFivIcEX5e8EV3sLPHj2u54";
+        private readonly string _consumerKey = "RMEjl9PUttoX3jl34Bb3iQ";
+        private readonly string _consumerSecret = "vpIEH6sBorbEo39JRsUTFivIcEX5e8EV3sLPHj2u54";
         private const string AccessToken = "183268831-4nxoXhFvGuiv74lI17SUqU6v82GX4q67IIH46lAY";
         private const string AccessTokenSecret = "8yXYxa0AiCn02aNgngKFdl2Yhe8NZgipmKgGa1cUuRE9m";
 
+        public TweetService(string consumerKey, string consumerSecret)
+        {
+            _consumerKey = consumerKey;
+            _consumerSecret = consumerSecret;
+        }
+
         public TweetService()
         {
-            var twitterClientInfo = new TwitterClientInfo { ConsumerKey = ConsumerKey, ConsumerSecret = ConsumerSecret };
+            _consumerKey = "RMEjl9PUttoX3jl34Bb3iQ";
+            _consumerSecret = "vpIEH6sBorbEo39JRsUTFivIcEX5e8EV3sLPHj2u54";
+            var twitterClientInfo = new TwitterClientInfo { ConsumerKey = _consumerKey, ConsumerSecret = _consumerSecret };
             twitterService = new TwitterService(twitterClientInfo);
         }
 

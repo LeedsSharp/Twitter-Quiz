@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -13,24 +14,26 @@ namespace TwitterQuiz.Controllers
     public class AuthorizeController : Controller
     {
         private readonly IDocumentSession _documentSession;
+        private readonly string _consumerKey = ConfigurationManager.AppSettings["ConsumerKey"];
+        private readonly string _consumerSecret = ConfigurationManager.AppSettings["ConsumerSecret"];
+        private readonly TweetService _tweetService;
 
         public AuthorizeController(IDocumentSession documentSession)
         {
+            _tweetService = new TweetService(_consumerKey, _consumerSecret);
             _documentSession = documentSession;
         }
 
         public ActionResult AuthorizeViaTwitter()
         {
-            var tweetService = new TweetService();
-            var uri = tweetService.GetAuthorizeUri();
+            var uri = _tweetService.GetAuthorizeUri();
             return new RedirectResult(uri, false /*permanent*/);
         }
 
         public ActionResult AuthorizeCallback(string oauth_token, string oauth_verifier)
         {
-            var tweetService = new TweetService();
-            var token = tweetService.GetAccessToken(oauth_token, oauth_verifier);
-            var userCreds = tweetService.GetUserCredentials(token);
+            var token = _tweetService.GetAccessToken(oauth_token, oauth_verifier);
+            var userCreds = _tweetService.GetUserCredentials(token);
 
             var user = Domain.Account.User.FromAuthenticatedTwitterUser(userCreds, token);
 
