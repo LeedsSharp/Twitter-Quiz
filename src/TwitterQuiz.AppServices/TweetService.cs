@@ -12,35 +12,72 @@ namespace TwitterQuiz.AppServices
 
         #endregion
 
-        private readonly TwitterService twitterService;
-        private const string ConsumerKey = "cCUfLlJdwNanXcdTFPaw";
-        private const string ConsumerSecret = "LeLyBeYm655HdtdAJnBr74NDZ7DXWKgxmVQomhN1Y";
-        private const string AccessToken = "576199065-QkMWPvETEvstaTkC2ksQ8Y3tvrJip0XDjTVgEZu7";
-        private const string AccessTokenSecret = "ydDC3XFV98i8GHihwbMkhD5VNGrbtRE0B0iQM6Mtj0nAj";
+        private readonly TwitterService _twitterService;
+        private readonly string _consumerKey;
+        private readonly string _consumerSecret;
+        private const string _accessToken = "183268831-4nxoXhFvGuiv74lI17SUqU6v82GX4q67IIH46lAY";
+        private const string _accessTokenSecret = "8yXYxa0AiCn02aNgngKFdl2Yhe8NZgipmKgGa1cUuRE9m";
+
+        public TweetService(string consumerKey, string consumerSecret)
+        {
+            _consumerKey = consumerKey;
+            _consumerSecret = consumerSecret;
+            var twitterClientInfo = new TwitterClientInfo { ConsumerKey = _consumerKey, ConsumerSecret = _consumerSecret };
+            _twitterService = new TwitterService(twitterClientInfo);
+        }
 
         public TweetService()
         {
-            var twitterClientInfo = new TwitterClientInfo { ConsumerKey = ConsumerKey, ConsumerSecret = ConsumerSecret };
-            twitterService = new TwitterService(twitterClientInfo);
+            _consumerKey = "RMEjl9PUttoX3jl34Bb3iQ";
+            _consumerSecret = "vpIEH6sBorbEo39JRsUTFivIcEX5e8EV3sLPHj2u54";
+            var twitterClientInfo = new TwitterClientInfo { ConsumerKey = _consumerKey, ConsumerSecret = _consumerSecret };
+            _twitterService = new TwitterService(twitterClientInfo);
+        }
+
+        public string GetAuthorizeUri(string callback)
+        {
+
+            // This is the registered callback URL
+            OAuthRequestToken requestToken = _twitterService.GetRequestToken(string.Format("http://localhost:12347/{0}", callback));
+
+            // Step 2 - Redirect to the OAuth Authorization URL
+            Uri uri = _twitterService.GetAuthorizationUri(requestToken);
+            return uri.ToString();
+        }
+
+        public OAuthAccessToken GetAccessToken(string oauth_token, string oauth_verifier)
+        {
+            var requestToken = new OAuthRequestToken { Token = oauth_token };
+
+            // Step 3 - Exchange the Request Token for an Access Token
+            return _twitterService.GetAccessToken(requestToken, oauth_verifier);
+        }
+
+        public TwitterUser GetUserCredentials(OAuthAccessToken accessToken)
+        {
+            // Step 4 - User authenticates using the Access Token
+            _twitterService.AuthenticateWith(accessToken.Token, accessToken.TokenSecret);
+            var options = new VerifyCredentialsOptions();
+            return _twitterService.VerifyCredentials(options);
         }
 
         public void Tweet(string message)
         {
-            twitterService.AuthenticateWith(AccessToken, AccessTokenSecret);
-            twitterService.SendTweet(new SendTweetOptions { Status = message });
+            _twitterService.AuthenticateWith(_accessToken, _accessTokenSecret);
+            _twitterService.SendTweet(new SendTweetOptions { Status = message });
         }
 
         public IEnumerable<TwitterDirectMessage> GetDMs()
         {
-            twitterService.AuthenticateWith(AccessToken, AccessTokenSecret);
-            var dms = twitterService.ListDirectMessagesReceived(new ListDirectMessagesReceivedOptions());
-            if (twitterService.Response == null)
+            _twitterService.AuthenticateWith(_accessToken, _accessTokenSecret);
+            var dms = _twitterService.ListDirectMessagesReceived(new ListDirectMessagesReceivedOptions());
+            if (_twitterService.Response == null)
             {
                 throw new ApplicationException("Response was null");
             }
-            if (twitterService.Response.Error != null)
+            if (_twitterService.Response.Error != null)
             {
-                throw new ApplicationException(twitterService.Response.Error.Message + "(" + twitterService.Response.Error.Code + ")");
+                throw new ApplicationException(_twitterService.Response.Error.Message + "(" + _twitterService.Response.Error.Code + ")");
             }
             return dms;
         }

@@ -8,7 +8,7 @@ namespace TwitterQuiz.ViewModels.Quiz
         public string InternalName { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public string Host { get; set; }
+        public string HostName { get; set; }
         public bool IsComplete { get; set; }
         public string Usernamne { get; set; }
 
@@ -18,7 +18,7 @@ namespace TwitterQuiz.ViewModels.Quiz
             InternalName = quiz.InternalName;
             Name = quiz.Name;
             Description = quiz.Description;
-            Host = quiz.Host;
+            HostName = quiz.Host.Name;
             IsComplete = quiz.Complete;
             Usernamne = username;
         }

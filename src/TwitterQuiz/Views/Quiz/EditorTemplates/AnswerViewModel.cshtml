@@ -1,6 +1,6 @@
 ﻿@model TwitterQuiz.ViewModels.Quiz.AnswerViewModel
 <div class="answer-template">
-    <div class="col-md-9">
+    <div class="col-xs-10">
         <div class="form-group">
             <div class="input-group">
                 <span class="input-group-addon">@Html.CheckBoxFor(x => x.IsCorrect, new { @class = "no-margin-bottom" })</span>
@@ -9,7 +9,7 @@
             @Html.ValidationMessageFor(x => x.Answer)
         </div>
     </div>
-    <div class="col-md-3 pull-right">
+    <div class="col-xs-2 pull-right">
         <a class="danger delete-answer">
             <i class="fa fa-trash-o fa-lg"></i>
         </a>

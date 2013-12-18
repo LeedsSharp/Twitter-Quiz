@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using EventStore.ClientAPI;
 using Raven.Client.Linq;
+using TwitterQuiz.Domain.Account;
 using TwitterQuiz.EventStore.Logic;
 using TwitterQuiz.ViewModels.Quiz;
 using Raven.Client;
@@ -62,18 +64,6 @@ namespace TwitterQuiz.Controllers
             return View("Edit", model);
         }
 
-        [HttpPost]
-        public ActionResult New(EditQuizViewModel model)
-        {
-            var quiz = model.ToQuizModel();
-            _documentSession.Store(quiz);
-            _documentSession.SaveChanges();
-            // Temp raven cop out to get the front end working whilst I figure out CQRS...
-            //_quizLogic.CreateNewQuiz(model.ToQuizModel(), User.Identity.Name);
-
-            return RedirectToAction("Edit", "Quiz", new { id = quiz.Id });
-        }
-
         [HttpGet]
         public ActionResult Edit(int id)
         {
@@ -81,13 +71,30 @@ namespace TwitterQuiz.Controllers
             // Temp raven cop out to get the front end working whilst I figure out CQRS...
             //var quiz = _quizLogic.GetQuiz(id, User.Identity.Name);
             var model = new EditQuizViewModel(quiz);
+
             return View(model);
         }
 
         [HttpPost]
         public ActionResult Edit(EditQuizViewModel model)
         {
-            return View(model);
+            var quiz = model.ToQuizModel();
+
+            var host = GetExistingHost(quiz.Host);
+            if (host != null)
+            {
+                quiz.HostUser = host;
+                quiz.HostIsAuthenticated = host.AccessTokens.Any(x => x.ProviderType == "twitter");
+            }
+            _documentSession.Store(quiz);
+            _documentSession.SaveChanges();
+
+            return RedirectToAction("Edit", "Quiz", new { id = quiz.Id });
+        }
+
+        private User GetExistingHost(string host)
+        {
+            return _documentSession.Query<User>().FirstOrDefault(x => x.Username == host);
         }
 
         [HttpPost]
@@ -111,18 +118,48 @@ namespace TwitterQuiz.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        public ActionResult Start(int id)
+        {
+            var quiz = _documentSession.Load<Quiz>(id);
+            quiz.StartDate = DateTime.Now;
+            quiz.Status = QuizStatus.InProgress;
+            _documentSession.Store(quiz);
+            _documentSession.SaveChanges();
+            return RedirectToAction("Play", new {id});
+        }
+
         public ActionResult Play(int id)
         {
-            var quizInProgress = _quizLogic.GetStartedQuiz(id, User.Identity.Name);
+            var quiz = _documentSession.Load<Quiz>(id);
+            var quizInProgress = _quizLogic.GetStartedQuiz(quiz, User.Identity.Name);
             var model = new PlayQuizViewModel(quizInProgress);
             return View(model);
         }
 
         public ActionResult Player(int id, string player)
         {
-            var quizInProgress = _quizLogic.GetStartedQuiz(id, User.Identity.Name);
+            var quiz = _documentSession.Load<Quiz>(id);
+            var quizInProgress = _quizLogic.GetStartedQuiz(quiz, User.Identity.Name);
             QuizPlayerViewModel model = new QuizPlayerViewModel(quizInProgress, player);
             return View(model);
+        }
+
+        public ActionResult Delete(int id)
+        {
+            var quiz = _documentSession.Load<Quiz>(id);
+            _documentSession.Delete(quiz);
+            _documentSession.SaveChanges();
+            return RedirectToAction("Index", "Home");
+        }
+
+        public ActionResult Stop(int id)
+        {
+            var quiz = _documentSession.Load<Quiz>(id);
+            quiz.StartDate = DateTime.Now.AddHours(1);
+            quiz.Status = QuizStatus.Draft;
+            _documentSession.Store(quiz);
+            _documentSession.SaveChanges();
+            return RedirectToAction("Index", "Home");
         }
     }
 }

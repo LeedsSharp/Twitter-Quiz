@@ -1,21 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using TwitterQuiz.Domain.Account;
 
 namespace TwitterQuiz.Domain
 {
     public class Quiz
     {
         public int Id { get; set; }
-        public string InternalName { get; set; }
+        public string InternalName { get { return string.Format("{0}-Quiz-{1}", Owner.Replace(" ", ""), Id); }}
         public string Name { get; set; }
         public string Description { get; set; }
         public string Owner { get; set; }
         public string Host { get; set; }
+        public bool HostIsAuthenticated { get; set; }
+        public User HostUser { get; set; }
         public DateTime StartDate { get; set; }
         public int FrequencyOfQuestions { get; set; } // The number of minutes the questions are tweeted
         public int FrequencyOfAnswers { get; set; } // The number of minutes the correct answers are tweeted at the end of the quiz
         public IList<Round> Rounds { get; set; }
         public Player Winner { get; set; }
+        public QuizStatus Status { get; set; }
 
         public Quiz()
         {

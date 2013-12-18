@@ -39,6 +39,7 @@ namespace TwitterQuiz.ViewModels.Quiz
         {
             Name = quiz.Name;
             Description = quiz.Description;
+            Owner = quiz.Owner;
             Host = quiz.Host;
             StartDate = quiz.StartDate;
             FrequencyOfAnswers = quiz.FrequencyOfAnswers;

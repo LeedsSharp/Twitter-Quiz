@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using System.Web.Mvc;
-using EventStore.ClientAPI;
+﻿using System.Web.Mvc;
 using Raven.Client;
 using Raven.Client.Linq;
 using TwitterQuiz.Domain;
@@ -35,7 +33,10 @@ namespace TwitterQuiz.Controllers
                         Description = quiz.Description,
                         Name = quiz.Name,
                         Id = quiz.Id,
-                        Start = quiz.StartDate
+                        Start = quiz.StartDate,
+                        Status = quiz.Status,
+                        Host = quiz.Host,
+                        HostIsAuthenticated = quiz.HostIsAuthenticated
                     };
                     model.Quizzes.Add(quizmodel);
                 }
@@ -43,6 +44,5 @@ namespace TwitterQuiz.Controllers
 
             return View(model);
         }
-
     }
 }

@@ -50,6 +50,10 @@
     <Reference Include="EventStore.ClientAPI">
       <HintPath>..\packages\EventStore.Client.2.0.2\lib\net40\EventStore.ClientAPI.dll</HintPath>
     </Reference>
+    <Reference Include="Hammock.ClientProfile, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c148cfba29ed1a4d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\TweetSharp.2.3.1\lib\4.0\Hammock.ClientProfile.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Data.Edm, Version=5.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -152,6 +156,9 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="TweetSharp">
+      <HintPath>..\packages\TweetSharp.2.3.1\lib\4.0\TweetSharp.dll</HintPath>
+    </Reference>
     <Reference Include="WebActivator">
       <HintPath>..\packages\WebActivator.1.5.3\lib\net40\WebActivator.dll</HintPath>
     </Reference>
@@ -162,7 +169,7 @@
   <ItemGroup>
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="App_Start\RegisterClientValidationExtensions.cs" />
-    <Compile Include="Controllers\AuthenticationCallbackProvider.cs" />
+    <Compile Include="Controllers\AuthorizeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\QuizController.cs" />
     <Compile Include="Ninject\EventStoreNinjectModule.cs" />
@@ -263,6 +270,10 @@
     <Content Include="Views\Shared\_MasterLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TwitterQuiz.AppServices\TwitterQuiz.AppServices.csproj">
+      <Project>{6A1ECB19-73BA-4862-8FC9-169D147725C8}</Project>
+      <Name>TwitterQuiz.AppServices</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TwitterQuiz.Domain\TwitterQuiz.Domain.csproj">
       <Project>{83EFF6B3-F4EA-4E1D-8320-6FF84CC3509F}</Project>
       <Name>TwitterQuiz.Domain</Name>

@@ -1,6 +1,6 @@
 ﻿@using SimpleAuthentication.Mvc
 <div class="sign-in-buttons">
-    <a class="btn btn-lg btn-primary" href="@Url.RedirectToProvider("twitter")">
+    <a class="btn btn-lg btn-primary" href="@Url.Action("AuthorizeViaTwitter", "Authorize")">
         <i class="fa fa-twitter fa-lg"></i> 
         Sign in with Twitter
     </a>
