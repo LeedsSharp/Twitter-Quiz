@@ -48,7 +48,7 @@ namespace TwitterQuiz.Domain.Account
             {
                 Username = userCreds.ScreenName,
                 Name = userCreds.Name,
-                Email = userCreds.ProfileImageUrl,
+                //Email = userCreds.ProfileImageUrl,
                 //Gender = GenderTypeHelpers.ToGenderType(userCreds..UserInformation.Gender.ToString()),
                 Locale = userCreds.Language,
                 Picture = userCreds.ProfileImageUrl,
