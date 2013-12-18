@@ -1,4 +1,4 @@
-﻿using TwitterQuiz.Domain.DTO;
+﻿using TwitterQuiz.Domain;
 
 namespace TwitterQuiz.ViewModels.Quiz
 {
@@ -12,14 +12,14 @@ namespace TwitterQuiz.ViewModels.Quiz
         public bool IsComplete { get; set; }
         public string Usernamne { get; set; }
 
-        public QuizPlayerViewModel(QuizInProgress quiz, string username)
+        public QuizPlayerViewModel(Domain.Quiz quiz, string username)
         {
             Id = quiz.Id;
             InternalName = quiz.InternalName;
             Name = quiz.Name;
             Description = quiz.Description;
-            HostName = quiz.Host.Name;
-            IsComplete = quiz.Complete;
+            HostName = quiz.Host;
+            IsComplete = quiz.Status == QuizStatus.Complete;
             Usernamne = username;
         }
     }

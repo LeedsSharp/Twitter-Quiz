@@ -9,9 +9,11 @@ namespace TwitterQuiz.Domain
         public int Sequence { get; set; }
         public IList<PossibleAnswer> PossibleAnswers { get; set; }
         public DateTime? DateSent { get; set; }
+        public IEnumerable<Answer> Replies { get; set; }
 
         public Question()
         {
+            Replies = new List<Answer>();
             PossibleAnswers = new List<PossibleAnswer>();
         }
     }
