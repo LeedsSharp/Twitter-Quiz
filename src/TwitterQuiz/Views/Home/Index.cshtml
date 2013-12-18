@@ -29,12 +29,12 @@ else
             <p>Start: @quiz.Start</p>
             @if (!quiz.HostIsAuthenticated)
             {
-                <a class="btn btn-lg btn-warning" href="@Url.Action("AuthorizeHost", "Quiz", new {id = quiz.Id})">
+                <a class="btn btn-lg btn-warning" href="@Url.Action("AuthorizeHost", "Authorize", new {id = quiz.Id})">
                     <i class="fa fa-exclamation fa-fw"></i>
-                    Authorize Host
+                    Authorize @quiz.Host
                 </a>
             }
-            @if (quiz.HostIsAuthenticated && quiz.Status == QuizStatus.Ready)
+            @if (quiz.HostIsAuthenticated)
             {
                 <a class="btn btn-lg btn-success" href="@Url.Action("Start", "Quiz", new {id = quiz.Id})">
                     <i class="fa fa-play fa-fw"></i>

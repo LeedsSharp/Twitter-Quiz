@@ -6,7 +6,9 @@ using System.Web.Mvc;
 using System.Web.Security;
 using Raven.Abstractions.Extensions;
 using Raven.Client;
+using TweetSharp;
 using TwitterQuiz.AppServices;
+using TwitterQuiz.Domain;
 using TwitterQuiz.Domain.Account;
 
 namespace TwitterQuiz.Controllers
@@ -14,19 +16,45 @@ namespace TwitterQuiz.Controllers
     public class AuthorizeController : Controller
     {
         private readonly IDocumentSession _documentSession;
-        private readonly string _consumerKey = ConfigurationManager.AppSettings["ConsumerKey"];
-        private readonly string _consumerSecret = ConfigurationManager.AppSettings["ConsumerSecret"];
+        private readonly string _consumerKey;
+        private readonly string _consumerSecret;
         private readonly TweetService _tweetService;
 
         public AuthorizeController(IDocumentSession documentSession)
         {
+            _consumerKey = ConfigurationManager.AppSettings["ConsumerKey"];
+            _consumerSecret = ConfigurationManager.AppSettings["ConsumerSecret"];
             _tweetService = new TweetService(_consumerKey, _consumerSecret);
             _documentSession = documentSession;
         }
 
+        public ActionResult AuthorizeHost(int id)
+        {
+            var uri = _tweetService.GetAuthorizeUri("Authorize/RegiserHost?id="+id);
+            return new RedirectResult(uri, false /*permanent*/);
+        }
+
+        public ActionResult RegiserHost(int id, string oauth_token, string oauth_verifier)
+        {
+            var token = _tweetService.GetAccessToken(oauth_token, oauth_verifier);
+            var quiz = _documentSession.Load<Quiz>(id);
+            if (quiz.Host == token.ScreenName)
+            {
+                var userCreds = _tweetService.GetUserCredentials(token);
+
+                var user = SaveUser(userCreds, token);
+
+                quiz.HostUser = user;
+                quiz.HostIsAuthenticated = true;
+                _documentSession.Store(quiz);
+                _documentSession.SaveChanges();
+            }
+            return RedirectToAction("Index", "Home");
+        }
+
         public ActionResult AuthorizeViaTwitter()
         {
-            var uri = _tweetService.GetAuthorizeUri();
+            var uri = _tweetService.GetAuthorizeUri("Authorize/AuthorizeCallback");
             return new RedirectResult(uri, false /*permanent*/);
         }
 
@@ -35,6 +63,22 @@ namespace TwitterQuiz.Controllers
             var token = _tweetService.GetAccessToken(oauth_token, oauth_verifier);
             var userCreds = _tweetService.GetUserCredentials(token);
 
+            var user = SaveUser(userCreds, token);
+
+            _documentSession.SaveChanges();
+
+            // Create auth token
+            var ticket = new FormsAuthenticationTicket(1, user.Username, DateTime.Now, DateTime.Now.AddMinutes(30), false, "");
+
+            var strEncryptedTicket = FormsAuthentication.Encrypt(ticket);
+            var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, strEncryptedTicket);
+            HttpContext.Response.Cookies.Add(cookie);
+            
+            return RedirectToAction("Index", "Home");
+        }
+
+        private User SaveUser(TwitterUser userCreds, OAuthAccessToken token)
+        {
             var user = Domain.Account.User.FromAuthenticatedTwitterUser(userCreds, token);
 
             if (!_documentSession.Query<User>().Any(x => x.Username == user.Username))
@@ -55,18 +99,7 @@ namespace TwitterQuiz.Controllers
                 existingUser.AccessTokens.AddRange(user.AccessTokens);
                 _documentSession.Store(existingUser);
             }
-
-
-            _documentSession.SaveChanges();
-
-            // Create auth token
-            var ticket = new FormsAuthenticationTicket(1, user.Username, DateTime.Now, DateTime.Now.AddMinutes(30), false, "");
-
-            var strEncryptedTicket = FormsAuthentication.Encrypt(ticket);
-            var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, strEncryptedTicket);
-            HttpContext.Response.Cookies.Add(cookie);
-            
-            return RedirectToAction("Index", "Home");
+            return user;
         }
     }
 }

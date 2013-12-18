@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using EventStore.ClientAPI;
 using Raven.Client.Linq;
+using TwitterQuiz.Domain.Account;
 using TwitterQuiz.EventStore.Logic;
 using TwitterQuiz.ViewModels.Quiz;
 using Raven.Client;
@@ -77,10 +79,22 @@ namespace TwitterQuiz.Controllers
         public ActionResult Edit(EditQuizViewModel model)
         {
             var quiz = model.ToQuizModel();
+
+            var host = GetExistingHost(quiz.Host);
+            if (host != null)
+            {
+                quiz.HostUser = host;
+                quiz.HostIsAuthenticated = host.AccessTokens.Any(x => x.ProviderType == "twitter");
+            }
             _documentSession.Store(quiz);
             _documentSession.SaveChanges();
 
             return RedirectToAction("Edit", "Quiz", new { id = quiz.Id });
+        }
+
+        private User GetExistingHost(string host)
+        {
+            return _documentSession.Query<User>().FirstOrDefault(x => x.Username == host);
         }
 
         [HttpPost]
@@ -142,17 +156,9 @@ namespace TwitterQuiz.Controllers
         {
             var quiz = _documentSession.Load<Quiz>(id);
             quiz.StartDate = DateTime.Now.AddHours(1);
-            quiz.Status = QuizStatus.Ready;
+            quiz.Status = QuizStatus.Draft;
             _documentSession.Store(quiz);
             _documentSession.SaveChanges();
-            return RedirectToAction("Index", "Home");
-        }
-
-        public ActionResult AuthorizeHost(int id)
-        {
-            var quiz = _documentSession.Load<Quiz>(id);
-
-            var host = quiz.HostUser;
             return RedirectToAction("Index", "Home");
         }
     }
