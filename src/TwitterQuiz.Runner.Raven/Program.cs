@@ -19,57 +19,91 @@ namespace TwitterQuiz.Runner.Raven
             {
                 using (var documentSession = documentStore.OpenSession())
                 {
-                    Console.WriteLine("tick {0}", DateTime.Now);
                     StartDueQuizzes(documentSession);
 
                     foreach (var activeQuiz in documentSession.Query<Quiz>().Where(x => x.Status == QuizStatus.InProgress))
                     {
-                        if (activeQuiz.ActiveRound == null)
-                        {
-                            // Start the first round
-                            StartRound(activeQuiz.NextRound);
-                        }
-                        else
-                        {
-                            if (activeQuiz.ActiveRound.ActiveQuestion == null)
-                            {
-                                // No questions have been sent yet for this round. Send the first one.
-                                StartQuestion(activeQuiz.ActiveRound.NextQuestion);
-                            }
-                            else
-                            {
-                                if (activeQuiz.ActiveRound.ActiveQuestion.DateSent.HasValue)
-                                {
-                                    if (activeQuiz.ActiveRound.ActiveQuestion.DateSent.Value.AddMinutes(activeQuiz.FrequencyOfQuestions) < DateTime.Now)
-                                    {
-                                        if (activeQuiz.ActiveRound.NextQuestion == null)
-                                        {
-                                            if (activeQuiz.NextRound == null)
-                                            {
-                                                activeQuiz.Status = QuizStatus.Complete;
-                                            }
-                                            else
-                                            {
-                                                StartRound(activeQuiz.NextRound);
-                                            }
-                                        }
-                                        else
-                                        {
-                                            StartQuestion(activeQuiz.ActiveRound.NextQuestion);
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    StartQuestion(activeQuiz.ActiveRound.ActiveQuestion);
-                                }
-                            }
-                        }
-
+                        var action = GetQuizAction(activeQuiz);
+                        action.CarryOutAction(activeQuiz);
+                        Console.WriteLine("{0} - Action: {1}", DateTime.Now, action.GetType());
                     }
                     documentSession.SaveChanges();
                 }
                 Thread.Sleep(1000);
+            }
+        }
+
+        private static IQuizAction GetQuizAction(Quiz activeQuiz)
+        {
+            // if no rounds have been started then start the first
+            if (activeQuiz.ActiveRound == null)
+            {
+                return new StartQuiz();
+            }
+            // If no questions have been sent yet for this round. Send the first one.
+            if (activeQuiz.ActiveRound.ActiveQuestion == null)
+            {
+                return new StartRound();
+            }
+            // Shouldn't happen but if there us an active question with no sent value then send it
+            if (!activeQuiz.ActiveRound.ActiveQuestion.DateSent.HasValue)
+            {
+                return new StartRound();
+            }
+            // If time has elapsed between questions then send the next question
+            if (activeQuiz.ActiveRound.ActiveQuestion.DateSent.Value.AddMinutes(activeQuiz.FrequencyOfQuestions) < DateTime.Now)
+            {
+                // If next question is null then start the next round
+                if (activeQuiz.ActiveRound.NextQuestion == null)
+                {
+                    // If the next round is null then the quiz is over
+                    if (activeQuiz.NextRound == null)
+                    {
+                        return new CompleteQuiz();
+                    }
+                    return new StartRound();
+                }
+                return new StartQuestion();
+            }
+            return new Sleep();
+        }
+
+        private static void ActOnActiveQuiz(Quiz activeQuiz)
+        {
+            // if no rounds have been started then start the first
+            if (activeQuiz.ActiveRound == null)
+            {
+                StartRound(activeQuiz.NextRound);
+                return;
+            }
+            // If no questions have been sent yet for this round. Send the first one.
+            if (activeQuiz.ActiveRound.ActiveQuestion == null)
+            {
+                StartQuestion(activeQuiz.ActiveRound.NextQuestion);
+                return;
+            }
+            // Shouldn't happen but if there us an active question with no sent value then send it
+            if (!activeQuiz.ActiveRound.ActiveQuestion.DateSent.HasValue)
+            {
+                StartQuestion(activeQuiz.ActiveRound.ActiveQuestion);
+                return;
+            }
+            // If time has elapsed between questions then send the next question
+            if (activeQuiz.ActiveRound.ActiveQuestion.DateSent.Value.AddMinutes(activeQuiz.FrequencyOfQuestions) < DateTime.Now)
+            {
+                // If next question is null then start the next round
+                if (activeQuiz.ActiveRound.NextQuestion == null)
+                {
+                    // If the next round is null then the quiz is over
+                    if (activeQuiz.NextRound == null)
+                    {
+                        activeQuiz.Status = QuizStatus.Complete;
+                        return;
+                    }
+                    StartRound(activeQuiz.NextRound);
+                    return;
+                }
+                StartQuestion(activeQuiz.ActiveRound.NextQuestion);
             }
         }
 
