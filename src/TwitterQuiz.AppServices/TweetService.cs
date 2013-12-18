@@ -13,15 +13,42 @@ namespace TwitterQuiz.AppServices
         #endregion
 
         private readonly TwitterService twitterService;
-        private const string ConsumerKey = "cCUfLlJdwNanXcdTFPaw";
-        private const string ConsumerSecret = "LeLyBeYm655HdtdAJnBr74NDZ7DXWKgxmVQomhN1Y";
-        private const string AccessToken = "576199065-QkMWPvETEvstaTkC2ksQ8Y3tvrJip0XDjTVgEZu7";
-        private const string AccessTokenSecret = "ydDC3XFV98i8GHihwbMkhD5VNGrbtRE0B0iQM6Mtj0nAj";
+        private const string ConsumerKey = "RMEjl9PUttoX3jl34Bb3iQ";
+        private const string ConsumerSecret = "vpIEH6sBorbEo39JRsUTFivIcEX5e8EV3sLPHj2u54";
+        private const string AccessToken = "183268831-4nxoXhFvGuiv74lI17SUqU6v82GX4q67IIH46lAY";
+        private const string AccessTokenSecret = "8yXYxa0AiCn02aNgngKFdl2Yhe8NZgipmKgGa1cUuRE9m";
 
         public TweetService()
         {
             var twitterClientInfo = new TwitterClientInfo { ConsumerKey = ConsumerKey, ConsumerSecret = ConsumerSecret };
             twitterService = new TwitterService(twitterClientInfo);
+        }
+
+        public string GetAuthorizeUri()
+        {
+
+            // This is the registered callback URL
+            OAuthRequestToken requestToken = twitterService.GetRequestToken("http://localhost:12347/Authorize/AuthorizeCallback");
+
+            // Step 2 - Redirect to the OAuth Authorization URL
+            Uri uri = twitterService.GetAuthorizationUri(requestToken);
+            return uri.ToString();
+        }
+
+        public OAuthAccessToken GetAccessToken(string oauth_token, string oauth_verifier)
+        {
+            var requestToken = new OAuthRequestToken { Token = oauth_token };
+
+            // Step 3 - Exchange the Request Token for an Access Token
+            return twitterService.GetAccessToken(requestToken, oauth_verifier);
+        }
+
+        public TwitterUser GetUserCredentials(OAuthAccessToken accessToken)
+        {
+            // Step 4 - User authenticates using the Access Token
+            twitterService.AuthenticateWith(accessToken.Token, accessToken.TokenSecret);
+            var options = new VerifyCredentialsOptions();
+            return twitterService.VerifyCredentials(options);
         }
 
         public void Tweet(string message)

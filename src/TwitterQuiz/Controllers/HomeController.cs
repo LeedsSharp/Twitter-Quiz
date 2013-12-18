@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using System.Web.Mvc;
-using EventStore.ClientAPI;
+﻿using System.Web.Mvc;
 using Raven.Client;
 using Raven.Client.Linq;
 using TwitterQuiz.Domain;

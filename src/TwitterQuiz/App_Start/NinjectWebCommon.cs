@@ -49,8 +49,6 @@ namespace TwitterQuiz.App_Start
             
             kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
-            kernel.Bind<IAuthenticationCallbackProvider>().To<AuthenticationCallbackProvider>();
-            kernel.Load(typeof(SimpleAuthenticationController).Assembly);
             kernel.Bind<ICache>().To<CookieCache>();
 
             RegisterServices(kernel);
