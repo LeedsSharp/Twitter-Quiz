@@ -33,8 +33,9 @@
                         <ul class="list-group">
                             @foreach (var answer in question.PossibleAnswers)
                             {
-                                <li class="list-group-item">
-                                    <b>@answer.Letter</b>: @answer.Answer
+                                <li class="list-group-item @answer.AnswerClass">
+                                    <span class="badge">@question.Replies.Count(x => String.Equals(x.Answer, answer.Letter.ToString(), StringComparison.CurrentCultureIgnoreCase))</span>
+                                    <b>@answer.Letter</b>: @answer.Answer 
                                 </li>
                             }
                         </ul>
@@ -43,7 +44,7 @@
                         @foreach (var reply in question.Replies)
                         {
                             <a href="@Url.Action("Player", "Quiz", new { id = Model.Id, player = reply.Username })">
-                                <img id="answer-@round.Sequence-@question.Sequence-@reply.Username" src="@reply.ImageUrl" alt="&#64;@reply.Username" title="&#64;@reply.Username" class="img-thumbnail" width="50" />
+                                <img id="answer-@round.Sequence-@question.Sequence-@reply.Username" src="@reply.ImageUrl" alt="&#64;@reply.Username" title="&#64;@reply.Username" class="img-thumbnail @reply.AnswerClass" width="50" />
                             </a>
                         }
                     </div>

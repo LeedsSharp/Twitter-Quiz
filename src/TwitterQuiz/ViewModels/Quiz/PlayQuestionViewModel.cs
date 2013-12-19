@@ -24,7 +24,7 @@ namespace TwitterQuiz.ViewModels.Quiz
             for (int i = 0; i < question.PossibleAnswers.Count; i++)
             {
                 var answer = question.PossibleAnswers[i];
-                PossibleAnswers.Add(new PossibleAnswerViewModel(_letters[i], answer.Answer));
+                PossibleAnswers.Add(new PossibleAnswerViewModel(answer, _letters[i], question.AnswersGathered));
             }
             Replies = new List<PlayAnswerViewModel>();
             foreach (var reply in question.Replies)
