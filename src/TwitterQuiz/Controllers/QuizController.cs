@@ -121,7 +121,6 @@ namespace TwitterQuiz.Controllers
         {
             var quiz = _documentSession.Load<Quiz>(id);
             quiz.StartDate = DateTime.Now;
-            quiz.Status = QuizStatus.InProgress;
             _documentSession.Store(quiz);
             _documentSession.SaveChanges();
             return RedirectToAction("Play", new {id});
