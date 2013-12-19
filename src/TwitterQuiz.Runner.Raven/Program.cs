@@ -30,7 +30,14 @@ namespace TwitterQuiz.Runner.Raven
                     foreach (var activeQuiz in documentSession.Query<Quiz>().Where(x => x.Status == QuizStatus.InProgress))
                     {
                         var action = GetQuizAction(activeQuiz);
-                        ApplyAction(action, activeQuiz);
+                        string[] tweets = action.GetTweetsForAction(activeQuiz);
+
+                        action.UpdateQuiz(activeQuiz);
+                        documentSession.Store(activeQuiz);
+                        documentSession.SaveChanges();
+
+                        SendTweets(tweets, activeQuiz);
+
                         //Console.WriteLine("{0} - Action: {1}", DateTime.Now, action.GetType());
                         if (activeQuiz.Status == QuizStatus.Complete)
                         {
@@ -41,6 +48,17 @@ namespace TwitterQuiz.Runner.Raven
                     documentSession.SaveChanges();
                 }
                 Thread.Sleep(1000);
+            }
+        }
+
+        private static void SendTweets(IEnumerable<string> tweets, Quiz activeQuiz)
+        {
+            var accessToken = activeQuiz.HostUser.AccessTokens.First(x => x.ProviderType == "twitter");
+            foreach (var tweet in tweets)
+            {
+                Console.WriteLine(tweet);
+                _tweetService.Tweet(accessToken.PublicAccessToken, accessToken.TokenSecret, tweet);
+                Thread.Sleep(5000);
             }
         }
 
@@ -74,20 +92,6 @@ namespace TwitterQuiz.Runner.Raven
             quiz.Rounds.SelectMany(x => x.Questions).Where(x => x.DateSent < responseTime).OrderByDescending(x => x.DateSent).First().Replies.Add(answer);
 
             Console.WriteLine("{0}: {1}", answer.Player.Username, answer.AnswerConent);
-        }
-
-        private static void ApplyAction(IQuizAction action, Quiz activeQuiz)
-        {
-            string[] tweets = action.GetTweetsForAction(activeQuiz);
-            var accessToken = activeQuiz.HostUser.AccessTokens.First(x => x.ProviderType == "twitter");
-
-            action.UpdateQuiz(activeQuiz);
-            foreach (var tweet in tweets)
-            {
-                Console.WriteLine(tweet);
-                //_tweetService.Tweet(accessToken.PublicAccessToken, accessToken.TokenSecret, tweet);
-                Thread.Sleep(5000);
-            }
         }
 
         private static IQuizAction GetQuizAction(Quiz activeQuiz)
@@ -129,9 +133,14 @@ namespace TwitterQuiz.Runner.Raven
         {
             foreach (var dueQuiz in documentSession.Query<Quiz>().Where(x => x.Status == QuizStatus.Draft && x.HostIsAuthenticated && x.StartDate < DateTime.Now))
             {
-                ApplyAction(new StartQuiz(), dueQuiz);
+                var action = new StartQuiz();
+                string[] tweets = action.GetTweetsForAction(dueQuiz);
+
+                action.UpdateQuiz(dueQuiz);
                 documentSession.Store(dueQuiz);
                 documentSession.SaveChanges();
+
+                SendTweets(tweets, dueQuiz);
             }
         }
     }
