@@ -27,25 +27,30 @@ namespace TwitterQuiz.Runner.Raven
 
                     foreach (var activeQuiz in documentSession.Query<Quiz>().Where(x => x.Status == QuizStatus.InProgress))
                     {
-                        var accessToken = activeQuiz.HostUser.AccessTokens.First(x => x.ProviderType == "twitter");
-
                         var action = GetQuizAction(activeQuiz);
-                        string[] tweets = action.GetTweetsForAction(activeQuiz);
-
-                        foreach (var tweet in tweets)
-                        {
-                            Console.WriteLine(tweet);
-                            Thread.Sleep(5000);
-                            //_tweetService.Tweet(accessToken.PublicAccessToken, accessToken.TokenSecret, tweet);
-                        }
-
-                        action.UpdateQuiz(activeQuiz);
-                        Console.WriteLine("{0} - Action: {1}", DateTime.Now, action.GetType());
+                        ApplyAction(action, activeQuiz);
+                        //Console.WriteLine("{0} - Action: {1}", DateTime.Now, action.GetType());
+                        documentSession.Store(activeQuiz);
                     }
                     documentSession.SaveChanges();
                 }
                 Thread.Sleep(1000);
             }
+        }
+
+        private static void ApplyAction(IQuizAction action, Quiz activeQuiz)
+        {
+            string[] tweets = action.GetTweetsForAction(activeQuiz);
+            var accessToken = activeQuiz.HostUser.AccessTokens.First(x => x.ProviderType == "twitter");
+
+            foreach (var tweet in tweets)
+            {
+                Console.WriteLine(tweet);
+                //_tweetService.Tweet(accessToken.PublicAccessToken, accessToken.TokenSecret, tweet);
+                Thread.Sleep(5000);
+            }
+
+            action.UpdateQuiz(activeQuiz);
         }
 
         private static IQuizAction GetQuizAction(Quiz activeQuiz)
@@ -87,8 +92,7 @@ namespace TwitterQuiz.Runner.Raven
         {
             foreach (var dueQuiz in documentSession.Query<Quiz>().Where(x => x.Status == QuizStatus.Draft && x.HostIsAuthenticated && x.StartDate < DateTime.Now))
             {
-                Console.WriteLine("Starting Quiz: {0}", dueQuiz.Name);
-                dueQuiz.Status = QuizStatus.InProgress;
+                ApplyAction(new StartQuiz(), dueQuiz);
                 documentSession.Store(dueQuiz);
                 documentSession.SaveChanges();
             }

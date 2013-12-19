@@ -34,10 +34,18 @@ namespace TwitterQuiz.Runner.Raven
     {
         public string[] GetTweetsForAction(Quiz quiz)
         {
-            return new[]
+            const string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            var question = quiz.NextRound.NextQuestion;
+
+            var response = new List<string>
                 {
-                    string.Format("Round {0}: {1}", quiz.NextRound.Sequence, quiz.NextRound.Name)
+                    string.Format("Round {0}: {1}", quiz.NextRound.Sequence, quiz.NextRound.Name),
+                    string.Format("Question {0}: {1}", quiz.NextRound.Questions.IndexOf(question), question.Tweet)
                 };
+
+            response.AddRange(question.PossibleAnswers.Select(x => string.Format("{0}: {1}", letters[question.PossibleAnswers.IndexOf(x)], x.Answer)));
+
+            return response.ToArray();
         }
 
         public void UpdateQuiz(Quiz quiz)
