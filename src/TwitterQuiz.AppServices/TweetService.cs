@@ -65,29 +65,47 @@ namespace TwitterQuiz.AppServices
 
         public void Tweet(string message)
         {
-            _twitterService.AuthenticateWith(_accessToken, _accessTokenSecret);
-            _twitterService.SendTweet(new SendTweetOptions { Status = message });
+            Tweet(_accessToken, _accessTokenSecret, message);
         }
 
         public void Tweet(string accessToken, string accessTokenSecret, string message)
         {
-            _twitterService.AuthenticateWith(accessToken, accessTokenSecret);
-            _twitterService.SendTweet(new SendTweetOptions { Status = message });
+            try
+            {
+                _twitterService.AuthenticateWith(accessToken, accessTokenSecret);
+                _twitterService.SendTweet(new SendTweetOptions { Status = message });
+            }
+            catch (ApplicationException)
+            {
+                
+            }
         }
 
         public IEnumerable<TwitterDirectMessage> GetDMs()
         {
-            _twitterService.AuthenticateWith(_accessToken, _accessTokenSecret);
-            var dms = _twitterService.ListDirectMessagesReceived(new ListDirectMessagesReceivedOptions());
-            if (_twitterService.Response == null)
+            return GetDMs(_accessToken, _accessTokenSecret);
+        }
+
+        public IEnumerable<TwitterDirectMessage> GetDMs(string accessToken, string accessTokenSecret)
+        {
+            try
             {
-                throw new ApplicationException("Response was null");
+                _twitterService.AuthenticateWith(accessToken, accessTokenSecret);
+                var dms = _twitterService.ListDirectMessagesReceived(new ListDirectMessagesReceivedOptions());
+                if (_twitterService.Response == null)
+                {
+                    throw new ApplicationException("Response was null");
+                }
+                if (_twitterService.Response.Error != null)
+                {
+                    throw new ApplicationException(_twitterService.Response.Error.Message + "(" + _twitterService.Response.Error.Code + ")");
+                }
+                return dms;
             }
-            if (_twitterService.Response.Error != null)
+            catch (ApplicationException)
             {
-                throw new ApplicationException(_twitterService.Response.Error.Message + "(" + _twitterService.Response.Error.Code + ")");
+                return null;
             }
-            return dms;
         }
     }
 }

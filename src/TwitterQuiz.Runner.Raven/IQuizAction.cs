@@ -19,7 +19,8 @@ namespace TwitterQuiz.Runner.Raven
                 {
                     string.Format("The quiz \"{0}\" is about to begin", quiz.Name),
                     string.Format("Questions are multiple choice and will be tweeted every {0} minutes followed by each option", quiz.FrequencyOfQuestions),
-                    string.Format("To answer DM this account before the next question is tweeted with the corresponding letter. For example: DM @{0} A", quiz.Host)
+                    string.Format("To answer DM this account before the next question is tweeted with the corresponding letter. For example: DM @{0} A", quiz.Host),
+                    string.Format("This quiz is powered by @QuizimodoNET - quizzimodo.azurewebsites.net")
                 };
         }
 
@@ -82,7 +83,7 @@ namespace TwitterQuiz.Runner.Raven
         {
             return new[]
                 {
-                    "The quiz is over"
+                    "The quiz is now over - powered by @QuizimodoNET"
                 };
         }
 

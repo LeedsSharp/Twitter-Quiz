@@ -30,16 +30,16 @@ namespace TwitterQuiz.Controllers
 
         public ActionResult AuthorizeHost(int id)
         {
-            var callback = Url.RouteUrl("Default", new { Action = "RegiserHost", Controller = "Authorize" }, Request.Url.Scheme);
+            var callback = Url.RouteUrl("Default", new { Action = "RegiserHost", Controller = "Authorize", quizId = id }, Request.Url.Scheme);
             var uri = _tweetService.GetAuthorizeUri(callback);
             return new RedirectResult(uri, false /*permanent*/);
         }
 
-        public ActionResult RegiserHost(int id, string oauth_token, string oauth_verifier)
+        public ActionResult RegiserHost(int quizId, string oauth_token, string oauth_verifier)
         {
             var token = _tweetService.GetAccessToken(oauth_token, oauth_verifier);
-            var quiz = _documentSession.Load<Quiz>(id);
-            if (quiz.Host == token.ScreenName)
+            var quiz = _documentSession.Load<Quiz>(quizId);
+            if (quiz.Host.ToLower() == token.ScreenName.ToLower())
             {
                 var userCreds = _tweetService.GetUserCredentials(token);
 
