@@ -29,8 +29,6 @@ namespace TwitterQuiz.Runner.Raven
 
                     foreach (var activeQuiz in documentSession.Query<Quiz>().Where(x => x.Status == QuizStatus.InProgress))
                     {
-                        GetAnswers(activeQuiz);
-
                         var action = GetQuizAction(activeQuiz);
                         ApplyAction(action, activeQuiz);
                         //Console.WriteLine("{0} - Action: {1}", DateTime.Now, action.GetType());
@@ -49,13 +47,17 @@ namespace TwitterQuiz.Runner.Raven
         private static void GetAnswers(Quiz quiz)
         {
             var accessToken = quiz.HostUser.AccessTokens.First(x => x.ProviderType == "twitter");
-            var dms = _tweetService.GetDMs(accessToken.PublicAccessToken, accessToken.TokenSecret).ToList();
-
-            if (dms.Any(x => x.CreatedDate > quiz.StartDate))
+            var data = _tweetService.GetDMs(accessToken.PublicAccessToken, accessToken.TokenSecret);
+            if (data != null)
             {
-                foreach (var dm in dms.Where(x => x.CreatedDate > quiz.StartDate).OrderBy(x => x.CreatedDate))
+                var dms = data.ToList();
+
+                if (dms.Any(x => x.CreatedDate > quiz.StartDate))
                 {
-                    AddResponse(quiz, dm);
+                    foreach (var dm in dms.Where(x => x.CreatedDate > quiz.StartDate).OrderBy(x => x.CreatedDate))
+                    {
+                        AddResponse(quiz, dm);
+                    }
                 }
             }
         }
