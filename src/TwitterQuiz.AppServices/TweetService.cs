@@ -15,8 +15,8 @@ namespace TwitterQuiz.AppServices
         private readonly TwitterService _twitterService;
         private readonly string _consumerKey;
         private readonly string _consumerSecret;
-        private const string _accessToken = "183268831-4nxoXhFvGuiv74lI17SUqU6v82GX4q67IIH46lAY";
-        private const string _accessTokenSecret = "8yXYxa0AiCn02aNgngKFdl2Yhe8NZgipmKgGa1cUuRE9m";
+        private string _accessToken;
+        private string _accessTokenSecret;
 
         public TweetService(string consumerKey, string consumerSecret)
         {
@@ -30,6 +30,8 @@ namespace TwitterQuiz.AppServices
         {
             _consumerKey = "RMEjl9PUttoX3jl34Bb3iQ";
             _consumerSecret = "vpIEH6sBorbEo39JRsUTFivIcEX5e8EV3sLPHj2u54";
+            _accessToken = "183268831-4nxoXhFvGuiv74lI17SUqU6v82GX4q67IIH46lAY";
+            _accessTokenSecret = "8yXYxa0AiCn02aNgngKFdl2Yhe8NZgipmKgGa1cUuRE9m";
             var twitterClientInfo = new TwitterClientInfo { ConsumerKey = _consumerKey, ConsumerSecret = _consumerSecret };
             _twitterService = new TwitterService(twitterClientInfo);
         }
@@ -64,6 +66,12 @@ namespace TwitterQuiz.AppServices
         public void Tweet(string message)
         {
             _twitterService.AuthenticateWith(_accessToken, _accessTokenSecret);
+            _twitterService.SendTweet(new SendTweetOptions { Status = message });
+        }
+
+        public void Tweet(string accessToken, string accessTokenSecret, string message)
+        {
+            _twitterService.AuthenticateWith(accessToken, accessTokenSecret);
             _twitterService.SendTweet(new SendTweetOptions { Status = message });
         }
 

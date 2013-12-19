@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using TwitterQuiz.Domain.DTO;
 
 namespace TwitterQuiz.ViewModels.Quiz
 {
@@ -7,13 +6,15 @@ namespace TwitterQuiz.ViewModels.Quiz
     {
         public string Name { get; set; }
         public int Sequence { get; set; }
+        public bool Started { get; set; }
         public IList<PlayQuestionViewModel> Questions { get; set; }
 
-        public PlayRoundViewModel(RoundInProgress round)
+        public PlayRoundViewModel(Domain.Round round)
         {
             Name = round.Name;
             Sequence = round.Sequence;
             Questions = new List<PlayQuestionViewModel>();
+            Started = round.RoundStarted;
 
             foreach (var question in round.Questions)
             {

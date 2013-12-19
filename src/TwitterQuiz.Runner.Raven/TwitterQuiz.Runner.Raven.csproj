@@ -4,15 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{83EFF6B3-F4EA-4E1D-8320-6FF84CC3509F}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{BF0EDC05-469C-4228-8E7B-CD1DE6F5118B}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TwitterQuiz.Domain</RootNamespace>
-    <AssemblyName>TwitterQuiz.Domain</AssemblyName>
+    <RootNamespace>TwitterQuiz.Runner.Raven</RootNamespace>
+    <AssemblyName>TwitterQuiz.Runner.Raven</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -30,20 +32,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Hammock.ClientProfile">
-      <HintPath>..\packages\TweetSharp.2.3.1\lib\4.0\Hammock.ClientProfile.dll</HintPath>
-    </Reference>
-    <Reference Include="Raven.Client.Embedded">
+    <Reference Include="Raven.Client.Embedded, Version=2.5.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\TwitterQuiz\bin\Raven.Client.Embedded.dll</HintPath>
     </Reference>
     <Reference Include="Raven.Client.Lightweight">
       <HintPath>..\TwitterQuiz\bin\Raven.Client.Lightweight.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Database">
+    <Reference Include="Raven.Database, Version=2.5.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\TwitterQuiz\bin\Raven.Database.dll</HintPath>
-    </Reference>
-    <Reference Include="SimpleAuthentication.Core">
-      <HintPath>..\packages\SimpleAuthentication.Core.0.3.9\lib\net40\SimpleAuthentication.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -53,29 +51,25 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="TweetSharp">
-      <HintPath>..\packages\TweetSharp.2.3.1\lib\4.0\TweetSharp.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Account\AccessToken.cs" />
-    <Compile Include="Account\Gender.cs" />
-    <Compile Include="Account\TweetedAnswer.cs" />
-    <Compile Include="Account\User.cs" />
-    <Compile Include="Answer.cs" />
-    <Compile Include="DTO\QuizInProgress.cs" />
-    <Compile Include="Player.cs" />
-    <Compile Include="PossibleAnswer.cs" />
+    <Compile Include="IQuizAction.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Question.cs" />
-    <Compile Include="Quiz.cs" />
-    <Compile Include="QuizEvents\AnswerReceived.cs" />
-    <Compile Include="QuizEvents\iQuizEvent.cs" />
-    <Compile Include="QuizEvents\QuizEnded.cs" />
-    <Compile Include="QuizStatus.cs" />
-    <Compile Include="Round.cs" />
-    <Compile Include="QuizEvents\QuestionSent.cs" />
-    <Compile Include="QuizEvents\RoundStarted.cs" />
+    <Compile Include="RavenSessionProvider.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TwitterQuiz.AppServices\TwitterQuiz.AppServices.csproj">
+      <Project>{6A1ECB19-73BA-4862-8FC9-169D147725C8}</Project>
+      <Name>TwitterQuiz.AppServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TwitterQuiz.Domain\TwitterQuiz.Domain.csproj">
+      <Project>{83EFF6B3-F4EA-4E1D-8320-6FF84CC3509F}</Project>
+      <Name>TwitterQuiz.Domain</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

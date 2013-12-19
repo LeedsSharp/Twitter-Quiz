@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using EventStore.ClientAPI;
@@ -20,11 +21,9 @@ namespace TwitterQuiz.Controllers
     [Authorize]
     public class QuizController : Controller
     {
-        private readonly QuizLogic _quizLogic;
         private readonly IDocumentSession _documentSession;
-        public QuizController(IEventStoreConnection eventStoreConnection, IDocumentSession documentSession)
+        public QuizController(IDocumentSession documentSession)
         {
-            _quizLogic = new QuizLogic(eventStoreConnection);
             _documentSession = documentSession;
         }
 
@@ -122,7 +121,6 @@ namespace TwitterQuiz.Controllers
         {
             var quiz = _documentSession.Load<Quiz>(id);
             quiz.StartDate = DateTime.Now;
-            quiz.Status = QuizStatus.InProgress;
             _documentSession.Store(quiz);
             _documentSession.SaveChanges();
             return RedirectToAction("Play", new {id});
@@ -131,16 +129,14 @@ namespace TwitterQuiz.Controllers
         public ActionResult Play(int id)
         {
             var quiz = _documentSession.Load<Quiz>(id);
-            var quizInProgress = _quizLogic.GetStartedQuiz(quiz, User.Identity.Name);
-            var model = new PlayQuizViewModel(quizInProgress);
+            var model = new PlayQuizViewModel(quiz);
             return View(model);
         }
 
         public ActionResult Player(int id, string player)
         {
             var quiz = _documentSession.Load<Quiz>(id);
-            var quizInProgress = _quizLogic.GetStartedQuiz(quiz, User.Identity.Name);
-            QuizPlayerViewModel model = new QuizPlayerViewModel(quizInProgress, player);
+            QuizPlayerViewModel model = new QuizPlayerViewModel(quiz, player);
             return View(model);
         }
 
@@ -160,6 +156,24 @@ namespace TwitterQuiz.Controllers
             _documentSession.Store(quiz);
             _documentSession.SaveChanges();
             return RedirectToAction("Index", "Home");
+        }
+
+        public ActionResult Reset(int id)
+        {
+            var quiz = _documentSession.Load<Quiz>(id);
+            foreach (var round in quiz.Rounds)
+            {
+                foreach (var question in round.Questions)
+                {
+                    question.DateSent = null;
+                    question.Replies = new List<Answer>();
+                }
+            }
+            quiz.Status = QuizStatus.Draft;
+            quiz.StartDate = DateTime.Now.AddHours(1);
+            _documentSession.Store(quiz);
+            _documentSession.SaveChanges();
+            return RedirectToAction("Edit", "Quiz", new { id = quiz.Id });
         }
     }
 }

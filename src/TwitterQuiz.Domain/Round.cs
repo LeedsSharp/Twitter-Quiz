@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace TwitterQuiz.Domain
 {
@@ -8,6 +9,30 @@ namespace TwitterQuiz.Domain
         public string Name { get; set; }
         public int Sequence { get; set; }
         public IList<Question> Questions { get; set; }
+
+        public Question ActiveQuestion
+        {
+            get
+            {
+                return Questions.OrderBy(x => x.Sequence).LastOrDefault(x => x.DateSent.HasValue);
+            }
+        }
+
+        public Question NextQuestion
+        {
+            get
+            {
+                return Questions.OrderBy(x => x.Sequence).FirstOrDefault(x => !x.DateSent.HasValue);
+            }
+        }
+
+        public bool RoundStarted
+        {
+            get
+            {
+                return Questions.Any(x => x.DateSent.HasValue);
+            }
+        }
 
         public Round()
         {

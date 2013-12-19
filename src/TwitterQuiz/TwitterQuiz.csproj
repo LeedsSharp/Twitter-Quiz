@@ -187,6 +187,7 @@
     <Compile Include="ViewModels\Quiz\PlayQuestionViewModel.cs" />
     <Compile Include="ViewModels\Quiz\PlayQuizViewModel.cs" />
     <Compile Include="ViewModels\Quiz\PlayRoundViewModel.cs" />
+    <Compile Include="ViewModels\Quiz\PossibleAnswerViewModel.cs" />
     <Compile Include="ViewModels\Quiz\QuestionViewModel.cs" />
     <Compile Include="ViewModels\Quiz\QuizDetailsViewModel.cs" />
     <Compile Include="ViewModels\Quiz\QuizIndexViewModel.cs" />
