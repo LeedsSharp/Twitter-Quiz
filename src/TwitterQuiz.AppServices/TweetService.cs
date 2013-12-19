@@ -65,8 +65,7 @@ namespace TwitterQuiz.AppServices
 
         public void Tweet(string message)
         {
-            _twitterService.AuthenticateWith(_accessToken, _accessTokenSecret);
-            _twitterService.SendTweet(new SendTweetOptions { Status = message });
+            Tweet(_accessToken, _accessTokenSecret, message);
         }
 
         public void Tweet(string accessToken, string accessTokenSecret, string message)
@@ -77,7 +76,12 @@ namespace TwitterQuiz.AppServices
 
         public IEnumerable<TwitterDirectMessage> GetDMs()
         {
-            _twitterService.AuthenticateWith(_accessToken, _accessTokenSecret);
+            return GetDMs(_accessToken, _accessTokenSecret);
+        }
+
+        public IEnumerable<TwitterDirectMessage> GetDMs(string accessToken, string accessTokenSecret)
+        {
+            _twitterService.AuthenticateWith(accessToken, accessTokenSecret);
             var dms = _twitterService.ListDirectMessagesReceived(new ListDirectMessagesReceivedOptions());
             if (_twitterService.Response == null)
             {
