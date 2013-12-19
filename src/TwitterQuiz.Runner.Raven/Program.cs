@@ -46,7 +46,7 @@ namespace TwitterQuiz.Runner.Raven
             foreach (var tweet in tweets)
             {
                 Console.WriteLine(tweet);
-                //_tweetService.Tweet(accessToken.PublicAccessToken, accessToken.TokenSecret, tweet);
+                _tweetService.Tweet(accessToken.PublicAccessToken, accessToken.TokenSecret, tweet);
                 Thread.Sleep(5000);
             }
 
