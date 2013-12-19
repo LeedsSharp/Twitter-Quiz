@@ -1,26 +1,35 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Threading;
+using Microsoft.WindowsAzure.ServiceRuntime;
 using Raven.Client;
+using Raven.Client.Linq;
 using TweetSharp;
 using TwitterQuiz.AppServices;
 using TwitterQuiz.Domain;
 
 namespace TwitterQuiz.Runner.Raven
 {
-    class Program
+    public class Program : RoleEntryPoint
     {
         private static TweetService _tweetService;
         static void Main(string[] args)
         {
+            RunProcess();
+        }
+
+        private static void RunProcess()
+        {
             var consumerKey = ConfigurationManager.AppSettings["ConsumerKey"];
             var consumerSecret = ConfigurationManager.AppSettings["ConsumerSecret"];
             _tweetService = new TweetService(consumerKey, consumerSecret);
-            
+
             var documentStore = RavenSessionProvider.DocumentStore;
-            
+
             while (true)
             {
                 using (var documentSession = documentStore.OpenSession())
@@ -51,12 +60,27 @@ namespace TwitterQuiz.Runner.Raven
             }
         }
 
+        public override void Run()
+        {
+            RunProcess();
+        }
+
+        public override bool OnStart()
+        {
+            // Set the maximum number of concurrent connections 
+            ServicePointManager.DefaultConnectionLimit = 12;
+
+            // For information on handling configuration changes
+            // see the MSDN topic at http://go.microsoft.com/fwlink/?LinkId=166357.
+
+            return base.OnStart();
+        }
         private static void SendTweets(IEnumerable<string> tweets, Quiz activeQuiz)
         {
             var accessToken = activeQuiz.HostUser.AccessTokens.First(x => x.ProviderType == "twitter");
             foreach (var tweet in tweets)
             {
-                Console.WriteLine(tweet);
+                Trace.TraceInformation(tweet, "Information");
                 _tweetService.Tweet(accessToken.PublicAccessToken, accessToken.TokenSecret, tweet);
                 Thread.Sleep(5000);
             }
@@ -83,15 +107,15 @@ namespace TwitterQuiz.Runner.Raven
         private static void AddResponse(Quiz quiz, TwitterDirectMessage response)
         {
             var answer = new Answer
-                {
-                    Player = new Player { Username = response.SenderScreenName, ImageUrl = response.Sender.ProfileImageUrl },
-                    AnswerConent = response.Text
-                };
+            {
+                Player = new Player { Username = response.SenderScreenName, ImageUrl = response.Sender.ProfileImageUrl },
+                AnswerConent = response.Text
+            };
             var responseTime = response.CreatedDate;
 
             quiz.Rounds.SelectMany(x => x.Questions).Where(x => x.DateSent < responseTime).OrderByDescending(x => x.DateSent).First().Replies.Add(answer);
 
-            Console.WriteLine("{0}: {1}", answer.Player.Username, answer.AnswerConent);
+            Trace.TraceInformation("{0}: {1}", answer.Player.Username, answer.AnswerConent, "Information");
         }
 
         private static IQuizAction GetQuizAction(Quiz activeQuiz)
