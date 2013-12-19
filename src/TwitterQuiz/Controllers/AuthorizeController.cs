@@ -30,7 +30,8 @@ namespace TwitterQuiz.Controllers
 
         public ActionResult AuthorizeHost(int id)
         {
-            var uri = _tweetService.GetAuthorizeUri("Authorize/RegiserHost?id="+id);
+            var callback = Url.RouteUrl("Default", new { Action = "RegiserHost", Controller = "Authorize" }, Request.Url.Scheme);
+            var uri = _tweetService.GetAuthorizeUri(callback);
             return new RedirectResult(uri, false /*permanent*/);
         }
 
@@ -54,7 +55,8 @@ namespace TwitterQuiz.Controllers
 
         public ActionResult AuthorizeViaTwitter()
         {
-            var uri = _tweetService.GetAuthorizeUri("Authorize/AuthorizeCallback");
+            var callback = Url.RouteUrl("Default", new { Action = "AuthorizeCallback", Controller = "Authorize" }, Request.Url.Scheme);
+            var uri = _tweetService.GetAuthorizeUri(callback);
             return new RedirectResult(uri, false /*permanent*/);
         }
 
