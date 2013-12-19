@@ -43,14 +43,13 @@ namespace TwitterQuiz.Runner.Raven
             string[] tweets = action.GetTweetsForAction(activeQuiz);
             var accessToken = activeQuiz.HostUser.AccessTokens.First(x => x.ProviderType == "twitter");
 
+            action.UpdateQuiz(activeQuiz);
             foreach (var tweet in tweets)
             {
                 Console.WriteLine(tweet);
                 _tweetService.Tweet(accessToken.PublicAccessToken, accessToken.TokenSecret, tweet);
                 Thread.Sleep(5000);
             }
-
-            action.UpdateQuiz(activeQuiz);
         }
 
         private static IQuizAction GetQuizAction(Quiz activeQuiz)
