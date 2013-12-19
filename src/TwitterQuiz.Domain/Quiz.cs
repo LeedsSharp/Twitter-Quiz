@@ -37,7 +37,7 @@ namespace TwitterQuiz.Domain
             }
         }
 
-        public Player Winner { get; set; }
+        public string Winner { get; set; }
         public QuizStatus Status { get; set; }
         public IList<QuizEvent> Events { get; set; }
 
