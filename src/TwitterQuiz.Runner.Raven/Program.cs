@@ -110,12 +110,15 @@ namespace TwitterQuiz.Runner.Raven
 
         private static void AddResponse(Quiz quiz, TwitterDirectMessage response)
         {
+            const string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             var question = quiz.Rounds.SelectMany(x => x.Questions).Where(x => x.DateSent < response.CreatedDate).OrderByDescending(x => x.DateSent).First();
+            var correctAnswer = question.PossibleAnswers.First(x => x.IsCorrect);
+            var correctLetter = letters[question.PossibleAnswers.IndexOf(correctAnswer)];
             var answer = new Answer
             {
                 Player = new Player { Username = response.SenderScreenName, ImageUrl = response.Sender.ProfileImageUrl },
                 AnswerConent = response.Text,
-                IsCorrect = String.Equals(question.PossibleAnswers.First(x => x.IsCorrect).Answer, response.Text.Trim(), StringComparison.CurrentCultureIgnoreCase)
+                IsCorrect = String.Equals(correctLetter.ToString(), response.Text.Trim(), StringComparison.CurrentCultureIgnoreCase)
             };
             question.Replies.Add(answer);
             Console.WriteLine("{0}: {1}", answer.Player.Username, answer.AnswerConent);
