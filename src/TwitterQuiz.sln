@@ -16,15 +16,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitterQuiz.Domain", "Twitt
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitterQuiz.EventStore", "TwitterQuiz.EventStore\TwitterQuiz.EventStore.csproj", "{99090409-30AC-4F45-A02E-96A945260F89}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitterQuiz.Runner", "TwitterQuiz.Runner\TwitterQuiz.Runner.csproj", "{60655527-F216-48D7-9213-80467092DB57}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitterQuiz.FakeAnswerer", "TwitterQuiz.FakeAnswerer\TwitterQuiz.FakeAnswerer.csproj", "{2506EDF2-070F-4248-A530-FD3AD8A2B83D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitterQuiz.AtomPoller", "TwittQuiz.AtomPoller\TwitterQuiz.AtomPoller.csproj", "{3E57913F-E0C1-4534-AF75-6356E4E933B7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitterQuiz.AppServices", "TwitterQuiz.AppServices\TwitterQuiz.AppServices.csproj", "{6A1ECB19-73BA-4862-8FC9-169D147725C8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitterQuiz.Runner.Raven", "TwitterQuiz.Runner.Raven\TwitterQuiz.Runner.Raven.csproj", "{BF0EDC05-469C-4228-8E7B-CD1DE6F5118B}"
+Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "TwitterQuiz.Runner.Azure", "TwitterQuiz.Runner.Azure\TwitterQuiz.Runner.Azure.ccproj", "{C04A55C6-AF29-4695-8908-6CC1DBFD6832}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwitterQuiz.Runner.Raven", "TwitterQuiz.Runner.Raven\TwitterQuiz.Runner.Raven.csproj", "{DB95D4E4-EED1-4384-A39D-905A7FFB876E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,10 +48,6 @@ Global
 		{99090409-30AC-4F45-A02E-96A945260F89}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{99090409-30AC-4F45-A02E-96A945260F89}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{99090409-30AC-4F45-A02E-96A945260F89}.Release|Any CPU.Build.0 = Release|Any CPU
-		{60655527-F216-48D7-9213-80467092DB57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{60655527-F216-48D7-9213-80467092DB57}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{60655527-F216-48D7-9213-80467092DB57}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{60655527-F216-48D7-9213-80467092DB57}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2506EDF2-070F-4248-A530-FD3AD8A2B83D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2506EDF2-070F-4248-A530-FD3AD8A2B83D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2506EDF2-070F-4248-A530-FD3AD8A2B83D}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -64,10 +60,14 @@ Global
 		{6A1ECB19-73BA-4862-8FC9-169D147725C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A1ECB19-73BA-4862-8FC9-169D147725C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A1ECB19-73BA-4862-8FC9-169D147725C8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BF0EDC05-469C-4228-8E7B-CD1DE6F5118B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BF0EDC05-469C-4228-8E7B-CD1DE6F5118B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BF0EDC05-469C-4228-8E7B-CD1DE6F5118B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BF0EDC05-469C-4228-8E7B-CD1DE6F5118B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C04A55C6-AF29-4695-8908-6CC1DBFD6832}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C04A55C6-AF29-4695-8908-6CC1DBFD6832}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C04A55C6-AF29-4695-8908-6CC1DBFD6832}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C04A55C6-AF29-4695-8908-6CC1DBFD6832}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB95D4E4-EED1-4384-A39D-905A7FFB876E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB95D4E4-EED1-4384-A39D-905A7FFB876E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB95D4E4-EED1-4384-A39D-905A7FFB876E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB95D4E4-EED1-4384-A39D-905A7FFB876E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

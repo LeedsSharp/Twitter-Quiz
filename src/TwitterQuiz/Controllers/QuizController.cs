@@ -166,6 +166,7 @@ namespace TwitterQuiz.Controllers
                 foreach (var question in round.Questions)
                 {
                     question.DateSent = null;
+                    question.AnswersGathered = false;
                     question.Replies = new List<Answer>();
                 }
             }

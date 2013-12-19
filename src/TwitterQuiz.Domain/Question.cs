@@ -10,6 +10,7 @@ namespace TwitterQuiz.Domain
         public IList<PossibleAnswer> PossibleAnswers { get; set; }
         public DateTime? DateSent { get; set; }
         public IList<Answer> Replies { get; set; }
+        public bool AnswersGathered { get; set; }
 
         public Question()
         {

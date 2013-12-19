@@ -82,3 +82,10 @@ a.success {
 a.danger {
     color: #d2322d;
 }
+
+.answer-wrong {
+    background-color:#d2322d;
+}
+.answer-correct {
+    background-color:#5cb85c;
+}
