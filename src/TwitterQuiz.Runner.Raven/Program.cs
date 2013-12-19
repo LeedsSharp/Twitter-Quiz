@@ -1,18 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Threading;
 using Raven.Client;
+using TwitterQuiz.AppServices;
 using TwitterQuiz.Domain;
 
 namespace TwitterQuiz.Runner.Raven
 {
     class Program
     {
-        private const string _letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
+        private static TweetService _tweetService;
         static void Main(string[] args)
         {
+            var consumerKey = ConfigurationManager.AppSettings["ConsumerKey"];
+            var consumerSecret = ConfigurationManager.AppSettings["ConsumerSecret"];
+            _tweetService = new TweetService(consumerKey, consumerSecret);
+            
             var documentStore = RavenSessionProvider.DocumentStore;
             
             while (true)
@@ -23,8 +27,19 @@ namespace TwitterQuiz.Runner.Raven
 
                     foreach (var activeQuiz in documentSession.Query<Quiz>().Where(x => x.Status == QuizStatus.InProgress))
                     {
+                        var accessToken = activeQuiz.HostUser.AccessTokens.First(x => x.ProviderType == "twitter");
+
                         var action = GetQuizAction(activeQuiz);
-                        action.CarryOutAction(activeQuiz);
+                        string[] tweets = action.GetTweetsForAction(activeQuiz);
+
+                        foreach (var tweet in tweets)
+                        {
+                            Console.WriteLine(tweet);
+                            Thread.Sleep(5000);
+                            //_tweetService.Tweet(accessToken.PublicAccessToken, accessToken.TokenSecret, tweet);
+                        }
+
+                        action.UpdateQuiz(activeQuiz);
                         Console.WriteLine("{0} - Action: {1}", DateTime.Now, action.GetType());
                     }
                     documentSession.SaveChanges();
@@ -38,7 +53,7 @@ namespace TwitterQuiz.Runner.Raven
             // if no rounds have been started then start the first
             if (activeQuiz.ActiveRound == null)
             {
-                return new StartQuiz();
+                return new StartRound();
             }
             // If no questions have been sent yet for this round. Send the first one.
             if (activeQuiz.ActiveRound.ActiveQuestion == null)
