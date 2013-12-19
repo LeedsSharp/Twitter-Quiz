@@ -17,10 +17,9 @@ namespace TwitterQuiz.Runner.Raven
         {
             return new[]
                 {
-                    string.Format("The quiz {0} is about to begin", quiz.Name),
+                    string.Format("The quiz \"{0}\" is about to begin", quiz.Name),
                     string.Format("Questions are multiple choice and will be tweeted every {0} minutes followed by each option", quiz.FrequencyOfQuestions),
-                    "To answer DM this account before the next question is tweeted with the corresponding letter. e.g. A",
-                    "Good Luck!"
+                    string.Format("To answer DM this account before the next question is tweeted with the corresponding letter. For example: DM @{0} A", quiz.Host)
                 };
         }
 

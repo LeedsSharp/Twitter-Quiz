@@ -40,7 +40,7 @@ namespace TwitterQuiz.AppServices
         {
 
             // This is the registered callback URL
-            OAuthRequestToken requestToken = _twitterService.GetRequestToken(string.Format("http://localhost:12347/{0}", callback));
+            OAuthRequestToken requestToken = _twitterService.GetRequestToken(callback);
 
             // Step 2 - Redirect to the OAuth Authorization URL
             Uri uri = _twitterService.GetAuthorizationUri(requestToken);
