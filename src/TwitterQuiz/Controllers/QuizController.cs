@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using EventStore.ClientAPI;
@@ -156,6 +157,24 @@ namespace TwitterQuiz.Controllers
             _documentSession.Store(quiz);
             _documentSession.SaveChanges();
             return RedirectToAction("Index", "Home");
+        }
+
+        public ActionResult Reset(int id)
+        {
+            var quiz = _documentSession.Load<Quiz>(id);
+            foreach (var round in quiz.Rounds)
+            {
+                foreach (var question in round.Questions)
+                {
+                    question.DateSent = null;
+                    question.Replies = new List<Answer>();
+                }
+            }
+            quiz.Status = QuizStatus.Draft;
+            quiz.StartDate = DateTime.Now.AddHours(1);
+            _documentSession.Store(quiz);
+            _documentSession.SaveChanges();
+            return RedirectToAction("Edit", "Quiz", new { id = quiz.Id });
         }
     }
 }
