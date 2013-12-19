@@ -39,7 +39,7 @@ namespace TwitterQuiz.Controllers
         {
             var token = _tweetService.GetAccessToken(oauth_token, oauth_verifier);
             var quiz = _documentSession.Load<Quiz>(quizId);
-            if (quiz.Host == token.ScreenName)
+            if (quiz.Host.ToLower() == token.ScreenName.ToLower())
             {
                 var userCreds = _tweetService.GetUserCredentials(token);
 
