@@ -85,7 +85,7 @@ namespace TwitterQuiz.Runner.Raven
             {
                 Console.WriteLine(tweet);
                 //Trace.TraceInformation(tweet, "Information");
-                //_tweetService.Tweet(accessToken.PublicAccessToken, accessToken.TokenSecret, tweet);
+                _tweetService.Tweet(accessToken.PublicAccessToken, accessToken.TokenSecret, tweet);
                 Thread.Sleep(5000);
             }
         }
