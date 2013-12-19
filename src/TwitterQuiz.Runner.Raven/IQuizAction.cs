@@ -77,6 +77,19 @@ namespace TwitterQuiz.Runner.Raven
         }
     }
 
+    internal class GatherAnswers : IQuizAction
+    {
+        public string[] GetTweetsForAction(Quiz quiz)
+        {
+            return new string[0];
+        }
+
+        public void UpdateQuiz(Quiz quiz)
+        {
+            quiz.ActiveRound.ActiveQuestion.AnswersGathered = true;
+        }
+    }
+
     internal class CompleteQuiz : IQuizAction
     {
         public string[] GetTweetsForAction(Quiz quiz)

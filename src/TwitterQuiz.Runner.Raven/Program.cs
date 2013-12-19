@@ -39,6 +39,14 @@ namespace TwitterQuiz.Runner.Raven
                     foreach (var activeQuiz in documentSession.Query<Quiz>().Where(x => x.Status == QuizStatus.InProgress))
                     {
                         var action = GetQuizAction(activeQuiz);
+
+                        Console.WriteLine(action.GetType().ToString());
+
+                        if (action.GetType() == typeof(GatherAnswers))
+                        {
+                            GetAnswers(activeQuiz);
+                        }
+                        
                         string[] tweets = action.GetTweetsForAction(activeQuiz);
 
                         action.UpdateQuiz(activeQuiz);
@@ -47,11 +55,6 @@ namespace TwitterQuiz.Runner.Raven
 
                         SendTweets(tweets, activeQuiz);
 
-                        //Console.WriteLine("{0} - Action: {1}", DateTime.Now, action.GetType());
-                        if (activeQuiz.Status == QuizStatus.Complete)
-                        {
-                            GetAnswers(activeQuiz);
-                        }
                         documentSession.Store(activeQuiz);
                     }
                     documentSession.SaveChanges();
@@ -80,8 +83,9 @@ namespace TwitterQuiz.Runner.Raven
             var accessToken = activeQuiz.HostUser.AccessTokens.First(x => x.ProviderType == "twitter");
             foreach (var tweet in tweets)
             {
-                Trace.TraceInformation(tweet, "Information");
-                _tweetService.Tweet(accessToken.PublicAccessToken, accessToken.TokenSecret, tweet);
+                Console.WriteLine(tweet);
+                //Trace.TraceInformation(tweet, "Information");
+                //_tweetService.Tweet(accessToken.PublicAccessToken, accessToken.TokenSecret, tweet);
                 Thread.Sleep(5000);
             }
         }
@@ -92,11 +96,11 @@ namespace TwitterQuiz.Runner.Raven
             var data = _tweetService.GetDMs(accessToken.PublicAccessToken, accessToken.TokenSecret);
             if (data != null)
             {
-                var dms = data.ToList();
+                List<TwitterDirectMessage> dms = data.ToList();
 
                 if (dms.Any(x => x.CreatedDate > quiz.StartDate))
                 {
-                    foreach (var dm in dms.Where(x => x.CreatedDate > quiz.StartDate).OrderBy(x => x.CreatedDate))
+                    foreach (var dm in dms.Where(x => x.CreatedDate > quiz.ActiveRound.ActiveQuestion.DateSent).OrderBy(x => x.CreatedDate))
                     {
                         AddResponse(quiz, dm);
                     }
@@ -106,16 +110,16 @@ namespace TwitterQuiz.Runner.Raven
 
         private static void AddResponse(Quiz quiz, TwitterDirectMessage response)
         {
+            var question = quiz.Rounds.SelectMany(x => x.Questions).Where(x => x.DateSent < response.CreatedDate).OrderByDescending(x => x.DateSent).First();
             var answer = new Answer
             {
                 Player = new Player { Username = response.SenderScreenName, ImageUrl = response.Sender.ProfileImageUrl },
-                AnswerConent = response.Text
+                AnswerConent = response.Text,
+                IsCorrect = String.Equals(question.PossibleAnswers.First(x => x.IsCorrect).Answer, response.Text.Trim(), StringComparison.CurrentCultureIgnoreCase)
             };
-            var responseTime = response.CreatedDate;
-
-            quiz.Rounds.SelectMany(x => x.Questions).Where(x => x.DateSent < responseTime).OrderByDescending(x => x.DateSent).First().Replies.Add(answer);
-
-            Trace.TraceInformation("{0}: {1}", answer.Player.Username, answer.AnswerConent, "Information");
+            question.Replies.Add(answer);
+            Console.WriteLine("{0}: {1}", answer.Player.Username, answer.AnswerConent);
+            //Trace.TraceInformation("{0}: {1}", answer.Player.Username, answer.AnswerConent, "Information");
         }
 
         private static IQuizAction GetQuizAction(Quiz activeQuiz)
@@ -138,6 +142,10 @@ namespace TwitterQuiz.Runner.Raven
             // If time has elapsed between questions then send the next question
             if (activeQuiz.ActiveRound.ActiveQuestion.DateSent.Value.AddMinutes(activeQuiz.FrequencyOfQuestions) < DateTime.Now)
             {
+                if (!activeQuiz.ActiveRound.ActiveQuestion.AnswersGathered)
+                {
+                    return new GatherAnswers();
+                }
                 // If next question is null then start the next round
                 if (activeQuiz.ActiveRound.NextQuestion == null)
                 {
